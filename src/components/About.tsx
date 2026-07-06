@@ -80,8 +80,8 @@ export default function About() {
             }}
           >
             <ImageSlot
-              src="/images/shiva-shamtoub-do.webp"
-              alt="Physician at Rockaway Internal Medicine in Jamaica, Queens"
+              src="/images/about-care.jpg"
+              alt="Clinician reviewing patient records with a stethoscope at Rockaway Internal Medicine"
               label="Drop a photo — waiting room or care team"
             />
           </div>
