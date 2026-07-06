@@ -4,10 +4,12 @@ interface Props {
   eyebrow: string
   children: ReactNode
   maxWidth?: string | number
+  /** Applied to the <h2> itself (uses the heading's own font for `ch` units). */
+  headingMaxWidth?: string | number
   delay?: number
 }
 
-export default function SectionHeading({ eyebrow, children, maxWidth, delay = 0 }: Props) {
+export default function SectionHeading({ eyebrow, children, maxWidth, headingMaxWidth, delay = 0 }: Props) {
   return (
     <div className="reveal" style={{ transitionDelay: `${delay}s`, maxWidth }}>
       <span
@@ -33,6 +35,7 @@ export default function SectionHeading({ eyebrow, children, maxWidth, delay = 0 
           lineHeight: 1.04,
           letterSpacing: '-.01em',
           marginTop: 18,
+          maxWidth: headingMaxWidth,
         }}
       >
         {children}

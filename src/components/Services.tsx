@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { clinic } from '../data/clinic'
 import SectionHeading from './SectionHeading'
 import { scrollToId } from './Header'
@@ -19,7 +19,7 @@ const SERVICES: { icon: ReactNode; title: string; body: string }[] = [
   {
     icon: <Stethoscope size={21} />,
     title: 'Sick Visits & Same-Week Care',
-    body: "Fevers, infections, aches, and flare-ups seen quickly — often the same week you call.",
+    body: 'Fevers, infections, aches, and flare-ups seen quickly — often the same week you call.',
   },
   {
     icon: <Flask size={21} />,
@@ -38,16 +38,78 @@ const SERVICES: { icon: ReactNode; title: string; body: string }[] = [
   },
 ]
 
-const FINDER: { concern: string; match: string; note: string }[] = [
-  { concern: 'I feel run down / low energy', match: 'Lab Work & Diagnostics', note: 'We’ll check iron, B12, thyroid, and blood sugar to find the cause.' },
-  { concern: 'I need a check-up or physical', match: 'Annual Physicals & Preventive Care', note: 'Book a full preventive visit — new patients welcome.' },
-  { concern: 'I have a long-term condition', match: 'Chronic Disease Management', note: 'One team keeps your diabetes, BP, or thyroid on track.' },
-  { concern: 'I’m sick right now', match: 'Sick Visits & Same-Week Care', note: 'Call us — we keep same-week slots open for this.' },
-  { concern: 'I need a vaccine or shot', match: 'Vaccines & Immunizations', note: 'Flu, shingles, tetanus and more — walk you through what’s due.' },
+const FINDER: { concern: string; kicker: string; title: string; desc: string }[] = [
+  {
+    concern: "I'm always tired",
+    kicker: "LET'S FIND THE WHY",
+    title: 'Fatigue & anemia workup',
+    desc: 'Persistent tiredness usually deserves bloodwork — thyroid, iron, B12, blood sugar — plus a real conversation about sleep and stress. We do the draw in-office and explain every result.',
+  },
+  {
+    concern: 'My blood pressure runs high',
+    kicker: 'ONGOING, NOT ONE-OFF',
+    title: 'Hypertension management',
+    desc: 'We confirm with proper readings, tailor medication if needed, and follow up until your numbers are steady — without upending your routine.',
+  },
+  {
+    concern: 'My sugar is creeping up',
+    kicker: 'CATCH IT EARLY',
+    title: 'Diabetes & pre-diabetes care',
+    desc: 'From A1C testing to medication and food-first changes, we manage blood sugar closely — and celebrate the wins with you.',
+  },
+  {
+    concern: 'I just need a checkup',
+    kicker: 'THE SMART ANNUAL',
+    title: 'Annual physical & preventive care',
+    desc: 'A head-to-toe exam with age-appropriate screenings and vaccines — and enough time to actually talk.',
+  },
+  {
+    concern: "I'm sick right now",
+    kicker: "DON'T WAIT IT OUT",
+    title: 'Same-week sick visit',
+    desc: "New cough, fever, pain, or just 'off'? Call us first — we usually see sick patients within the week, often sooner.",
+  },
+  {
+    concern: 'I get short of breath',
+    kicker: 'BREATHE EASIER',
+    title: 'Asthma & COPD care',
+    desc: 'We check your lungs, build a stepwise inhaler plan, and keep an eye on triggers before they become ER visits.',
+  },
+  {
+    concern: 'I need vaccines or forms',
+    kicker: 'QUICK & OFFICIAL',
+    title: 'Immunizations & paperwork',
+    desc: 'Flu, pneumonia, shingles — plus school, work, and travel forms, done properly and on time.',
+  },
+  {
+    concern: 'My weight and energy are stuck',
+    kicker: 'NO JUDGMENT HERE',
+    title: 'Weight & lifestyle medicine',
+    desc: "Food-first counseling, lab checks for hidden causes, and honest medical support when it's warranted.",
+  },
 ]
 
 export default function Services() {
-  const [pick, setPick] = useState<number | null>(null)
+  const [sel, setSel] = useState<number>(-1)
+  const [flip, setFlip] = useState(false)
+  const timer = useRef<number | null>(null)
+  const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const pick = (i: number) => {
+    if (timer.current) window.clearTimeout(timer.current)
+    if (reduced || sel < 0) {
+      setSel(i)
+      setFlip(false)
+      return
+    }
+    setFlip(true)
+    timer.current = window.setTimeout(() => {
+      setSel(i)
+      setFlip(false)
+    }, 220)
+  }
+
+  const active = sel >= 0 ? FINDER[sel] : null
 
   return (
     <section id="services" style={{ background: 'var(--bg2)', padding: 'clamp(72px,9vw,124px) 0 0' }}>
@@ -100,122 +162,166 @@ export default function Services() {
           ))}
         </div>
 
-        {/* Interactive service finder */}
+        {/* Symptom → service finder */}
         <div
           className="reveal"
           style={{
             marginTop: 'clamp(56px,7vw,88px)',
-            background: 'linear-gradient(150deg, var(--olive-deep), #22280f)',
+            marginBottom: 'clamp(56px,7vw,96px)',
+            border: '1px solid var(--line)',
             borderRadius: 28,
-            padding: 'clamp(28px,4vw,52px)',
-            color: 'var(--on-olive)',
+            background: 'linear-gradient(135deg, rgba(200,213,160,.26), rgba(163,177,138,.16))',
+            padding: 'clamp(26px,4vw,48px)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))',
-            gap: 'clamp(28px,4vw,56px)',
+            gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,400px),1fr))',
+            gap: 'clamp(28px,4vw,48px)',
             alignItems: 'center',
           }}
         >
           <div>
-            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-              Not sure where to start?
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                fontFamily: "'DM Mono',monospace",
+                fontSize: 12,
+                letterSpacing: '.22em',
+                textTransform: 'uppercase',
+                color: 'var(--olive-deep)',
+              }}
+            >
+              Symptom → service finder
             </span>
-            <h3 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,38px)', lineHeight: 1.1, marginTop: 14 }}>
-              Tell us what's going on — we'll point you to the right visit.
+            <h3 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,36px)', lineHeight: 1.1, marginTop: 14 }}>
+              Not sure where to start? <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>Tap what's bothering you.</em>
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 26 }}>
+            <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 12 }}>
+              We'll show you how we'd approach it — and which visit to book.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 24 }}>
               {FINDER.map((f, i) => {
-                const active = pick === i
+                const on = sel === i
                 return (
                   <button
                     key={f.concern}
-                    onClick={() => setPick(i)}
+                    onClick={() => pick(i)}
+                    aria-pressed={on}
                     style={{
-                      textAlign: 'left',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 12,
-                      padding: '14px 18px',
-                      borderRadius: 14,
-                      border: `1px solid ${active ? 'var(--accent)' : 'rgba(239,237,221,.22)'}`,
-                      background: active ? 'rgba(200,213,160,.14)' : 'transparent',
-                      color: 'var(--on-olive)',
-                      fontSize: 15,
+                      border: `1px solid ${on ? 'transparent' : 'rgba(74,83,39,.32)'}`,
+                      borderRadius: 999,
+                      padding: '11px 18px',
+                      fontSize: 14.5,
                       fontWeight: 500,
-                      transition: 'background .3s, border-color .3s',
+                      background: on ? 'var(--olive-deep)' : 'var(--card)',
+                      color: on ? 'var(--on-olive)' : 'var(--ink)',
+                      transition: 'transform .25s, background .25s, color .25s, border-color .25s',
                     }}
                   >
                     {f.concern}
-                    <ArrowRight size={16} style={{ color: 'var(--accent)', opacity: active ? 1 : 0.5 }} />
                   </button>
                 )
               })}
             </div>
           </div>
 
-          <div
-            style={{
-              background: 'rgba(247,245,239,.06)',
-              border: '1px solid rgba(239,237,221,.18)',
-              borderRadius: 22,
-              padding: 'clamp(24px,3vw,36px)',
-              minHeight: 240,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            {pick === null ? (
-              <p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--on-dark-soft, rgba(239,237,221,.72))' }}>
-                Pick a concern on the left and we'll show you the matching service and the fastest way to get seen.
-              </p>
-            ) : (
-              <div key={pick} style={{ animation: 'rimPop .5s cubic-bezier(.22,.61,.36,1) both' }}>
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11.5, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-                  Recommended
-                </span>
-                <h4 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 28, lineHeight: 1.15, marginTop: 12 }}>
-                  {FINDER[pick].match}
-                </h4>
-                <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(239,237,221,.8)', marginTop: 12 }}>{FINDER[pick].note}</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 22 }}>
-                  <button
-                    onClick={() => scrollToId('contact')}
+          <div style={{ perspective: 1400 }}>
+            <div
+              aria-live="polite"
+              style={{
+                transform: flip ? 'rotateY(88deg)' : 'rotateY(0deg)',
+                transition: 'transform .22s ease',
+                transformStyle: 'preserve-3d',
+                background: 'var(--card)',
+                border: '1px solid var(--line)',
+                borderRadius: 22,
+                padding: 'clamp(24px,3vw,34px)',
+                minHeight: 280,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                boxShadow: '0 30px 60px -30px rgba(43,43,36,.3)',
+              }}
+            >
+              {!active ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
+                  <span
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 9,
-                      background: 'var(--accent)',
-                      color: 'var(--accent-ink)',
-                      padding: '13px 22px',
-                      borderRadius: 999,
-                      fontSize: 14.5,
-                      fontWeight: 600,
+                      justifyContent: 'center',
+                      width: 46,
+                      height: 46,
+                      borderRadius: '50%',
+                      background: 'rgba(107,122,63,.11)',
+                      color: 'var(--olive-deep)',
                     }}
                   >
-                    Request this visit
-                    <ArrowRight size={15} />
-                  </button>
-                  <a
-                    href={clinic.phoneHref}
+                    <Activity size={21} />
+                  </span>
+                  <p style={{ fontFamily: "'Instrument Serif',serif", fontSize: 22, lineHeight: 1.3 }}>
+                    Pick a concern on the left to see the visit we'd recommend.
+                  </p>
+                  <span
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 9,
-                      border: '1px solid rgba(239,237,221,.3)',
-                      color: 'var(--on-olive)',
-                      padding: '13px 20px',
+                      fontFamily: "'DM Mono',monospace",
+                      fontSize: 10.5,
+                      letterSpacing: '.2em',
+                      color: 'var(--olive)',
+                      border: '1px solid var(--line)',
                       borderRadius: 999,
-                      fontSize: 14.5,
-                      fontWeight: 600,
-                      textDecoration: 'none',
+                      padding: '7px 12px',
                     }}
                   >
-                    Call {clinic.phone}
-                  </a>
+                    NO SYMPTOM-GOOGLING REQUIRED
+                  </span>
                 </div>
-              </div>
-            )}
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
+                  <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.22em', color: 'var(--olive)' }}>
+                    {active.kicker}
+                  </span>
+                  <h4 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 27, lineHeight: 1.1 }}>{active.title}</h4>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.62, color: 'var(--ink-soft)' }}>{active.desc}</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 10 }}>
+                    <button
+                      onClick={() => scrollToId('contact')}
+                      className="rim-cta"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 9,
+                        background: 'var(--olive-deep)',
+                        color: 'var(--on-olive)',
+                        padding: '12px 20px',
+                        borderRadius: 999,
+                        fontSize: 14,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Book this visit
+                      <ArrowRight size={14} />
+                    </button>
+                    <a
+                      href={clinic.phoneHref}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '12px 18px',
+                        borderRadius: 999,
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: 'var(--olive-deep)',
+                        textDecoration: 'underline',
+                        textUnderlineOffset: 3,
+                      }}
+                    >
+                      or call us
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

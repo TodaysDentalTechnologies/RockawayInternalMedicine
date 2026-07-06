@@ -15,6 +15,10 @@
   --blob-a: rgba(163, 177, 138, 0.5);
   --blob-b: rgba(163, 177, 138, 0.32);
   --blob-c: rgba(200, 213, 160, 0.55);
+  --dark: #2e351b;
+  --dark2: #22280f;
+  --on-dark: #efeddd;
+  --on-dark-soft: rgba(239, 237, 221, 0.72);
 }
 
 *,
@@ -262,6 +266,17 @@ h4 {
 @keyframes rimBlink {
   50% {
     opacity: 0.35;
+  }
+}
+@keyframes rimPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(107, 122, 63, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(107, 122, 63, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(107, 122, 63, 0);
   }
 }
 @keyframes rimDots {

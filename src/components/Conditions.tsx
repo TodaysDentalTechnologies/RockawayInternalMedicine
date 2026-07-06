@@ -26,18 +26,19 @@ export default function Conditions() {
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,300px),1fr))',
-            gap: '20px clamp(32px,5vw,64px)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '24px 48px',
             alignItems: 'end',
+            justifyContent: 'space-between',
           }}
         >
-          <SectionHeading eyebrow="Conditions we treat" maxWidth="18ch">
+          <SectionHeading eyebrow="Conditions we treat" headingMaxWidth="14ch">
             The everyday conditions <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>we manage well.</em>
           </SectionHeading>
           <p
             className="reveal"
-            style={{ transitionDelay: '.1s', fontSize: 15.5, lineHeight: 1.65, color: 'var(--ink-soft)', maxWidth: '46ch', paddingBottom: 6 }}
+            style={{ transitionDelay: '.1s', fontSize: 15.5, lineHeight: 1.6, color: 'var(--ink-soft)', maxWidth: '36ch', paddingBottom: 6 }}
           >
             Hover or tap a card to see how we approach it. Don't see yours?{' '}
             <a href={clinic.phoneHref} style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
@@ -62,7 +63,10 @@ export default function Conditions() {
                 key={c.title}
                 className="rim-card reveal"
                 aria-expanded={isOpen}
-                onClick={() => setOpen(isOpen ? null : i)}
+                onMouseEnter={() => setOpen(i)}
+                onMouseLeave={() => setOpen((o) => (o === i ? null : o))}
+                onFocus={() => setOpen(i)}
+                onBlur={() => setOpen((o) => (o === i ? null : o))}
                 style={{
                   transitionDelay: `${(i % 6) * 0.03}s`,
                   textAlign: 'left',

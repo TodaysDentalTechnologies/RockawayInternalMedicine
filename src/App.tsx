@@ -23,9 +23,9 @@ export default function App() {
         <About />
         <Conditions />
         <Services />
-        {/* Services has its own dark finder block; ease into Insurance */}
-        <div style={{ background: 'var(--bg2)', height: 'clamp(56px,8vw,96px)' }} />
+        <WaveDivider from="var(--bg2)" to="var(--dark)" />
         <Insurance />
+        <WaveDivider from="var(--dark)" to="var(--bg)" />
         <Contact />
       </main>
       <Footer />
