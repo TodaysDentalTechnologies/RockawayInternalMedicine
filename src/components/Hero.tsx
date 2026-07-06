@@ -181,7 +181,11 @@ export default function Hero() {
               position: 'relative',
             }}
           >
-            <ImageSlot label="Drop a photo — your storefront, exam room, or team" />
+            <ImageSlot
+              src="/images/dr-shamtoub.png"
+              alt="Board-certified internal medicine physician at Rockaway Internal Medicine"
+              label="Drop a photo — your storefront, exam room, or team"
+            />
           </div>
           <div
             style={{

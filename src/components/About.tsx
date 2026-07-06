@@ -79,7 +79,11 @@ export default function About() {
               background: 'linear-gradient(150deg, rgba(163,177,138,.3), rgba(200,213,160,.22))',
             }}
           >
-            <ImageSlot label="Drop a photo — waiting room or care team" />
+            <ImageSlot
+              src="/images/shiva-shamtoub-do.webp"
+              alt="Physician at Rockaway Internal Medicine in Jamaica, Queens"
+              label="Drop a photo — waiting room or care team"
+            />
           </div>
           <figure
             style={{
