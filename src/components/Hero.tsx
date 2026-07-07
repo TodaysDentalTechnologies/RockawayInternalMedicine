@@ -164,7 +164,7 @@ export default function Hero() {
               position: 'absolute',
               inset: '-16px 6px 14px -4px',
               borderRadius: '44% 56% 52% 48% / 42% 46% 54% 58%',
-              border: '1.5px dashed rgba(107,122,63,.4)',
+              border: '1.5px dashed rgba(46,107,67,.4)',
               transform: 'rotate(5deg)',
               pointerEvents: 'none',
             }}
@@ -177,7 +177,7 @@ export default function Hero() {
               aspectRatio: '.94',
               margin: '0 auto',
               border: '1px solid var(--line)',
-              background: 'linear-gradient(160deg, rgba(163,177,138,.35), rgba(200,213,160,.28))',
+              background: 'linear-gradient(160deg, rgba(134,168,148,.35), rgba(179,209,187,.28))',
               position: 'relative',
             }}
           >
@@ -211,7 +211,7 @@ export default function Hero() {
                 width: 38,
                 height: 38,
                 borderRadius: 12,
-                background: 'rgba(107,122,63,.12)',
+                background: 'rgba(46,107,67,.12)',
                 color: 'var(--olive-deep)',
               }}
             >

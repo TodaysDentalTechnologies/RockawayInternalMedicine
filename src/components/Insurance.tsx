@@ -114,7 +114,7 @@ export default function Insurance() {
           width: 560,
           height: 560,
           borderRadius: '50%',
-          background: 'radial-gradient(circle at 40% 40%, rgba(200,213,160,.14), transparent 68%)',
+          background: 'radial-gradient(circle at 40% 40%, rgba(179,209,187,.14), transparent 68%)',
           pointerEvents: 'none',
         }}
       />
@@ -162,7 +162,7 @@ export default function Insurance() {
             <div
               key={s.label}
               className="reveal"
-              style={{ transitionDelay: `${i * 0.06}s`, borderTop: '1px solid rgba(239,237,221,.22)', paddingTop: 18 }}
+              style={{ transitionDelay: `${i * 0.06}s`, borderTop: '1px solid rgba(232,239,230,.22)', paddingTop: 18 }}
             >
               <CountUp value={s.value} suffix={s.suffix} dur={s.dur} />
               <p
@@ -255,7 +255,7 @@ export default function Insurance() {
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      border: `1px solid ${on ? 'transparent' : 'rgba(239,237,221,.3)'}`,
+                      border: `1px solid ${on ? 'transparent' : 'rgba(232,239,230,.3)'}`,
                       borderRadius: 999,
                       padding: '10px 17px',
                       fontSize: 14,
@@ -286,7 +286,7 @@ export default function Insurance() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  border: '1px dashed rgba(239,237,221,.3)',
+                  border: '1px dashed rgba(232,239,230,.3)',
                   borderRadius: 999,
                   padding: '10px 17px',
                   fontSize: 14,

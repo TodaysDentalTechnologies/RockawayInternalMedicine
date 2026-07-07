@@ -6,7 +6,7 @@ import { MapPin, Phone, ArrowRight } from './icons'
 import CallbackForm from './CallbackForm'
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-const CONFETTI_COLORS = ['#6B7A3F', '#A3B18A', '#C8D5A0', '#B08D57', '#4A5327']
+const CONFETTI_COLORS = ['#2E6B43', '#86A894', '#B3D1BB', '#B08D57', '#1C4A2C']
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clinic.fullAddress)}`
 
 const TYPES = [
@@ -104,13 +104,14 @@ const chip = (on: boolean): React.CSSProperties => ({
   padding: '11px 20px',
   fontSize: 14.5,
   fontWeight: 500,
-  background: on ? 'rgba(107,122,63,.1)' : 'var(--bg2)',
+  background: on ? 'rgba(46,107,67,.1)' : 'var(--bg2)',
   boxShadow: on ? 'inset 0 0 0 1px var(--olive)' : 'none',
   transition: 'border-color .25s, box-shadow .25s, background .25s',
 })
 const nextBtn: React.CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: 9,
   background: 'var(--olive-deep)',
   color: 'var(--on-olive)',
@@ -118,10 +119,13 @@ const nextBtn: React.CSSProperties = {
   borderRadius: 999,
   fontSize: 14.5,
   fontWeight: 600,
+  flex: 'none',
+  whiteSpace: 'nowrap',
 }
 const backBtn: React.CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: 8,
   padding: '12px 18px',
   borderRadius: 999,
@@ -129,6 +133,8 @@ const backBtn: React.CSSProperties = {
   fontWeight: 600,
   color: 'var(--ink-soft)',
   border: '1px solid var(--line)',
+  flex: 'none',
+  whiteSpace: 'nowrap',
 }
 
 export default function Contact() {
@@ -221,7 +227,7 @@ export default function Contact() {
               </h3>
               <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11.5, color: 'var(--ink-soft)', paddingBottom: 5 }}>{stepLabel}</span>
             </div>
-            <div style={{ height: 4, borderRadius: 99, background: 'rgba(107,122,63,.14)', margin: '16px 0 26px', overflow: 'hidden' }}>
+            <div style={{ height: 4, borderRadius: 99, background: 'rgba(46,107,67,.14)', margin: '16px 0 26px', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: progressWidth, background: 'var(--olive)', borderRadius: 99, transition: 'width .5s cubic-bezier(.22,.61,.36,1)' }} />
             </div>
 
@@ -244,7 +250,7 @@ export default function Contact() {
                           border: `1px solid ${on ? 'var(--olive)' : 'var(--line)'}`,
                           borderRadius: 14,
                           padding: '14px 16px',
-                          background: on ? 'rgba(107,122,63,.1)' : 'var(--bg2)',
+                          background: on ? 'rgba(46,107,67,.1)' : 'var(--bg2)',
                           boxShadow: on ? 'inset 0 0 0 1px var(--olive)' : 'none',
                           transition: 'border-color .25s, box-shadow .25s, background .25s',
                         }}
@@ -255,7 +261,7 @@ export default function Contact() {
                     )
                   })}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 22 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginTop: 22 }}>
                   <span style={{ fontSize: 12.5, color: '#A0522D', opacity: hint ? 1 : 0, transition: 'opacity .3s' }}>Pick one to continue</span>
                   <button onClick={next} className="rim-cta" style={nextBtn}>
                     Continue <ArrowRight size={14} />
@@ -283,12 +289,14 @@ export default function Contact() {
                     </button>
                   ))}
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 24 }}>
-                  <button onClick={back} className="rim-outline-btn" style={backBtn}>Back</button>
-                  <span style={{ fontSize: 12.5, color: '#A0522D', opacity: hint ? 1 : 0, transition: 'opacity .3s' }}>Pick a day and time</span>
-                  <button onClick={next} className="rim-cta" style={nextBtn}>
-                    Continue <ArrowRight size={14} />
-                  </button>
+                <div style={{ marginTop: 24 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                    <button onClick={back} className="rim-outline-btn" style={backBtn}>Back</button>
+                    <button onClick={next} className="rim-cta rim-wiz-primary" style={nextBtn}>
+                      Continue <ArrowRight size={14} />
+                    </button>
+                  </div>
+                  <p style={{ fontSize: 12.5, color: '#A0522D', opacity: hint ? 1 : 0, transition: 'opacity .3s', textAlign: 'center', marginTop: 12 }}>Pick a day and time</p>
                 </div>
               </div>
             )}
@@ -323,12 +331,14 @@ export default function Contact() {
                 <p style={{ fontSize: 12.5, lineHeight: 1.55, color: 'var(--ink-soft)', marginTop: 14 }}>
                   No portals, no passwords — every request is confirmed by a human on the phone.
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginTop: 22 }}>
-                  <button onClick={back} className="rim-outline-btn" style={backBtn}>Back</button>
-                  <span style={{ fontSize: 12.5, color: '#A0522D', opacity: hint ? 1 : 0, transition: 'opacity .3s', textAlign: 'center' }}>Add a number so we can call you</span>
-                  <button onClick={finish} className="rim-cta" style={nextBtn}>
-                    Review my request <ArrowRight size={14} />
-                  </button>
+                <div style={{ marginTop: 22 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                    <button onClick={back} className="rim-outline-btn" style={backBtn}>Back</button>
+                    <button onClick={finish} className="rim-cta rim-wiz-primary" style={nextBtn}>
+                      Review my request <ArrowRight size={14} />
+                    </button>
+                  </div>
+                  <p style={{ fontSize: 12.5, color: '#A0522D', opacity: hint ? 1 : 0, transition: 'opacity .3s', textAlign: 'center', marginTop: 12 }}>Add a number so we can call you</p>
                 </div>
               </div>
             )}
@@ -392,7 +402,7 @@ export default function Contact() {
           <div style={{ background: 'var(--dark)', color: 'var(--on-dark)', padding: 'clamp(26px,3.6vw,42px)', position: 'relative', overflow: 'hidden' }}>
             <div
               aria-hidden="true"
-              style={{ position: 'absolute', right: -130, top: -110, width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, rgba(200,213,160,.15), transparent 68%)', pointerEvents: 'none' }}
+              style={{ position: 'absolute', right: -130, top: -110, width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, rgba(179,209,187,.15), transparent 68%)', pointerEvents: 'none' }}
             />
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontFamily: "'DM Mono',monospace", fontSize: 11.5, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--accent)' }}>
@@ -413,7 +423,7 @@ export default function Contact() {
                   GET DIRECTIONS <ArrowRight size={12} strokeWidth={2} />
                 </a>
               </div>
-              <div style={{ height: 1, background: 'rgba(239,237,221,.14)', margin: '24px 0' }} />
+              <div style={{ height: 1, background: 'rgba(232,239,230,.14)', margin: '24px 0' }} />
               <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.2em', color: 'var(--on-dark-soft)' }}>CALL THE FRONT DESK</p>
               <a
                 href={clinic.phoneHref}
@@ -422,10 +432,10 @@ export default function Contact() {
                 {clinic.phone}
               </a>
               <p style={{ fontSize: 13.5, color: 'var(--on-dark-soft)', marginTop: 6 }}>Tap to call — a human picks up during office hours.</p>
-              <div style={{ height: 1, background: 'rgba(239,237,221,.14)', margin: '24px 0' }} />
+              <div style={{ height: 1, background: 'rgba(232,239,230,.14)', margin: '24px 0' }} />
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
                 <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.2em', color: 'var(--on-dark-soft)' }}>OFFICE HOURS</p>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono',monospace", fontSize: 11.5, border: '1px solid rgba(239,237,221,.25)', borderRadius: 999, padding: '6px 12px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono',monospace", fontSize: 11.5, border: '1px solid rgba(232,239,230,.25)', borderRadius: 999, padding: '6px 12px' }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: status.color, animation: 'rimBlink 2.4s infinite' }} />
                   {status.label}
                 </span>
@@ -444,7 +454,7 @@ export default function Contact() {
                         padding: '6px 10px',
                         borderRadius: 8,
                         color: isToday ? 'var(--on-dark)' : 'var(--on-dark-soft)',
-                        background: isToday ? 'rgba(200,213,160,.14)' : 'transparent',
+                        background: isToday ? 'rgba(179,209,187,.14)' : 'transparent',
                         fontWeight: isToday ? 600 : 400,
                       }}
                     >
@@ -476,7 +486,7 @@ export default function Contact() {
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '14px 20px', flexWrap: 'wrap', padding: '16px clamp(16px,2.4vw,24px)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-              <span style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 12, background: 'rgba(107,122,63,.11)', color: 'var(--olive-deep)' }}>
+              <span style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 12, background: 'rgba(46,107,67,.11)', color: 'var(--olive-deep)' }}>
                 <MapPin size={18} />
               </span>
               <span style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>

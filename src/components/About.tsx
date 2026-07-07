@@ -76,7 +76,7 @@ export default function About() {
               overflow: 'hidden',
               border: '1px solid var(--line)',
               aspectRatio: '4/4.4',
-              background: 'linear-gradient(150deg, rgba(163,177,138,.3), rgba(200,213,160,.22))',
+              background: 'linear-gradient(150deg, rgba(134,168,148,.3), rgba(179,209,187,.22))',
             }}
           >
             <ImageSlot

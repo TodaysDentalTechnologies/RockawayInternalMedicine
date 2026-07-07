@@ -1,28 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { clinic } from '../data/clinic'
 import SectionHeading from './SectionHeading'
 import { scrollToId } from './Header'
 import { Clipboard, Activity, Stethoscope, Flask, Syringe, Heart, Shield, Sun, Sparkles, Wind, Bone, Baby, Droplet, Pill, Search, Zap, Scale, ArrowRight } from './icons'
-import type { ReactNode } from 'react'
+import type { ReactNode, CSSProperties } from 'react'
 
-const SERVICES: { icon: ReactNode; title: string; body: string }[] = [
-  { icon: <Clipboard size={21} />, title: 'Annual Physicals', body: 'A thorough head-to-toe exam with vitals, labs, and screenings to catch problems early.' },
-  { icon: <Activity size={21} />, title: 'Hypertension Treatment', body: 'Personalized blood-pressure control with lifestyle guidance, medication, and monitoring.' },
-  { icon: <Sparkles size={21} />, title: 'Dermatology', body: 'Evaluation and care for rashes, acne, moles, and common skin conditions.' },
-  { icon: <Wind size={21} />, title: 'COPD & Emphysema', body: 'Breathing support with inhaler plans and steady lung-health monitoring.' },
-  { icon: <Stethoscope size={21} />, title: 'Liver & Gastric Disorders', body: 'Diagnosis and management of digestive, stomach, and liver concerns.' },
-  { icon: <Bone size={21} />, title: 'Osteoporosis Management', body: 'Bone-density screening and treatment to keep your bones strong.' },
-  { icon: <Syringe size={21} />, title: 'Physicals & Vaccinations', body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus shots.' },
-  { icon: <Baby size={21} />, title: 'Family Planning & Birth Control', body: 'Confidential contraception counseling and family-planning support.' },
-  { icon: <Heart size={21} />, title: 'Cardiology', body: 'Heart-health monitoring, EKGs, and cardiovascular risk management.' },
-  { icon: <Flask size={21} />, title: 'Cholesterol Testing', body: 'Lipid panels and treatment to protect your heart and prevent complications.' },
-  { icon: <Droplet size={21} />, title: 'Diabetes Treatment & Testing', body: 'A1C testing, blood-sugar monitoring, and food-first diabetes management.' },
-  { icon: <Shield size={21} />, title: 'Immunotherapy', body: 'Allergy and immune-system treatment coordinated under expert supervision.' },
-  { icon: <Sun size={21} />, title: 'Menopause Treatment', body: 'Symptom relief and hormone guidance to navigate menopause with confidence.' },
-  { icon: <Pill size={21} />, title: 'Thyroid Treatment', body: 'Testing and management for both under- and overactive thyroid conditions.' },
-  { icon: <Search size={21} />, title: 'Cancer Screening', body: 'Guideline-based screenings for early detection, when it matters most.' },
-  { icon: <Zap size={21} />, title: 'Neurology', body: 'Evaluation and management of headaches, nerve pain, and neurological conditions.' },
-  { icon: <Scale size={21} />, title: 'Obesity Treatment', body: 'Personalized weight management with medical support and honest guidance.' },
+// `motion` picks the icon's living animation — each is chosen to echo its meaning.
+const SERVICES: { icon: ReactNode; title: string; body: string; motion: string }[] = [
+  { icon: <Clipboard size={21} />, title: 'Annual Physicals', body: 'A thorough head-to-toe exam with vitals, labs, and screenings to catch problems early.', motion: 'stamp' },
+  { icon: <Activity size={21} />, title: 'Hypertension Treatment', body: 'Personalized blood-pressure control with lifestyle guidance, medication, and monitoring.', motion: 'ekg' },
+  { icon: <Sparkles size={21} />, title: 'Dermatology', body: 'Evaluation and care for rashes, acne, moles, and common skin conditions.', motion: 'twinkle' },
+  { icon: <Wind size={21} />, title: 'COPD & Emphysema', body: 'Breathing support with inhaler plans and steady lung-health monitoring.', motion: 'blow' },
+  { icon: <Stethoscope size={21} />, title: 'Liver & Gastric Disorders', body: 'Diagnosis and management of digestive, stomach, and liver concerns.', motion: 'swing' },
+  { icon: <Bone size={21} />, title: 'Osteoporosis Management', body: 'Bone-density screening and treatment to keep your bones strong.', motion: 'wiggle' },
+  { icon: <Syringe size={21} />, title: 'Physicals & Vaccinations', body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus shots.', motion: 'inject' },
+  { icon: <Baby size={21} />, title: 'Family Planning & Birth Control', body: 'Confidential contraception counseling and family-planning support.', motion: 'rock' },
+  { icon: <Heart size={21} />, title: 'Cardiology', body: 'Heart-health monitoring, EKGs, and cardiovascular risk management.', motion: 'beat' },
+  { icon: <Flask size={21} />, title: 'Cholesterol Testing', body: 'Lipid panels and treatment to protect your heart and prevent complications.', motion: 'swirl' },
+  { icon: <Droplet size={21} />, title: 'Diabetes Treatment & Testing', body: 'A1C testing, blood-sugar monitoring, and food-first diabetes management.', motion: 'drip' },
+  { icon: <Shield size={21} />, title: 'Immunotherapy', body: 'Allergy and immune-system treatment coordinated under expert supervision.', motion: 'guard' },
+  { icon: <Sun size={21} />, title: 'Menopause Treatment', body: 'Symptom relief and hormone guidance to navigate menopause with confidence.', motion: 'shine' },
+  { icon: <Pill size={21} />, title: 'Thyroid Treatment', body: 'Testing and management for both under- and overactive thyroid conditions.', motion: 'spin' },
+  { icon: <Search size={21} />, title: 'Cancer Screening', body: 'Guideline-based screenings for early detection, when it matters most.', motion: 'scan' },
+  { icon: <Zap size={21} />, title: 'Neurology', body: 'Evaluation and management of headaches, nerve pain, and neurological conditions.', motion: 'flash' },
+  { icon: <Scale size={21} />, title: 'Obesity Treatment', body: 'Personalized weight management with medical support and honest guidance.', motion: 'balance' },
 ]
 
 const FINDER: { concern: string; kicker: string; title: string; desc: string }[] = [
@@ -80,7 +81,23 @@ export default function Services() {
   const [sel, setSel] = useState<number>(-1)
   const [flip, setFlip] = useState(false)
   const timer = useRef<number | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
   const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  // Run the ambient icon/mesh animations only while the section is on-screen.
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    if (!('IntersectionObserver' in window)) {
+      el.classList.add('in-view')
+      return
+    }
+    const io = new IntersectionObserver(([e]) => el.classList.toggle('in-view', e.isIntersecting), {
+      rootMargin: '200px 0px',
+    })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   const pick = (i: number) => {
     if (timer.current) window.clearTimeout(timer.current)
@@ -99,7 +116,14 @@ export default function Services() {
   const active = sel >= 0 ? FINDER[sel] : null
 
   return (
-    <section id="services" style={{ background: 'var(--bg2)', padding: 'clamp(72px,9vw,124px) 0 0' }}>
+    <section ref={sectionRef} id="services" className="rim-svc-section" style={{ background: 'var(--bg2)', padding: 'clamp(72px,9vw,124px) 0 0' }}>
+      {/* Gradient-mesh backdrop */}
+      <div className="rim-mesh" aria-hidden="true">
+        <span className="m1" />
+        <span className="m2" />
+        <span className="m3" />
+      </div>
+
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         <SectionHeading eyebrow="What we do" maxWidth={640}>
           Primary care, <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>end to end.</em>
@@ -108,56 +132,35 @@ export default function Services() {
           From the annual physical to the years-long management of a chronic condition — one practice, one record, one team.
         </p>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,300px),1fr))',
-            gap: 16,
-            marginTop: 48,
-          }}
-        >
+        {/* Uniform service grid */}
+        <div className="rim-svc-grid" style={{ marginTop: 44 }}>
           {SERVICES.map((s, i) => (
-            <div
-              key={s.title}
-              className="rim-card reveal"
-              style={{
-                transitionDelay: `${(i % 3) * 0.04}s`,
-                background: 'var(--card)',
-                border: '1px solid var(--line)',
-                borderRadius: 20,
-                padding: 26,
-              }}
-            >
-              <span
-                className="rim-svc-icon"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 46,
-                  height: 46,
-                  borderRadius: 14,
-                  background: 'rgba(107,122,63,.11)',
-                  color: 'var(--olive-deep)',
-                }}
-              >
-                {s.icon}
-              </span>
-              <h3 style={{ fontSize: 17.5, fontWeight: 600, letterSpacing: '-.01em', marginTop: 18 }}>{s.title}</h3>
-              <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 8 }}>{s.body}</p>
+            <div key={s.title} className="reveal rim-rise" style={{ transitionDelay: `${(i % 4) * 0.05}s` }}>
+              <article className="rim-svc">
+                <span className="rim-svc-ic2">
+                  <span className={`rim-liv rim-liv-${s.motion}`} style={{ '--d': `-${(i * 0.31).toFixed(2)}s` } as CSSProperties}>{s.icon}</span>
+                </span>
+                <h3 style={{ fontSize: 17.5, fontWeight: 600, letterSpacing: '-.01em', marginTop: 18 }}>{s.title}</h3>
+                <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 8 }}>{s.body}</p>
+              </article>
             </div>
           ))}
         </div>
 
         {/* Symptom → service finder */}
         <div
-          className="reveal"
+          className="reveal rim-finder"
           style={{
+            position: 'relative',
+            overflow: 'hidden',
             marginTop: 'clamp(56px,7vw,88px)',
             marginBottom: 'clamp(56px,7vw,96px)',
-            border: '1px solid var(--line)',
+            border: '1px solid rgba(255,255,255,.55)',
             borderRadius: 28,
-            background: 'linear-gradient(135deg, rgba(200,213,160,.26), rgba(163,177,138,.16))',
+            background: 'linear-gradient(135deg, rgba(179,209,187,.4), rgba(134,168,148,.2))',
+            backdropFilter: 'blur(14px) saturate(1.3)',
+            WebkitBackdropFilter: 'blur(14px) saturate(1.3)',
+            boxShadow: '0 40px 80px -50px rgba(28,74,44,.6)',
             padding: 'clamp(26px,4vw,48px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,400px),1fr))',
@@ -194,15 +197,15 @@ export default function Services() {
                     key={f.concern}
                     onClick={() => pick(i)}
                     aria-pressed={on}
+                    className="rim-fchip"
                     style={{
-                      border: `1px solid ${on ? 'transparent' : 'rgba(74,83,39,.32)'}`,
+                      border: `1px solid ${on ? 'transparent' : 'rgba(28,74,44,.32)'}`,
                       borderRadius: 999,
                       padding: '11px 18px',
                       fontSize: 14.5,
                       fontWeight: 500,
-                      background: on ? 'var(--olive-deep)' : 'var(--card)',
+                      background: on ? 'var(--olive-deep)' : 'rgba(255,255,255,.7)',
                       color: on ? 'var(--on-olive)' : 'var(--ink)',
-                      transition: 'transform .25s, background .25s, color .25s, border-color .25s',
                     }}
                   >
                     {f.concern}
@@ -219,15 +222,17 @@ export default function Services() {
                 transform: flip ? 'rotateY(88deg)' : 'rotateY(0deg)',
                 transition: 'transform .22s ease',
                 transformStyle: 'preserve-3d',
-                background: 'var(--card)',
-                border: '1px solid var(--line)',
+                background: 'linear-gradient(160deg, rgba(255,255,255,.82), rgba(255,255,255,.6))',
+                border: '1px solid rgba(255,255,255,.7)',
                 borderRadius: 22,
                 padding: 'clamp(24px,3vw,34px)',
                 minHeight: 280,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                boxShadow: '0 30px 60px -30px rgba(43,43,36,.3)',
+                backdropFilter: 'blur(16px) saturate(1.4)',
+                WebkitBackdropFilter: 'blur(16px) saturate(1.4)',
+                boxShadow: '0 34px 66px -32px rgba(28,74,44,.5)',
               }}
             >
               {!active ? (
@@ -240,7 +245,7 @@ export default function Services() {
                       width: 46,
                       height: 46,
                       borderRadius: '50%',
-                      background: 'rgba(107,122,63,.11)',
+                      background: 'rgba(46,107,67,.11)',
                       color: 'var(--olive-deep)',
                     }}
                   >

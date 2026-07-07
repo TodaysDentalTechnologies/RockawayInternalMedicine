@@ -66,10 +66,10 @@ export default function CallbackForm() {
           display: 'flex',
           flexDirection: 'column',
           gap: 14,
-          background: 'linear-gradient(150deg, rgba(200,213,160,.22), rgba(163,177,138,.12))',
+          background: 'linear-gradient(150deg, rgba(179,209,187,.22), rgba(134,168,148,.12))',
         }}
       >
-        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 46, height: 46, borderRadius: 14, background: 'rgba(107,122,63,.12)', color: 'var(--olive-deep)' }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 46, height: 46, borderRadius: 14, background: 'rgba(46,107,67,.12)', color: 'var(--olive-deep)' }}>
           <PhoneCall size={22} />
         </span>
         <div>
@@ -88,7 +88,7 @@ export default function CallbackForm() {
       <div style={{ padding: 'clamp(24px,3vw,38px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {submitted ? (
           <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 58, height: 58, borderRadius: '50%', background: 'rgba(107,122,63,.14)', color: 'var(--olive-deep)', animation: 'rimPop .6s cubic-bezier(.34,1.56,.64,1) both' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 58, height: 58, borderRadius: '50%', background: 'rgba(46,107,67,.14)', color: 'var(--olive-deep)', animation: 'rimPop .6s cubic-bezier(.34,1.56,.64,1) both' }}>
               <Check size={28} />
             </span>
             <h4 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 24 }}>We'll call you back!</h4>
@@ -143,7 +143,7 @@ export default function CallbackForm() {
             >
               {submitting ? (
                 <>
-                  <span style={{ width: 16, height: 16, border: '2px solid rgba(247,245,239,.5)', borderTopColor: 'var(--on-olive)', borderRadius: '50%', animation: 'rimSpin .7s linear infinite' }} />
+                  <span style={{ width: 16, height: 16, border: '2px solid rgba(241,246,241,.5)', borderTopColor: 'var(--on-olive)', borderRadius: '50%', animation: 'rimSpin .7s linear infinite' }} />
                   Submitting…
                 </>
               ) : (

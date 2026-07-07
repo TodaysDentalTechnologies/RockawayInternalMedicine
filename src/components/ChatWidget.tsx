@@ -140,8 +140,8 @@ export default function ChatWidget() {
     height: 38,
     flex: 'none',
     borderRadius: '50%',
-    background: input.trim() ? 'var(--card)' : 'rgba(247,245,239,.55)',
-    color: input.trim() ? 'var(--olive-deep)' : 'rgba(74,83,39,.5)',
+    background: input.trim() ? 'var(--card)' : 'rgba(241,246,241,.55)',
+    color: input.trim() ? 'var(--olive-deep)' : 'rgba(28,74,44,.5)',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -153,14 +153,14 @@ export default function ChatWidget() {
     <>
       {/* ── Compact centered bottom bar (hidden over the hero) ──── */}
       {!open && scrolled && (
-        <div style={{ position: 'fixed', left: '50%', bottom: 16, transform: 'translateX(-50%)', zIndex: 70, width: 'clamp(320px, 50vw, 620px)', maxWidth: 'calc(100vw - 24px)' }}>
+        <div className="rim-chat-bar" style={{ position: 'fixed', bottom: 'calc(16px + env(safe-area-inset-bottom))', zIndex: 70 }}>
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 12,
               background: 'var(--olive-deep)',
-              border: '1px solid rgba(247,245,239,.14)',
+              border: '1px solid rgba(241,246,241,.14)',
               borderRadius: 20,
               padding: '12px 14px',
               boxShadow: '0 24px 50px -18px rgba(43,43,36,.6)',
@@ -169,7 +169,7 @@ export default function ChatWidget() {
           >
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ color: 'var(--on-olive)', fontSize: 12.5, fontWeight: 600, lineHeight: 1.2, marginBottom: 7 }}>
-                Hi! I'm the front desk <span style={{ fontWeight: 400, color: 'rgba(247,245,239,.62)' }}>— ask me anything</span>
+                Hi! I'm the front desk <span style={{ fontWeight: 400, color: 'rgba(241,246,241,.62)' }}>— ask me anything</span>
               </p>
               <input
                 type="text"
@@ -178,7 +178,8 @@ export default function ChatWidget() {
                 onKeyDown={onKey}
                 placeholder={PLACEHOLDERS[ph]}
                 aria-label="Ask the front desk"
-                style={{ width: '100%', background: 'var(--card)', border: 0, borderRadius: 999, padding: '9px 16px', fontSize: 13, color: 'var(--ink)', outline: 'none' }}
+                className="rim-chat-input"
+                style={{ width: '100%', background: 'var(--card)', border: 0, borderRadius: 999, padding: '10px 16px', fontSize: 13, color: 'var(--ink)', outline: 'none' }}
               />
             </div>
             <button onClick={() => send(input)} disabled={!input.trim()} style={barSendStyle} aria-label="Send message">
@@ -225,13 +226,13 @@ export default function ChatWidget() {
           {/* backdrop */}
           <div
             onClick={() => setOpen(false)}
-            style={{ position: 'absolute', inset: 0, background: 'rgba(20,24,10,.5)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', animation: 'rimRise .3s ease both' }}
+            style={{ position: 'absolute', inset: 0, background: 'rgba(10,30,18,.5)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', animation: 'rimRise .3s ease both' }}
           />
 
           {/* content */}
           <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', animation: 'rimRise .35s cubic-bezier(.22,.61,.36,1) both' }}>
             {/* header */}
-            <header style={{ background: 'var(--olive-deep)', borderBottom: '1px solid rgba(247,245,239,.14)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 'none' }}>
+            <header style={{ background: 'var(--olive-deep)', borderBottom: '1px solid rgba(241,246,241,.14)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: '50%', background: 'var(--card)', color: 'var(--olive-deep)', fontFamily: "'Instrument Serif',serif", fontSize: 17, flex: 'none' }}>R</span>
                 <h2 style={{ color: 'var(--on-olive)', fontFamily: "'Instrument Serif',serif", fontSize: 19, letterSpacing: '.01em' }}>Front Desk Chat</h2>
@@ -239,7 +240,7 @@ export default function ChatWidget() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                style={{ width: 36, height: 36, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(247,245,239,.85)', transition: 'background .2s' }}
+                style={{ width: 36, height: 36, borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(241,246,241,.85)', transition: 'background .2s' }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.18)')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               >
@@ -296,6 +297,7 @@ export default function ChatWidget() {
                   onKeyDown={onKey}
                   placeholder={PLACEHOLDERS[ph]}
                   aria-label="Type a message"
+                  className="rim-chat-input"
                   style={{ flex: 1, background: 'var(--bg2)', border: '1px solid var(--line)', borderRadius: 999, padding: '13px 18px', fontSize: 14, color: 'var(--ink)', outline: 'none' }}
                 />
                 <button

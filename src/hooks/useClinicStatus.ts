@@ -53,7 +53,7 @@ function computeStatus(): ClinicStatus {
       open: true,
       label: 'Open now',
       sub: `Until ${formatHour(today.close)}`,
-      color: '#6B7A3F',
+      color: '#2E6B43',
     }
   }
 

@@ -85,7 +85,7 @@ export default function Header() {
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label={`${clinic.name} — back to top`}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', minWidth: 0 }}
           >
             <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style={{ flex: 'none' }}>
               <circle
@@ -111,8 +111,8 @@ export default function Header() {
                 R
               </text>
             </svg>
-            <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontFamily: "'Instrument Serif',serif", fontSize: 19, lineHeight: 1, letterSpacing: '.01em' }}>
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, overflow: 'hidden' }}>
+              <span style={{ fontFamily: "'Instrument Serif',serif", fontSize: 19, lineHeight: 1, letterSpacing: '.01em', whiteSpace: 'nowrap' }}>
                 {clinic.shortName}
               </span>
               <span
@@ -122,6 +122,9 @@ export default function Header() {
                   letterSpacing: '.32em',
                   color: 'var(--olive)',
                   textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
                 {clinic.tagline}
@@ -186,7 +189,7 @@ export default function Header() {
           </div>
 
           {/* Mobile actions */}
-          <div className="rim-mobile-actions" style={{ alignItems: 'center', gap: 10 }}>
+          <div className="rim-mobile-actions" style={{ alignItems: 'center', gap: 10, flex: 'none' }}>
             <a
               href={clinic.phoneHref}
               aria-label={`Call ${clinic.phone}`}
