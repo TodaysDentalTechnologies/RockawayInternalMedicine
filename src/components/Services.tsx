@@ -2,40 +2,27 @@ import { useRef, useState } from 'react'
 import { clinic } from '../data/clinic'
 import SectionHeading from './SectionHeading'
 import { scrollToId } from './Header'
-import { Clipboard, Activity, Stethoscope, Flask, Syringe, Video, ArrowRight } from './icons'
+import { Clipboard, Activity, Stethoscope, Flask, Syringe, Heart, Shield, Sun, Sparkles, Wind, Bone, Baby, Droplet, Pill, Search, Zap, Scale, ArrowRight } from './icons'
 import type { ReactNode } from 'react'
 
 const SERVICES: { icon: ReactNode; title: string; body: string }[] = [
-  {
-    icon: <Clipboard size={21} />,
-    title: 'Annual Physicals & Preventive Care',
-    body: 'A proper head-to-toe: screenings, vaccines, and labs timed to your age and risk — with time left to talk.',
-  },
-  {
-    icon: <Activity size={21} />,
-    title: 'Chronic Disease Management',
-    body: 'Diabetes, hypertension, cholesterol, thyroid — steady, coordinated care that keeps small issues small.',
-  },
-  {
-    icon: <Stethoscope size={21} />,
-    title: 'Sick Visits & Same-Week Care',
-    body: 'Fevers, infections, aches, and flare-ups seen quickly — often the same week you call.',
-  },
-  {
-    icon: <Flask size={21} />,
-    title: 'Lab Work & Diagnostics',
-    body: 'On-site blood draws, EKGs, and results reviewed with you — not just texted a number.',
-  },
-  {
-    icon: <Syringe size={21} />,
-    title: 'Vaccines & Immunizations',
-    body: 'Flu, pneumonia, shingles, tetanus, and travel shots kept current and on schedule.',
-  },
-  {
-    icon: <Video size={21} />,
-    title: 'Telehealth Visits',
-    body: 'Follow-ups, refills, and quick questions handled from home when a visit isn’t needed.',
-  },
+  { icon: <Clipboard size={21} />, title: 'Annual Physicals', body: 'A thorough head-to-toe exam with vitals, labs, and screenings to catch problems early.' },
+  { icon: <Activity size={21} />, title: 'Hypertension Treatment', body: 'Personalized blood-pressure control with lifestyle guidance, medication, and monitoring.' },
+  { icon: <Sparkles size={21} />, title: 'Dermatology', body: 'Evaluation and care for rashes, acne, moles, and common skin conditions.' },
+  { icon: <Wind size={21} />, title: 'COPD & Emphysema', body: 'Breathing support with inhaler plans and steady lung-health monitoring.' },
+  { icon: <Stethoscope size={21} />, title: 'Liver & Gastric Disorders', body: 'Diagnosis and management of digestive, stomach, and liver concerns.' },
+  { icon: <Bone size={21} />, title: 'Osteoporosis Management', body: 'Bone-density screening and treatment to keep your bones strong.' },
+  { icon: <Syringe size={21} />, title: 'Physicals & Vaccinations', body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus shots.' },
+  { icon: <Baby size={21} />, title: 'Family Planning & Birth Control', body: 'Confidential contraception counseling and family-planning support.' },
+  { icon: <Heart size={21} />, title: 'Cardiology', body: 'Heart-health monitoring, EKGs, and cardiovascular risk management.' },
+  { icon: <Flask size={21} />, title: 'Cholesterol Testing', body: 'Lipid panels and treatment to protect your heart and prevent complications.' },
+  { icon: <Droplet size={21} />, title: 'Diabetes Treatment & Testing', body: 'A1C testing, blood-sugar monitoring, and food-first diabetes management.' },
+  { icon: <Shield size={21} />, title: 'Immunotherapy', body: 'Allergy and immune-system treatment coordinated under expert supervision.' },
+  { icon: <Sun size={21} />, title: 'Menopause Treatment', body: 'Symptom relief and hormone guidance to navigate menopause with confidence.' },
+  { icon: <Pill size={21} />, title: 'Thyroid Treatment', body: 'Testing and management for both under- and overactive thyroid conditions.' },
+  { icon: <Search size={21} />, title: 'Cancer Screening', body: 'Guideline-based screenings for early detection, when it matters most.' },
+  { icon: <Zap size={21} />, title: 'Neurology', body: 'Evaluation and management of headaches, nerve pain, and neurological conditions.' },
+  { icon: <Scale size={21} />, title: 'Obesity Treatment', body: 'Personalized weight management with medical support and honest guidance.' },
 ]
 
 const FINDER: { concern: string; kicker: string; title: string; desc: string }[] = [

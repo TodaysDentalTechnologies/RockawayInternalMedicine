@@ -3,6 +3,7 @@ import { clinic, hours } from '../data/clinic'
 import { useClinicStatus } from '../hooks/useClinicStatus'
 import SectionHeading from './SectionHeading'
 import { MapPin, Phone, ArrowRight } from './icons'
+import CallbackForm from './CallbackForm'
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const CONFETTI_COLORS = ['#6B7A3F', '#A3B18A', '#C8D5A0', '#B08D57', '#4A5327']
@@ -456,6 +457,9 @@ export default function Contact() {
             </div>
           </div>
         </div>
+
+        {/* Card: request a callback */}
+        <CallbackForm />
 
         {/* Card B: map */}
         <div

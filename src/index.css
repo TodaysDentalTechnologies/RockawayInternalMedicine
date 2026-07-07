@@ -291,6 +291,11 @@ h4 {
     opacity: 1;
   }
 }
+@keyframes rimSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
