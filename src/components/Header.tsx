@@ -1,39 +1,60 @@
-import { useState } from 'react'
-import { clinic } from '../data/clinic'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { locations, site } from '../data/clinic'
 import { useScrolled } from '../hooks/useReveal'
 import { useClinicStatus } from '../hooks/useClinicStatus'
-import { Phone, Menu, Close } from './icons'
+import { Menu, Close, Chevron } from './icons'
+import CallMenu from './CallMenu'
 
 const NAV = [
-  { id: 'about', label: 'About' },
-  { id: 'conditions', label: 'Conditions' },
-  { id: 'services', label: 'Services' },
-  { id: 'insurance', label: 'Insurance' },
-  { id: 'contact', label: 'Contact' },
+  { to: '/about', label: 'About' },
+  { to: '/conditions', label: 'Conditions' },
+  { to: '/services', label: 'Services' },
+  { to: '/insurance', label: 'Insurance' },
+  { to: '/contact', label: 'Contact' },
 ]
-
-export function scrollToId(id: string) {
-  const el = document.getElementById(id)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
 
 export default function Header() {
   const scrolled = useScrolled(24)
   const status = useClinicStatus()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [locOpen, setLocOpen] = useState(false)
+  const locRef = useRef<HTMLDivElement>(null)
 
-  const go = (id: string) => {
+  // Solid chrome once scrolled, and always on interior pages.
+  const solid = scrolled || pathname !== '/'
+
+  const go = (to: string) => {
     setMenuOpen(false)
-    scrollToId(id)
+    setLocOpen(false)
+    navigate(to)
   }
+
+  // Close the locations dropdown on outside click.
+  useEffect(() => {
+    if (!locOpen) return
+    const onDoc = (e: MouseEvent) => {
+      if (locRef.current && !locRef.current.contains(e.target as Node)) setLocOpen(false)
+    }
+    document.addEventListener('mousedown', onDoc)
+    return () => document.removeEventListener('mousedown', onDoc)
+  }, [locOpen])
+
+  // Close both menus whenever the route changes.
+  useEffect(() => {
+    setLocOpen(false)
+    setMenuOpen(false)
+  }, [pathname])
 
   return (
     <>
       <a
-        href="#contact"
+        href="/contact"
         onClick={(e) => {
           e.preventDefault()
-          go('contact')
+          go('/contact')
         }}
         style={{
           position: 'absolute',
@@ -60,11 +81,11 @@ export default function Header() {
           left: 0,
           right: 0,
           zIndex: 50,
-          background: scrolled ? 'var(--header-bg)' : 'transparent',
-          borderBottom: `1px solid ${scrolled ? 'var(--line)' : 'transparent'}`,
-          boxShadow: scrolled ? '0 10px 30px -22px rgba(43,43,36,.5)' : 'none',
-          backdropFilter: scrolled ? 'saturate(1.4) blur(12px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'saturate(1.4) blur(12px)' : 'none',
+          background: solid ? 'var(--header-bg)' : 'transparent',
+          borderBottom: `1px solid ${solid ? 'var(--line)' : 'transparent'}`,
+          boxShadow: solid ? '0 10px 30px -22px rgba(43,43,36,.5)' : 'none',
+          backdropFilter: solid ? 'saturate(1.4) blur(12px)' : 'none',
+          WebkitBackdropFilter: solid ? 'saturate(1.4) blur(12px)' : 'none',
           transition:
             'background .4s ease, border-color .4s ease, box-shadow .4s ease, backdrop-filter .4s ease',
         }}
@@ -74,7 +95,7 @@ export default function Header() {
             maxWidth: 1220,
             margin: '0 auto',
             padding: '0 clamp(18px,4vw,48px)',
-            height: scrolled ? 66 : 76,
+            height: solid ? 66 : 76,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -83,9 +104,9 @@ export default function Header() {
           }}
         >
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label={`${clinic.name} — back to top`}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', minWidth: 0 }}
+            onClick={() => go('/')}
+            aria-label={`${site.brand} — home`}
+            style={{ display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left' }}
           >
             <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" style={{ flex: 'none' }}>
               <circle
@@ -106,14 +127,14 @@ export default function Header() {
                 x="20"
                 y="26.5"
                 textAnchor="middle"
-                style={{ fontFamily: "'Instrument Serif',serif", fontSize: 21, fill: 'var(--olive-deep)' }}
+                style={{ fontFamily: "'Fraunces',serif", fontSize: 21, fill: 'var(--olive-deep)' }}
               >
-                R
+                {site.logoLetter}
               </text>
             </svg>
-            <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, overflow: 'hidden' }}>
-              <span style={{ fontFamily: "'Instrument Serif',serif", fontSize: 19, lineHeight: 1, letterSpacing: '.01em', whiteSpace: 'nowrap' }}>
-                {clinic.shortName}
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <span style={{ fontFamily: "'Fraunces',serif", fontSize: 19, lineHeight: 1, letterSpacing: '.01em', whiteSpace: 'nowrap' }}>
+                {site.shortName}
               </span>
               <span
                 style={{
@@ -122,42 +143,107 @@ export default function Header() {
                   letterSpacing: '.32em',
                   color: 'var(--olive)',
                   textTransform: 'uppercase',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
                 }}
               >
-                {clinic.tagline}
+                {site.tagline}
               </span>
             </span>
           </button>
 
           {/* Desktop nav */}
           <nav aria-label="Primary" className="rim-desktop-nav" style={{ alignItems: 'center', gap: 2 }}>
-            {NAV.map((item) => (
+            {/* Locations dropdown */}
+            <div ref={locRef} style={{ position: 'relative' }}>
               <button
-                key={item.id}
-                onClick={() => go(item.id)}
+                onClick={() => setLocOpen((v) => !v)}
                 className="rim-navlink"
+                aria-haspopup="true"
+                aria-expanded={locOpen}
                 style={{
-                  position: 'relative',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
                   padding: '9px 14px',
                   fontSize: 14.5,
-                  fontWeight: 500,
-                  color: 'var(--ink)',
+                  fontWeight: pathname.startsWith('/locations') ? 600 : 500,
+                  color: pathname.startsWith('/locations') ? 'var(--olive-deep)' : 'var(--ink)',
                   borderRadius: 8,
                 }}
               >
-                {item.label}
-                <span className="rim-navbar" />
+                Locations
+                <Chevron size={14} style={{ transform: locOpen ? 'rotate(180deg)' : 'none', transition: 'transform .25s' }} />
               </button>
-            ))}
+              {locOpen && (
+                <div
+                  role="menu"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 10px)',
+                    left: 0,
+                    minWidth: 300,
+                    background: 'var(--card)',
+                    border: '1px solid var(--line)',
+                    borderRadius: 16,
+                    boxShadow: '0 24px 50px -24px rgba(43,43,36,.45)',
+                    padding: 8,
+                    zIndex: 60,
+                    animation: 'rimRise .22s cubic-bezier(.22,.61,.36,1) both',
+                  }}
+                >
+                  {locations.map((loc) => (
+                    <button
+                      key={loc.id}
+                      role="menuitem"
+                      onClick={() => go(`/locations/${loc.id}`)}
+                      style={{ display: 'flex', flexDirection: 'column', gap: 3, width: '100%', textAlign: 'left', padding: '12px 14px', borderRadius: 10 }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg2)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{loc.city}</span>
+                      <span style={{ fontSize: 12.5, color: 'var(--ink-soft)' }}>{loc.name} · {loc.phone}</span>
+                    </button>
+                  ))}
+                  <button
+                    role="menuitem"
+                    onClick={() => go('/contact')}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 14px', marginTop: 4, borderTop: '1px solid var(--line)', borderRadius: 10, fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: '.1em', color: 'var(--olive-deep)' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg2)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    SEE BOTH ON CONTACT →
+                  </button>
+                </div>
+              )}
+            </div>
+            {NAV.map((item) => {
+              const active = pathname === item.to
+              return (
+                <button
+                  key={item.to}
+                  onClick={() => go(item.to)}
+                  className="rim-navlink"
+                  aria-current={active ? 'page' : undefined}
+                  style={{
+                    position: 'relative',
+                    padding: '9px 14px',
+                    fontSize: 14.5,
+                    fontWeight: active ? 600 : 500,
+                    color: active ? 'var(--olive-deep)' : 'var(--ink)',
+                    borderRadius: 8,
+                  }}
+                >
+                  {item.label}
+                  <span className="rim-navbar" style={active ? { transform: 'scaleX(1)' } : undefined} />
+                </button>
+              )
+            })}
           </nav>
 
           <div className="rim-desktop-actions" style={{ alignItems: 'center', gap: 12 }}>
-            <a
-              href={clinic.phoneHref}
-              style={{
+            <CallMenu
+              label="Call"
+              align="right"
+              triggerStyle={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 9,
@@ -166,14 +252,13 @@ export default function Header() {
                 borderRadius: 999,
                 fontFamily: "'DM Mono',monospace",
                 fontSize: 13.5,
-                textDecoration: 'none',
+                background: 'transparent',
+                color: 'var(--ink)',
+                cursor: 'pointer',
               }}
-            >
-              <Phone size={15} style={{ color: 'var(--olive)' }} />
-              {clinic.phone}
-            </a>
+            />
             <button
-              onClick={() => go('contact')}
+              onClick={() => go('/contact')}
               className="rim-cta"
               style={{
                 background: 'var(--olive-deep)',
@@ -189,11 +274,13 @@ export default function Header() {
           </div>
 
           {/* Mobile actions */}
-          <div className="rim-mobile-actions" style={{ alignItems: 'center', gap: 10, flex: 'none' }}>
-            <a
-              href={clinic.phoneHref}
-              aria-label={`Call ${clinic.phone}`}
-              style={{
+          <div className="rim-mobile-actions" style={{ alignItems: 'center', gap: 10 }}>
+            <CallMenu
+              iconOnly
+              align="right"
+              iconColor="var(--olive-deep)"
+              iconSize={17}
+              triggerStyle={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -203,10 +290,9 @@ export default function Header() {
                 borderRadius: 999,
                 color: 'var(--olive-deep)',
                 background: 'var(--card)',
+                cursor: 'pointer',
               }}
-            >
-              <Phone size={17} />
-            </a>
+            />
             <button
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
@@ -245,22 +331,51 @@ export default function Header() {
           }}
         >
           <nav aria-label="Mobile" style={{ display: 'flex', flexDirection: 'column' }}>
-            {NAV.map((item) => (
+            {NAV.map((item) => {
+              const active = pathname === item.to
+              return (
+                <button
+                  key={item.to}
+                  onClick={() => go(item.to)}
+                  aria-current={active ? 'page' : undefined}
+                  style={{
+                    textAlign: 'left',
+                    fontFamily: "'Fraunces',serif",
+                    fontSize: 36,
+                    color: active ? 'var(--olive)' : 'var(--ink)',
+                    padding: '14px 0',
+                    borderBottom: '1px solid var(--line)',
+                  }}
+                >
+                  {item.label}
+                </button>
+              )
+            })}
+          </nav>
+
+          {/* Locations */}
+          <div style={{ paddingTop: 22 }}>
+            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--olive)' }}>
+              Locations
+            </span>
+            {locations.map((loc) => (
               <button
-                key={item.id}
-                onClick={() => go(item.id)}
+                key={loc.id}
+                onClick={() => go(`/locations/${loc.id}`)}
                 style={{
+                  display: 'block',
+                  width: '100%',
                   textAlign: 'left',
-                  fontFamily: "'Instrument Serif',serif",
-                  fontSize: 36,
                   padding: '14px 0',
                   borderBottom: '1px solid var(--line)',
                 }}
               >
-                {item.label}
+                <span style={{ fontFamily: "'Fraunces',serif", fontSize: 26, color: 'var(--ink)' }}>{loc.city}</span>
+                <span style={{ display: 'block', fontFamily: "'DM Mono',monospace", fontSize: 12, color: 'var(--ink-soft)', marginTop: 3 }}>{loc.name}</span>
               </button>
             ))}
-          </nav>
+          </div>
+
           <div style={{ marginTop: 'auto', paddingTop: 32, display: 'flex', flexDirection: 'column', gap: 14 }}>
             <span
               style={{
@@ -283,24 +398,31 @@ export default function Header() {
               />
               {status.label} · {status.sub}
             </span>
-            <a
-              href={clinic.phoneHref}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 10,
-                background: 'var(--olive-deep)',
-                color: 'var(--on-olive)',
-                padding: '16px 24px',
-                borderRadius: 999,
-                fontWeight: 600,
-                textDecoration: 'none',
-                fontSize: 16,
-              }}
-            >
-              Call {clinic.phone}
-            </a>
+            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--ink-soft)' }}>
+              Call an office
+            </span>
+            {locations.map((loc) => (
+              <a
+                key={loc.id}
+                href={loc.phoneHref}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                  background: 'var(--olive-deep)',
+                  color: 'var(--on-olive)',
+                  padding: '14px 20px',
+                  borderRadius: 14,
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  fontSize: 15.5,
+                }}
+              >
+                <span>{loc.phone}</span>
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11.5, fontWeight: 400, color: 'rgba(241,246,241,.72)' }}>{loc.city}</span>
+              </a>
+            ))}
           </div>
         </div>
       )}

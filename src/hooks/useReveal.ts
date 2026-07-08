@@ -2,7 +2,9 @@ import { useEffect } from 'react'
 
 // Adds `is-visible` to any element with the `reveal` class when it scrolls
 // into view. Runs once on mount and observes the whole document.
-export function useReveal() {
+// Pass a value (e.g. the route pathname) as `dep` to re-run the observer
+// whenever it changes — needed so freshly-mounted page content animates in.
+export function useReveal(dep?: unknown) {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>('.reveal'))
 
@@ -25,7 +27,7 @@ export function useReveal() {
 
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [])
+  }, [dep])
 }
 
 // Tracks whether the page has scrolled past a threshold (for the sticky header).

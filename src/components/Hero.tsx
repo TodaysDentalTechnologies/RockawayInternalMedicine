@@ -1,13 +1,15 @@
+import { useNavigate } from 'react-router-dom'
 import { clinic } from '../data/clinic'
 import { useClinicStatus } from '../hooks/useClinicStatus'
-import { scrollToId } from './Header'
 import ImageSlot from './ImageSlot'
-import { Calendar, ArrowRight, Phone, Check, Heart } from './icons'
+import CallMenu from './CallMenu'
+import { Calendar, ArrowRight, Check, Heart } from './icons'
 
 const TRUST = ['Board-certified', 'Most major plans', 'Same-week visits']
 
 export default function Hero() {
   const status = useClinicStatus()
+  const navigate = useNavigate()
 
   return (
     <section
@@ -68,7 +70,7 @@ export default function Hero() {
 
           <h1
             style={{
-              fontFamily: "'Instrument Serif',serif",
+              fontFamily: "'Fraunces',serif",
               fontWeight: 400,
               fontSize: 'clamp(46px,6.3vw,84px)',
               lineHeight: 0.98,
@@ -96,7 +98,7 @@ export default function Hero() {
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 36, animation: 'rimRise .9s cubic-bezier(.22,.61,.36,1) .28s both' }}>
             <button
-              onClick={() => scrollToId('contact')}
+              onClick={() => navigate('/contact')}
               className="rim-cta"
               style={{
                 display: 'inline-flex',
@@ -114,10 +116,11 @@ export default function Hero() {
               Request an appointment
               <ArrowRight size={16} />
             </button>
-            <a
-              href={clinic.phoneHref}
-              className="rim-outline-btn"
-              style={{
+            <CallMenu
+              label="Call now"
+              iconSize={16}
+              triggerClassName="rim-outline-btn"
+              triggerStyle={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 10,
@@ -128,12 +131,9 @@ export default function Hero() {
                 borderRadius: 999,
                 fontSize: 15.5,
                 fontWeight: 600,
-                textDecoration: 'none',
+                cursor: 'pointer',
               }}
-            >
-              <Phone size={16} style={{ color: 'var(--olive)' }} />
-              Call now
-            </a>
+            />
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 22px', marginTop: 30, animation: 'rimRise .9s cubic-bezier(.22,.61,.36,1) .36s both' }}>

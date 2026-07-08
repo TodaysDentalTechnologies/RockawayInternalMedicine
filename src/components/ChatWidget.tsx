@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { clinic } from '../data/clinic'
+import { locations, site } from '../data/clinic'
 import { Send, Close, Chat } from './icons'
 
-const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clinic.fullAddress)}`
+const linkStyle: React.CSSProperties = { color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }
+const mapsUrl = (address: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
 
 // Rotating hint text shown in the input placeholder.
 const PLACEHOLDERS = [
@@ -20,10 +21,16 @@ interface Msg {
   content: ReactNode
 }
 
+// Lists every office's number so no single location is favoured.
 const PhoneLink = () => (
-  <a href={clinic.phoneHref} style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
-    {clinic.phone}
-  </a>
+  <>
+    {locations.map((loc, i) => (
+      <span key={loc.id}>
+        {i > 0 && ' or '}
+        <a href={loc.phoneHref} style={linkStyle}>{loc.phone}</a> ({loc.city})
+      </span>
+    ))}
+  </>
 )
 
 // Self-contained "front desk" assistant: routes free text to a canned answer.
@@ -35,7 +42,7 @@ function answer(text: string): ReactNode {
     return <>If this is a medical emergency, please call <strong>911</strong> right away. For urgent but non-emergency questions, call our office at <PhoneLink />.</>
 
   if (has(/hour|open|clos|today|when.*(open|close)|what time/))
-    return <>We're open <strong>Mon–Fri 9:00 AM–5:00 PM</strong> and <strong>Saturday 9:00 AM–1:00 PM</strong>. Closed Sunday. Right now: {clinic.name} — call <PhoneLink /> anytime and we'll pick up during office hours.</>
+    return <>Both offices are open <strong>Mon–Fri 9:00 AM–5:00 PM</strong> and <strong>Saturday 9:00 AM–1:00 PM</strong>. Closed Sunday. Call <PhoneLink /> anytime and we'll pick up during office hours.</>
 
   if (has(/insur|plan|cover|medicare|medicaid|aetna|cigna|united|blue|bcbs|emblem|fidelis|healthfirst|metroplus|copay|pay/))
     return <>We accept most major plans — Medicare, Medicaid, Aetna, Empire BCBS, Cigna, UnitedHealthcare, Healthfirst, Fidelis, EmblemHealth, MetroPlus and more. We'll confirm your specific coverage when you call <PhoneLink />.</>
@@ -44,7 +51,18 @@ function answer(text: string): ReactNode {
     return <>Happy to help you book. Use the appointment request form on this page, or call the front desk at <PhoneLink /> — we usually have same-week openings.</>
 
   if (has(/where|locat|address|direction|map|find you|parking|near/))
-    return <>We're at <strong>147-12 Rockaway Blvd, Jamaica, NY 11436</strong> — right on the Boulevard near 147th St. <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>Open directions in Google Maps</a>.</>
+    return (
+      <>
+        We have <strong>two Queens offices</strong>:{' '}
+        {locations.map((loc, i) => (
+          <span key={loc.id}>
+            {i > 0 && '; '}
+            <strong>{loc.fullAddress}</strong> (<a href={mapsUrl(loc.fullAddress)} target="_blank" rel="noopener noreferrer" style={linkStyle}>directions</a>)
+          </span>
+        ))}
+        .
+      </>
+    )
 
   if (has(/new patient|accept.*patient|taking.*patient|first (visit|time)/))
     return <>Yes — we're welcoming new patients, and most first visits are scheduled within the week. Call <PhoneLink /> or use the request form to get started.</>
@@ -234,8 +252,8 @@ export default function ChatWidget() {
             {/* header */}
             <header style={{ background: 'var(--olive-deep)', borderBottom: '1px solid rgba(241,246,241,.14)', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: '50%', background: 'var(--card)', color: 'var(--olive-deep)', fontFamily: "'Instrument Serif',serif", fontSize: 17, flex: 'none' }}>R</span>
-                <h2 style={{ color: 'var(--on-olive)', fontFamily: "'Instrument Serif',serif", fontSize: 19, letterSpacing: '.01em' }}>Front Desk Chat</h2>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: '50%', background: 'var(--card)', color: 'var(--olive-deep)', fontFamily: "'Fraunces',serif", fontSize: 17, flex: 'none' }}>{site.logoLetter}</span>
+                <h2 style={{ color: 'var(--on-olive)', fontFamily: "'Fraunces',serif", fontSize: 19, letterSpacing: '.01em' }}>Front Desk Chat</h2>
               </div>
               <button
                 onClick={() => setOpen(false)}
@@ -255,7 +273,7 @@ export default function ChatWidget() {
                 {msgs.length === 0 && !typing && (
                   <div style={{ alignSelf: 'flex-start', maxWidth: '82%' }}>
                     <div style={{ background: 'var(--card)', border: '1px solid var(--line)', color: 'var(--ink)', borderRadius: '18px 18px 18px 6px', padding: '12px 16px', fontSize: 14, lineHeight: 1.55 }}>
-                      Hi, welcome to {clinic.name}! How can I help you today?
+                      Hi, welcome to {site.brand}! How can I help you today?
                     </div>
                   </div>
                 )}

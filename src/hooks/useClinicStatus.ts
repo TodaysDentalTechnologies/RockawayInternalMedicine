@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { clinic, hours } from '../data/clinic'
+import { primaryLocation, type Location } from '../data/clinic'
 
 export interface ClinicStatus {
   open: boolean
@@ -16,10 +16,10 @@ function formatHour(h: number): string {
   return `${hour12} ${period}`
 }
 
-// Current wall-clock time in the clinic's timezone.
-function nowInClinicTz(): { day: number; hour: number; minute: number } {
+// Current wall-clock time in the given timezone.
+function nowInTz(timezone: string): { day: number; hour: number; minute: number } {
   const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: clinic.timezone,
+    timeZone: timezone,
     weekday: 'short',
     hour: 'numeric',
     minute: 'numeric',
@@ -43,10 +43,11 @@ function nowInClinicTz(): { day: number; hour: number; minute: number } {
   return { day, hour, minute }
 }
 
-function computeStatus(): ClinicStatus {
-  const { day, hour, minute } = nowInClinicTz()
+export function computeStatus(location: Location = primaryLocation): ClinicStatus {
+  const { day, hour, minute } = nowInTz(location.timezone)
   const now = hour + minute / 60
-  const today = hours[day]
+  const weekHours = location.hours
+  const today = weekHours[day]
 
   if (today && now >= today.open && now < today.close) {
     return {
@@ -69,7 +70,7 @@ function computeStatus(): ClinicStatus {
 
   for (let i = 1; i <= 7; i++) {
     const idx = (day + i) % 7
-    const next = hours[idx]
+    const next = weekHours[idx]
     if (next) {
       const when = i === 1 ? 'tomorrow' : DAY_NAMES[idx]
       return {
@@ -84,13 +85,16 @@ function computeStatus(): ClinicStatus {
   return { open: false, label: 'Closed', sub: 'Call for hours', color: '#B08D57' }
 }
 
-export function useClinicStatus(): ClinicStatus {
-  const [status, setStatus] = useState<ClinicStatus>(computeStatus)
+// Live open/closed status for a location. Defaults to the primary location,
+// so existing callers `useClinicStatus()` keep working unchanged.
+export function useClinicStatus(location: Location = primaryLocation): ClinicStatus {
+  const [status, setStatus] = useState<ClinicStatus>(() => computeStatus(location))
 
   useEffect(() => {
-    const id = setInterval(() => setStatus(computeStatus()), 60_000)
+    setStatus(computeStatus(location))
+    const id = setInterval(() => setStatus(computeStatus(location)), 60_000)
     return () => clearInterval(id)
-  }, [])
+  }, [location])
 
   return status
 }

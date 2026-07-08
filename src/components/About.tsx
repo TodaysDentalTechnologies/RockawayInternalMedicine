@@ -99,7 +99,7 @@ export default function About() {
               boxShadow: '0 26px 52px -26px rgba(43,43,36,.35)',
             }}
           >
-            <blockquote style={{ margin: 0, fontFamily: "'Instrument Serif',serif", fontStyle: 'italic', fontSize: 19, lineHeight: 1.35 }}>
+            <blockquote style={{ margin: 0, fontFamily: "'Fraunces',serif", fontStyle: 'italic', fontSize: 19, lineHeight: 1.35 }}>
               "We treat people, not lab values."
             </blockquote>
             <figcaption style={{ marginTop: 10, fontFamily: "'DM Mono',monospace", fontSize: 10.5, letterSpacing: '.2em', color: 'var(--olive)' }}>

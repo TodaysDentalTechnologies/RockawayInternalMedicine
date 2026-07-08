@@ -63,6 +63,19 @@ export const Chevron = (p: IconProps) => (
   </Base>
 )
 
+export const Plus = (p: IconProps) => (
+  <Base strokeWidth={2} {...p}>
+    <path d="M12 5v14" />
+    <path d="M5 12h14" />
+  </Base>
+)
+
+export const Minus = (p: IconProps) => (
+  <Base strokeWidth={2} {...p}>
+    <path d="M5 12h14" />
+  </Base>
+)
+
 export const Heart = (p: IconProps) => (
   <Base {...p}>
     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -263,5 +276,18 @@ export const Scale = (p: IconProps) => (
     <path d="M7 21h10" />
     <path d="M12 3v18" />
     <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+  </Base>
+)
+
+export const Gauge = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m12 14 4-4" />
+    <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+  </Base>
+)
+
+export const Thermometer = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
   </Base>
 )

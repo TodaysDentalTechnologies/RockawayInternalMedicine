@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { clinic } from '../data/clinic'
+import { locations } from '../data/clinic'
 import { Check } from './icons'
 
 const STATS = [
@@ -76,7 +76,7 @@ function CountUp({ value, suffix, dur }: { value: number; suffix: string; dur: n
   return (
     <span
       ref={ref}
-      style={{ fontFamily: "'Instrument Serif',serif", fontSize: 'clamp(42px,4.6vw,62px)', lineHeight: 1, display: 'flex', alignItems: 'baseline' }}
+      style={{ fontFamily: "'Fraunces',serif", fontSize: 'clamp(42px,4.6vw,62px)', lineHeight: 1, display: 'flex', alignItems: 'baseline' }}
     >
       {display.toLocaleString('en-US')}
       <span style={{ color: 'var(--accent)' }}>{suffix}</span>
@@ -137,7 +137,7 @@ export default function Insurance() {
           </span>
           <h2
             style={{
-              fontFamily: "'Instrument Serif',serif",
+              fontFamily: "'Fraunces',serif",
               fontWeight: 400,
               fontSize: 'clamp(34px,4.4vw,54px)',
               lineHeight: 1.04,
@@ -297,11 +297,16 @@ export default function Insurance() {
               </span>
             </div>
             <p style={{ fontFamily: "'DM Mono',monospace", fontSize: 12, color: 'var(--on-dark-soft)', marginTop: 18 }}>
-              Not listed?{' '}
-              <a href={clinic.phoneHref} style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
-                Call {clinic.phone}
-              </a>{' '}
-              — we'll check for you.
+              Not listed? Call either office —{' '}
+              {locations.map((loc, i) => (
+                <span key={loc.id}>
+                  {i > 0 && ' · '}
+                  <a href={loc.phoneHref} style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                    {loc.phone}
+                  </a>
+                </span>
+              ))}{' '}
+              — and we'll check for you.
             </p>
           </div>
         </div>

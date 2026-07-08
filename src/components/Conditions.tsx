@@ -1,110 +1,212 @@
 import { useState } from 'react'
-import { clinic } from '../data/clinic'
-import SectionHeading from './SectionHeading'
-import { Chevron } from './icons'
+import type { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+  Gauge,
+  Flask,
+  Heart,
+  Droplet,
+  Thermometer,
+  Sparkles,
+  Zap,
+  Activity,
+  Bone,
+  Stethoscope,
+  Syringe,
+  Search,
+  Sun,
+  Baby,
+  Chevron,
+} from './icons'
 
-const CONDITIONS = [
-  { title: 'Hypertension', body: 'Steady blood-pressure control that fits your routine — meds tuned, home readings reviewed.' },
-  { title: 'Type 2 Diabetes', body: 'A1C targets, medication management, and food-first guidance that respects your plate.' },
-  { title: 'High Cholesterol', body: "Risk-based treatment — statins when they're warranted, lifestyle when they're not." },
-  { title: 'Thyroid Disorders', body: 'Testing, dosing, and follow-through for hypo- and hyperthyroidism.' },
-  { title: 'Asthma & COPD', body: 'Lung checks, inhaler technique, and a stepwise plan for easier breathing.' },
-  { title: 'Acid Reflux & GERD', body: "Relief for the burn — plus a proper look at what's causing it." },
-  { title: 'Arthritis & Joint Pain', body: 'Practical pain plans that keep you moving — not just medicated.' },
-  { title: 'Anxiety & Depression', body: 'Screening, first-line treatment, and referrals that actually stick.' },
-  { title: 'Sleep Problems', body: 'From stubborn insomnia to sleep-apnea screening and referral.' },
-  { title: 'Anemia & Fatigue', body: 'Bloodwork that finds the cause behind low energy — iron, B12, thyroid, and beyond.' },
-  { title: 'Allergies & Sinus', body: 'Seasonal misery managed — before it becomes a yearly ritual.' },
-  { title: 'Migraine & Headache', body: 'Fewer bad days — triggers, prevention, and rescue plans that work.' },
+interface Condition {
+  name: string
+  category: string
+  body: string
+  icon: ReactNode
+}
+
+const CONDITIONS: Condition[] = [
+  { name: 'Blood Pressure / Hypertension', category: 'Cardiovascular', icon: <Gauge size={20} />, body: 'Steady blood-pressure control — meds tuned and home readings reviewed.' },
+  { name: 'Cholesterol', category: 'Cardiovascular', icon: <Flask size={20} />, body: "Risk-based lipid care — statins when they're warranted, lifestyle when they're not." },
+  { name: 'Cardiology', category: 'Cardiovascular', icon: <Heart size={20} />, body: 'Heart-health checks, EKGs, and cardiovascular risk kept in view.' },
+  { name: 'Diabetes Management', category: 'Chronic Care', icon: <Droplet size={20} />, body: 'A1C targets, medication, and food-first guidance that respects your plate.' },
+  { name: 'Thyroid Conditions', category: 'Endocrine', icon: <Thermometer size={20} />, body: 'Testing and dosing for hypo- and hyperthyroid, followed through.' },
+  { name: 'Dermatology / Skin Conditions', category: 'Specialty Care', icon: <Sparkles size={20} />, body: 'Rashes, acne, and moles evaluated — with referrals when needed.' },
+  { name: 'Neurology', category: 'Specialty Care', icon: <Zap size={20} />, body: 'Headaches, nerve pain, and neurological symptoms assessed and managed.' },
+  { name: 'Pain Management / Migraine', category: 'Pain Relief', icon: <Activity size={20} />, body: 'Practical plans that keep you moving — and fewer bad days.' },
+  { name: 'Arthritis', category: 'Musculoskeletal', icon: <Bone size={20} />, body: 'Joint-pain care that keeps you active, not just medicated.' },
+  { name: 'Liver and Gastric Disorders', category: 'Digestive Health', icon: <Stethoscope size={20} />, body: 'Reflux, stomach, and liver concerns diagnosed and settled.' },
+  { name: 'Physicals + Vaccinations', category: 'Preventive Care', icon: <Syringe size={20} />, body: 'Head-to-toe exams plus flu, pneumonia, shingles, and tetanus shots.' },
+  { name: 'Cancer Screening', category: 'Preventive Care', icon: <Search size={20} />, body: 'Guideline-based screenings for early detection, when it matters most.' },
+  { name: 'Menopause', category: "Women's Health", icon: <Sun size={20} />, body: 'Symptom relief and hormone guidance, navigated with confidence.' },
+  { name: 'Pregnancy Tests', category: "Women's Health", icon: <Baby size={20} />, body: 'Confidential testing and next steps in a supportive setting.' },
+]
+
+const CATEGORIES = [
+  'All Conditions',
+  'Cardiovascular',
+  'Chronic Care',
+  'Endocrine',
+  'Specialty Care',
+  'Pain Relief',
+  'Musculoskeletal',
+  'Digestive Health',
+  'Preventive Care',
+  "Women's Health",
 ]
 
 export default function Conditions() {
-  const [open, setOpen] = useState<number | null>(null)
+  const navigate = useNavigate()
+  const [active, setActive] = useState('All Conditions')
+
+  const visible =
+    active === 'All Conditions' ? CONDITIONS : CONDITIONS.filter((c) => c.category === active)
 
   return (
     <section id="conditions" style={{ background: 'var(--bg)', padding: 'clamp(72px,9vw,124px) 0' }}>
-      <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '24px 48px',
-            alignItems: 'end',
-            justifyContent: 'space-between',
-          }}
-        >
-          <SectionHeading eyebrow="Conditions we treat" headingMaxWidth="14ch">
-            The everyday conditions <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>we manage well.</em>
-          </SectionHeading>
-          <p
-            className="reveal"
-            style={{ transitionDelay: '.1s', fontSize: 15.5, lineHeight: 1.6, color: 'var(--ink-soft)', maxWidth: '36ch', paddingBottom: 6 }}
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
+        {/* Centered header */}
+        <div className="reveal" style={{ textAlign: 'center', maxWidth: 680, margin: '0 auto' }}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 12,
+              fontFamily: "'DM Mono',monospace",
+              fontSize: 12.5,
+              letterSpacing: '.28em',
+              textTransform: 'uppercase',
+              color: 'var(--olive)',
+            }}
           >
-            Hover or tap a card to see how we approach it. Don't see yours?{' '}
-            <a href={clinic.phoneHref} style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
-              Call us
-            </a>{' '}
-            — internal medicine covers a lot.
+            <span style={{ width: 22, height: 1.5, background: 'var(--olive)' }} />
+            Conditions We Treat
+            <span style={{ width: 22, height: 1.5, background: 'var(--olive)' }} />
+          </span>
+          <h2
+            style={{
+              fontFamily: "'Fraunces',serif",
+              fontWeight: 400,
+              fontSize: 'clamp(34px,5vw,56px)',
+              lineHeight: 1.04,
+              letterSpacing: '-.01em',
+              marginTop: 18,
+            }}
+          >
+            Expert diagnosis for a wide range of{' '}
+            <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>conditions.</em>
+          </h2>
+          <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.65, color: 'var(--ink-soft)', marginTop: 20 }}>
+            From acute illnesses to chronic disease management, our team is here to help —
+            thorough, unhurried, and centered on you.
           </p>
         </div>
 
+        {/* Category filter */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,248px),1fr))',
-            gap: 14,
-            marginTop: 48,
-          }}
+          className="reveal"
+          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10, marginTop: 'clamp(30px,4vw,44px)' }}
         >
-          {CONDITIONS.map((c, i) => {
-            const isOpen = open === i
+          {CATEGORIES.map((cat) => {
+            const on = active === cat
             return (
               <button
-                key={c.title}
-                className="rim-card reveal"
-                aria-expanded={isOpen}
-                onMouseEnter={() => setOpen(i)}
-                onMouseLeave={() => setOpen((o) => (o === i ? null : o))}
-                onFocus={() => setOpen(i)}
-                onBlur={() => setOpen((o) => (o === i ? null : o))}
+                key={cat}
+                type="button"
+                onClick={() => setActive(cat)}
+                aria-pressed={on}
+                className="rim-fchip"
                 style={{
-                  transitionDelay: `${(i % 6) * 0.03}s`,
-                  textAlign: 'left',
-                  background: 'var(--card)',
-                  border: `1px solid ${isOpen ? 'var(--olive)' : 'var(--line)'}`,
-                  borderRadius: 18,
-                  padding: '20px 20px 18px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 8,
+                  border: `1px solid ${on ? 'transparent' : 'var(--line)'}`,
+                  borderRadius: 999,
+                  padding: '10px 18px',
+                  fontFamily: "'DM Mono',monospace",
+                  fontSize: 11.5,
+                  letterSpacing: '.14em',
+                  textTransform: 'uppercase',
+                  background: on ? 'linear-gradient(135deg, var(--olive), var(--olive-deep))' : 'var(--card)',
+                  color: on ? 'var(--on-olive)' : 'var(--ink-soft)',
+                  boxShadow: on ? '0 12px 24px -12px rgba(28,74,44,.6)' : 'none',
                 }}
               >
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: 'var(--olive)' }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <Chevron
-                    size={15}
-                    style={{ color: 'var(--ink-soft)', transition: 'transform .35s', transform: isOpen ? 'rotate(180deg)' : 'none' }}
-                  />
-                </span>
-                <span style={{ fontSize: 16.5, fontWeight: 600, letterSpacing: '-.01em' }}>{c.title}</span>
-                <span
-                  style={{
-                    overflow: 'hidden',
-                    maxHeight: isOpen ? 140 : 0,
-                    opacity: isOpen ? 1 : 0,
-                    transition: 'max-height .45s cubic-bezier(.22,.61,.36,1), opacity .45s',
-                  }}
-                >
-                  <span style={{ display: 'block', fontSize: 14, lineHeight: 1.55, color: 'var(--ink-soft)', paddingTop: 2 }}>
-                    {c.body}
-                  </span>
-                </span>
+                {cat}
               </button>
             )
           })}
         </div>
+
+        {/* Condition cards */}
+        <div className="rim-cond-grid" style={{ marginTop: 'clamp(36px,5vw,52px)' }}>
+          {visible.map((c) => (
+            <div
+              key={c.name}
+              tabIndex={0}
+              className="rim-card rim-cond-card"
+              style={{
+                background: 'var(--card)',
+                border: '1px solid var(--line)',
+                borderRadius: 18,
+                padding: '22px 22px 20px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span
+                  className="rim-svc-icon"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 46,
+                    height: 46,
+                    borderRadius: 14,
+                    background: 'linear-gradient(140deg, var(--olive), var(--olive-deep))',
+                    color: '#fff',
+                    boxShadow: '0 10px 20px -10px rgba(28,74,44,.6)',
+                  }}
+                >
+                  {c.icon}
+                </span>
+                <Chevron className="rim-cond-chev" size={16} style={{ color: 'var(--ink-soft)', opacity: 0.55 }} />
+              </span>
+              <h3
+                style={{
+                  fontFamily: "'Fraunces',serif",
+                  fontWeight: 400,
+                  fontSize: 20,
+                  lineHeight: 1.12,
+                  letterSpacing: '-.01em',
+                  marginTop: 18,
+                }}
+              >
+                {c.name}
+              </h3>
+              {/* Extends on hover — a short line about how we approach it. */}
+              <span className="rim-cond-body">
+                <span style={{ display: 'block', fontSize: 14, lineHeight: 1.55, color: 'var(--ink-soft)', marginTop: 10 }}>
+                  {c.body}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer CTA */}
+        <p
+          className="reveal"
+          style={{ textAlign: 'center', marginTop: 'clamp(36px,5vw,52px)', fontSize: 15.5, color: 'var(--ink-soft)' }}
+        >
+          Don't see your condition listed?{' '}
+          <button
+            onClick={() => navigate('/contact')}
+            style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3, background: 'none', border: 0, padding: 0, font: 'inherit', cursor: 'pointer' }}
+          >
+            Call us
+          </button>{' '}
+          — internal medicine covers a lot.
+        </p>
       </div>
     </section>
   )

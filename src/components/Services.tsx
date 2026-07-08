@@ -1,29 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { clinic } from '../data/clinic'
+import { services } from '../data/services'
 import SectionHeading from './SectionHeading'
-import { scrollToId } from './Header'
-import { Clipboard, Activity, Stethoscope, Flask, Syringe, Heart, Shield, Sun, Sparkles, Wind, Bone, Baby, Droplet, Pill, Search, Zap, Scale, ArrowRight } from './icons'
-import type { ReactNode, CSSProperties } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Activity, ArrowRight } from './icons'
 
-// `motion` picks the icon's living animation — each is chosen to echo its meaning.
-const SERVICES: { icon: ReactNode; title: string; body: string; motion: string }[] = [
-  { icon: <Clipboard size={21} />, title: 'Annual Physicals', body: 'A thorough head-to-toe exam with vitals, labs, and screenings to catch problems early.', motion: 'stamp' },
-  { icon: <Activity size={21} />, title: 'Hypertension Treatment', body: 'Personalized blood-pressure control with lifestyle guidance, medication, and monitoring.', motion: 'ekg' },
-  { icon: <Sparkles size={21} />, title: 'Dermatology', body: 'Evaluation and care for rashes, acne, moles, and common skin conditions.', motion: 'twinkle' },
-  { icon: <Wind size={21} />, title: 'COPD & Emphysema', body: 'Breathing support with inhaler plans and steady lung-health monitoring.', motion: 'blow' },
-  { icon: <Stethoscope size={21} />, title: 'Liver & Gastric Disorders', body: 'Diagnosis and management of digestive, stomach, and liver concerns.', motion: 'swing' },
-  { icon: <Bone size={21} />, title: 'Osteoporosis Management', body: 'Bone-density screening and treatment to keep your bones strong.', motion: 'wiggle' },
-  { icon: <Syringe size={21} />, title: 'Physicals & Vaccinations', body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus shots.', motion: 'inject' },
-  { icon: <Baby size={21} />, title: 'Family Planning & Birth Control', body: 'Confidential contraception counseling and family-planning support.', motion: 'rock' },
-  { icon: <Heart size={21} />, title: 'Cardiology', body: 'Heart-health monitoring, EKGs, and cardiovascular risk management.', motion: 'beat' },
-  { icon: <Flask size={21} />, title: 'Cholesterol Testing', body: 'Lipid panels and treatment to protect your heart and prevent complications.', motion: 'swirl' },
-  { icon: <Droplet size={21} />, title: 'Diabetes Treatment & Testing', body: 'A1C testing, blood-sugar monitoring, and food-first diabetes management.', motion: 'drip' },
-  { icon: <Shield size={21} />, title: 'Immunotherapy', body: 'Allergy and immune-system treatment coordinated under expert supervision.', motion: 'guard' },
-  { icon: <Sun size={21} />, title: 'Menopause Treatment', body: 'Symptom relief and hormone guidance to navigate menopause with confidence.', motion: 'shine' },
-  { icon: <Pill size={21} />, title: 'Thyroid Treatment', body: 'Testing and management for both under- and overactive thyroid conditions.', motion: 'spin' },
-  { icon: <Search size={21} />, title: 'Cancer Screening', body: 'Guideline-based screenings for early detection, when it matters most.', motion: 'scan' },
-  { icon: <Zap size={21} />, title: 'Neurology', body: 'Evaluation and management of headaches, nerve pain, and neurological conditions.', motion: 'flash' },
-  { icon: <Scale size={21} />, title: 'Obesity Treatment', body: 'Personalized weight management with medical support and honest guidance.', motion: 'balance' },
+// The three "hero" specialties shown as large image cards. The middle card is
+// dropped down to create the staggered editorial row; each pulls its photo and
+// title from the shared services data and links to its detail page.
+const FEATURED: { slug: string; kicker: string }[] = [
+  { slug: 'cardiology', kicker: '01 · Cardiovascular' },
+  { slug: 'dermatology', kicker: '02 · Skin Health' },
+  { slug: 'neurology', kicker: '03 · Neurological' },
 ]
 
 const FINDER: { concern: string; kicker: string; title: string; desc: string }[] = [
@@ -78,6 +65,7 @@ const FINDER: { concern: string; kicker: string; title: string; desc: string }[]
 ]
 
 export default function Services() {
+  const navigate = useNavigate()
   const [sel, setSel] = useState<number>(-1)
   const [flip, setFlip] = useState(false)
   const timer = useRef<number | null>(null)
@@ -125,26 +113,92 @@ export default function Services() {
       </div>
 
       <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
-        <SectionHeading eyebrow="What we do" maxWidth={640}>
-          Primary care, <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>end to end.</em>
-        </SectionHeading>
-        <p className="reveal" style={{ fontSize: 16.5, lineHeight: 1.65, color: 'var(--ink-soft)', marginTop: 20, maxWidth: 640 }}>
-          From the annual physical to the years-long management of a chronic condition — one practice, one record, one team.
-        </p>
+        {/* Split header — serif heading left, supporting line right */}
+        <div className="rim-feat-head">
+          <SectionHeading eyebrow="What we do" headingMaxWidth="13ch">
+            Primary care, <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>end to end.</em>
+          </SectionHeading>
+          <p className="reveal">
+            From the annual physical to the years-long management of a chronic condition — one practice, one record, one team.
+          </p>
+        </div>
 
-        {/* Uniform service grid */}
-        <div className="rim-svc-grid" style={{ marginTop: 44 }}>
-          {SERVICES.map((s, i) => (
-            <div key={s.title} className="reveal rim-rise" style={{ transitionDelay: `${(i % 4) * 0.05}s` }}>
-              <article className="rim-svc">
-                <span className="rim-svc-ic2">
-                  <span className={`rim-liv rim-liv-${s.motion}`} style={{ '--d': `-${(i * 0.31).toFixed(2)}s` } as CSSProperties}>{s.icon}</span>
+        {/* Featured specialty cards (staggered) */}
+        <div className="rim-feat-grid">
+          {FEATURED.map((f, i) => {
+            const s = services.find((x) => x.slug === f.slug)
+            if (!s) return null
+            return (
+              <button
+                key={f.slug}
+                onClick={() => navigate(`/services/${s.slug}`)}
+                className={`rim-feat reveal rim-rise${i === 1 ? ' rim-feat-offset' : ''}`}
+                style={{ transitionDelay: `${i * 0.06}s` }}
+                aria-label={`${s.title} — view details`}
+              >
+                <span className="rim-feat-media">
+                  <img src={s.img} alt={s.title} loading="lazy" />
+                  <span className="rim-feat-veil" aria-hidden="true" />
+                  <span className="rim-feat-cap">
+                    <span className="rim-feat-kicker">{f.kicker}</span>
+                    <span className="rim-feat-title">{s.title}</span>
+                  </span>
                 </span>
-                <h3 style={{ fontSize: 17.5, fontWeight: 600, letterSpacing: '-.01em', marginTop: 18 }}>{s.title}</h3>
-                <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 8 }}>{s.body}</p>
-              </article>
-            </div>
-          ))}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* All twelve specialties */}
+        <div
+          className="reveal"
+          style={{ marginTop: 'clamp(48px,6vw,76px)', borderTop: '1px solid var(--line)', paddingTop: 'clamp(28px,3.5vw,40px)' }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              fontFamily: "'DM Mono',monospace",
+              fontSize: 12,
+              letterSpacing: '.24em',
+              textTransform: 'uppercase',
+              color: 'var(--olive)',
+            }}
+          >
+            <span style={{ width: 22, height: 1.5, background: 'var(--olive)' }} />
+            All twelve specialties
+          </span>
+          <div className="rim-spec-grid" style={{ marginTop: 24 }}>
+            {services.map((s) => (
+              <button key={s.slug} className="rim-spec" onClick={() => navigate(`/services/${s.slug}`)}>
+                <span className="rim-spec-dot" aria-hidden="true" />
+                {s.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Explore all services */}
+        <div className="reveal" style={{ textAlign: 'center', marginTop: 'clamp(40px,5vw,60px)' }}>
+          <button
+            onClick={() => navigate('/services')}
+            className="rim-cta"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              background: 'var(--olive-deep)',
+              color: 'var(--on-olive)',
+              padding: '15px 30px',
+              borderRadius: 999,
+              fontSize: 15,
+              fontWeight: 600,
+              boxShadow: '0 20px 40px -18px rgba(28,74,44,.6)',
+            }}
+          >
+            Explore all services <ArrowRight size={15} />
+          </button>
         </div>
 
         {/* Symptom → service finder */}
@@ -183,7 +237,7 @@ export default function Services() {
             >
               Symptom → service finder
             </span>
-            <h3 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,36px)', lineHeight: 1.1, marginTop: 14 }}>
+            <h3 style={{ fontFamily: "'Fraunces',serif", fontWeight: 400, fontSize: 'clamp(26px,3vw,36px)', lineHeight: 1.1, marginTop: 14 }}>
               Not sure where to start? <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>Tap what's bothering you.</em>
             </h3>
             <p style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 12 }}>
@@ -251,7 +305,7 @@ export default function Services() {
                   >
                     <Activity size={21} />
                   </span>
-                  <p style={{ fontFamily: "'Instrument Serif',serif", fontSize: 22, lineHeight: 1.3 }}>
+                  <p style={{ fontFamily: "'Fraunces',serif", fontSize: 22, lineHeight: 1.3 }}>
                     Pick a concern on the left to see the visit we'd recommend.
                   </p>
                   <span
@@ -273,11 +327,11 @@ export default function Services() {
                   <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.22em', color: 'var(--olive)' }}>
                     {active.kicker}
                   </span>
-                  <h4 style={{ fontFamily: "'Instrument Serif',serif", fontWeight: 400, fontSize: 27, lineHeight: 1.1 }}>{active.title}</h4>
+                  <h4 style={{ fontFamily: "'Fraunces',serif", fontWeight: 400, fontSize: 27, lineHeight: 1.1 }}>{active.title}</h4>
                   <p style={{ fontSize: 14.5, lineHeight: 1.62, color: 'var(--ink-soft)' }}>{active.desc}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 10 }}>
                     <button
-                      onClick={() => scrollToId('contact')}
+                      onClick={() => navigate('/contact')}
                       className="rim-cta"
                       style={{
                         display: 'inline-flex',
@@ -294,8 +348,8 @@ export default function Services() {
                       Book this visit
                       <ArrowRight size={14} />
                     </button>
-                    <a
-                      href={clinic.phoneHref}
+                    <button
+                      onClick={() => navigate('/contact')}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -306,10 +360,13 @@ export default function Services() {
                         color: 'var(--olive-deep)',
                         textDecoration: 'underline',
                         textUnderlineOffset: 3,
+                        background: 'none',
+                        border: 0,
+                        cursor: 'pointer',
                       }}
                     >
                       or call us
-                    </a>
+                    </button>
                   </div>
                 </div>
               )}

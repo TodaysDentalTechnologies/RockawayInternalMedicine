@@ -29,7 +29,7 @@ export default function SectionHeading({ eyebrow, children, maxWidth, headingMax
       </span>
       <h2
         style={{
-          fontFamily: "'Instrument Serif',serif",
+          fontFamily: "'Fraunces',serif",
           fontWeight: 400,
           fontSize: 'clamp(34px,4.4vw,54px)',
           lineHeight: 1.04,
