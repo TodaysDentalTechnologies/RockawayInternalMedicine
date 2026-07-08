@@ -37,7 +37,7 @@ export default function Hero() {
 
       <div
         style={{
-          maxWidth: 1220,
+          maxWidth: 1500,
           margin: '0 auto',
           padding: '0 clamp(18px,4vw,48px)',
           position: 'relative',
@@ -158,6 +158,9 @@ export default function Hero() {
         </div>
 
         <div style={{ position: 'relative', padding: '0 10px', animation: 'rimRise 1s cubic-bezier(.22,.61,.36,1) .22s both' }}>
+          {/* Inner box sized to the photo so the ring + badges always hug it,
+              no matter how wide the column gets. */}
+          <div style={{ position: 'relative', width: 'min(520px,100%)', margin: '0 auto' }}>
           <div
             aria-hidden="true"
             style={{
@@ -173,9 +176,8 @@ export default function Hero() {
             style={{
               borderRadius: '44% 56% 52% 48% / 42% 46% 54% 58%',
               overflow: 'hidden',
-              width: 'min(520px,100%)',
+              width: '100%',
               aspectRatio: '.94',
-              margin: '0 auto',
               border: '1px solid var(--line)',
               background: 'linear-gradient(160deg, rgba(134,168,148,.35), rgba(179,209,187,.28))',
               position: 'relative',
@@ -240,6 +242,7 @@ export default function Hero() {
             }}
           >
             ADULT PRIMARY CARE
+          </div>
           </div>
         </div>
       </div>

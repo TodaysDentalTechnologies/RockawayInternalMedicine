@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { services } from '../data/services'
 import SectionHeading from './SectionHeading'
 import { useNavigate } from 'react-router-dom'
-import { Activity, ArrowRight } from './icons'
+import { Activity, ArrowRight, Check } from './icons'
 
 // The three "hero" specialties shown as large image cards. The middle card is
 // dropped down to create the staggered editorial row; each pulls its photo and
@@ -112,7 +112,7 @@ export default function Services() {
         <span className="m3" />
       </div>
 
-      <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
+      <div style={{ maxWidth: 1500, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Split header — serif heading left, supporting line right */}
         <div className="rim-feat-head">
           <SectionHeading eyebrow="What we do" headingMaxWidth="13ch">
@@ -172,7 +172,9 @@ export default function Services() {
           <div className="rim-spec-grid" style={{ marginTop: 24 }}>
             {services.map((s) => (
               <button key={s.slug} className="rim-spec" onClick={() => navigate(`/services/${s.slug}`)}>
-                <span className="rim-spec-dot" aria-hidden="true" />
+                <span className="rim-spec-dot" aria-hidden="true">
+                  <Check size={14} />
+                </span>
                 {s.title}
               </button>
             ))}
@@ -216,10 +218,6 @@ export default function Services() {
             WebkitBackdropFilter: 'blur(14px) saturate(1.3)',
             boxShadow: '0 40px 80px -50px rgba(28,74,44,.6)',
             padding: 'clamp(26px,4vw,48px)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,400px),1fr))',
-            gap: 'clamp(28px,4vw,48px)',
-            alignItems: 'center',
           }}
         >
           <div>

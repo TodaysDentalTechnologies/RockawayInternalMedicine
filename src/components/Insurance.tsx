@@ -118,7 +118,7 @@ export default function Insurance() {
           pointerEvents: 'none',
         }}
       />
-      <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)', position: 'relative' }}>
+      <div style={{ maxWidth: 1500, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)', position: 'relative' }}>
         <div className="reveal" style={{ maxWidth: 640 }}>
           <span
             style={{

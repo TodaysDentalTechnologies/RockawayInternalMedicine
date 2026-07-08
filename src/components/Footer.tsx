@@ -29,7 +29,7 @@ export default function Footer() {
     <footer style={{ background: '#0e2416', color: 'var(--on-olive)' }}>
       <div
         style={{
-          maxWidth: 1220,
+          maxWidth: 1500,
           margin: '0 auto',
           padding: 'clamp(56px,7vw,88px) clamp(18px,4vw,48px) 40px',
           display: 'grid',
@@ -117,7 +117,7 @@ export default function Footer() {
       <div style={{ borderTop: '1px solid rgba(232,239,230,.14)' }}>
         <div
           style={{
-            maxWidth: 1220,
+            maxWidth: 1500,
             margin: '0 auto',
             padding: '20px clamp(18px,4vw,48px)',
             display: 'flex',

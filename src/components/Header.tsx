@@ -92,7 +92,7 @@ export default function Header() {
       >
         <div
           style={{
-            maxWidth: 1220,
+            maxWidth: 1500,
             margin: '0 auto',
             padding: '0 clamp(18px,4vw,48px)',
             height: solid ? 66 : 76,
@@ -115,8 +115,8 @@ export default function Header() {
                 r="17.5"
                 style={{
                   fill: 'none',
-                  stroke: 'var(--olive)',
-                  strokeWidth: 1.6,
+                  stroke: 'var(--olive-deep)',
+                  strokeWidth: 2.2,
                   strokeDasharray: 110,
                   strokeDashoffset: 110,
                   animation: 'rimDraw 1.1s cubic-bezier(.4,0,.2,1) .25s forwards',

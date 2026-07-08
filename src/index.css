@@ -519,18 +519,18 @@ h4 {
   color: var(--olive-deep);
 }
 .rim-spec-dot {
-  width: 7px;
-  height: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  transform: rotate(45deg);
-  background: var(--sage);
+  color: var(--olive);
   transition:
-    background 0.25s,
+    color 0.25s,
     transform 0.25s;
 }
 .rim-spec:hover .rim-spec-dot {
-  background: var(--olive);
-  transform: rotate(45deg) scale(1.18);
+  color: var(--olive-deep);
+  transform: scale(1.14);
 }
 
 /* ===== Living icons — a meaning-matched motion per service ============== */
@@ -771,6 +771,21 @@ h4 {
 .rim-cond-card:hover .rim-cond-chev,
 .rim-cond-card:focus-within .rim-cond-chev {
   transform: rotate(180deg);
+}
+
+/* Symptom finder layout — left column sized to its content, right card fills,
+   tighter gap so the two sit close (stacks on small screens). */
+.rim-finder {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(22px, 3vw, 32px);
+  align-items: center;
+}
+@media (min-width: 860px) {
+  .rim-finder {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    column-gap: clamp(24px, 2.4vw, 34px);
+  }
 }
 
 /* Symptom finder — calm chip hover lift. */

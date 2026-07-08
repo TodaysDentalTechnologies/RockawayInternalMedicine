@@ -27,7 +27,7 @@ const divider: React.CSSProperties = { height: 1, background: 'var(--line)' }
 export default function Contact() {
   return (
     <section id="contact" style={{ background: 'var(--bg)', padding: 'clamp(64px,8vw,110px) 0 clamp(72px,9vw,124px)' }}>
-      <div style={{ maxWidth: 1220, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
+      <div style={{ maxWidth: 1500, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Header */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px 48px', alignItems: 'end', justifyContent: 'space-between' }}>
           <SectionHeading eyebrow="Visits & contact" headingMaxWidth="15ch">

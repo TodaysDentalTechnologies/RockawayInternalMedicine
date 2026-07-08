@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { locations } from '../data/clinic'
 import { callbackUrl } from '../config/api'
 import { Calendar, Check, ArrowRight } from './icons'
+import ServiceSearchSelect from './ServiceSearchSelect'
 
 // Reason-for-visit options (mirrors the Center for Primary Care form).
 const SERVICE_OPTIONS = [
@@ -241,12 +242,14 @@ export default function AppointmentForm() {
         {/* Reason */}
         <div>
           <label htmlFor="ap-proc" style={labelStyle}>Reason for visit {req}</label>
-          <select id="ap-proc" name="medicalProcedure" value={form.medicalProcedure} onChange={change} required style={inputStyle}>
-            <option value="">Select a service…</option>
-            {SERVICE_OPTIONS.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          <ServiceSearchSelect
+            id="ap-proc"
+            value={form.medicalProcedure}
+            options={SERVICE_OPTIONS}
+            onChange={(v) => setForm((f) => ({ ...f, medicalProcedure: v }))}
+            inputStyle={inputStyle}
+            required
+          />
         </div>
 
         {/* Message */}

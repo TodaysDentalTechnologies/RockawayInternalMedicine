@@ -1,5 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import SectionHeading from './SectionHeading'
 import ImageSlot from './ImageSlot'
+import { Calendar, ArrowRight } from './icons'
 
 const PRINCIPLES = [
   {
@@ -20,11 +22,12 @@ const PRINCIPLES = [
 ]
 
 export default function About() {
+  const navigate = useNavigate()
   return (
     <section id="about" style={{ background: 'var(--bg2)', padding: 'clamp(72px,9vw,124px) 0' }}>
       <div
         style={{
-          maxWidth: 1220,
+          maxWidth: 1500,
           margin: '0 auto',
           padding: '0 clamp(18px,4vw,48px)',
           display: 'grid',
@@ -66,6 +69,31 @@ export default function About() {
                 </span>
               </div>
             ))}
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, marginTop: 34 }}>
+            <button
+              onClick={() => navigate('/contact')}
+              className="rim-cta"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 11,
+                background: 'var(--olive-deep)',
+                color: 'var(--on-olive)',
+                padding: '15px 26px',
+                borderRadius: 999,
+                fontSize: 15.5,
+                fontWeight: 600,
+              }}
+            >
+              <Calendar size={17} />
+              Become a patient
+              <ArrowRight size={16} />
+            </button>
+            <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 12.5, letterSpacing: '.04em', color: 'var(--ink-soft)' }}>
+              New &amp; existing patients welcome
+            </span>
           </div>
         </div>
 
