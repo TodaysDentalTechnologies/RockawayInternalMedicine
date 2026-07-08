@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { locations, site } from '../data/clinic'
+import { API_CONFIG } from '../config/api'
 import { Send, Close, Chat } from './icons'
 
 const linkStyle: React.CSSProperties = { color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }
@@ -33,7 +34,8 @@ const PhoneLink = () => (
   </>
 )
 
-// Self-contained "front desk" assistant: routes free text to a canned answer.
+// Offline fallback "front desk" assistant: routes free text to a canned
+// answer when the AI agent WebSocket is unreachable or times out.
 function answer(text: string): ReactNode {
   const t = text.toLowerCase()
   const has = (re: RegExp) => re.test(t)
@@ -90,9 +92,117 @@ export default function ChatWidget() {
   const listRef = useRef<HTMLDivElement>(null)
   const overlayInputRef = useRef<HTMLInputElement>(null)
   const timers = useRef<number[]>([])
-  const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  useEffect(() => () => timers.current.forEach((t) => window.clearTimeout(t)), [])
+  // AI agent WebSocket (TodaysDentalInsightsAiAgentsS1). Messages typed before
+  // the socket opens are queued and flushed on connect; if the socket fails or
+  // a reply never arrives, the queued text is answered by the canned fallback.
+  const wsRef = useRef<WebSocket | null>(null)
+  const pendingQueue = useRef<string[]>([])
+  const fallbackTimer = useRef<number | null>(null)
+
+  useEffect(
+    () => () => {
+      timers.current.forEach((t) => window.clearTimeout(t))
+      if (fallbackTimer.current) window.clearTimeout(fallbackTimer.current)
+      wsRef.current?.close()
+    },
+    [],
+  )
+
+  const addBotMsg = (content: ReactNode) => {
+    if (fallbackTimer.current) {
+      window.clearTimeout(fallbackTimer.current)
+      fallbackTimer.current = null
+    }
+    setMsgs((m) => m.concat([{ id: `b-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, role: 'bot', content }]))
+    setTyping(false)
+  }
+
+  // Answer anything still waiting with the canned fallback (socket dead/slow).
+  const answerFallback = (text?: string) => {
+    const queued = pendingQueue.current
+    pendingQueue.current = []
+    const toAnswer = text != null ? [text] : queued
+    toAnswer.forEach((t) => addBotMsg(answer(t)))
+  }
+
+  const armFallbackTimer = (text: string) => {
+    if (fallbackTimer.current) window.clearTimeout(fallbackTimer.current)
+    fallbackTimer.current = window.setTimeout(() => {
+      fallbackTimer.current = null
+      answerFallback(text)
+    }, 25000)
+  }
+
+  const connectWs = () => {
+    const existing = wsRef.current
+    if (existing && (existing.readyState === WebSocket.OPEN || existing.readyState === WebSocket.CONNECTING)) return existing
+
+    try {
+      const ws = new WebSocket(API_CONFIG.WEBSOCKET_API)
+
+      ws.onopen = () => {
+        pendingQueue.current.forEach((text) => ws.send(JSON.stringify({ action: 'message', message: text })))
+        pendingQueue.current = []
+      }
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          switch (data.type) {
+            // AI agent streaming protocol
+            case 'thinking':
+            case 'chunk':
+            case 'agent_typing':
+              setTyping(true)
+              break
+            case 'complete':
+              addBotMsg(data.content || '')
+              break
+            // Human agent handoff events
+            case 'handoff_queued':
+              addBotMsg(data.content || 'Connecting you with a team member. Please hold on…')
+              break
+            case 'handoff_started':
+              addBotMsg(data.content || "You're now connected with a team member.")
+              break
+            case 'agent_message':
+              addBotMsg(data.content || '')
+              break
+            case 'handoff_ended':
+              addBotMsg(data.content || "You're now back with our AI assistant. How can I help you?")
+              break
+            case 'error':
+              addBotMsg(data.content || data.message || 'Sorry, something went wrong. Please try again.')
+              break
+            default: {
+              // Legacy single-shot response fallback
+              const text = data.message || data.text || data.content
+              if (text) addBotMsg(text)
+            }
+          }
+        } catch {
+          console.error('[Chat] Failed to parse message')
+        }
+      }
+
+      ws.onclose = () => {
+        wsRef.current = null
+        if (pendingQueue.current.length > 0) answerFallback()
+      }
+
+      ws.onerror = (error) => {
+        console.error('[Chat] WebSocket error:', error)
+      }
+
+      wsRef.current = ws
+      return ws
+    } catch (error) {
+      console.error('[Chat] Failed to create WebSocket:', error)
+      answerFallback()
+      return null
+    }
+  }
 
   // Rotate the placeholder suggestion.
   useEffect(() => {
@@ -119,9 +229,11 @@ export default function ChatWidget() {
     if (el) el.scrollTop = el.scrollHeight
   }, [msgs, typing, open])
 
-  // Focus the overlay input when it opens; lock body scroll.
+  // Focus the overlay input when it opens; lock body scroll. Also eagerly
+  // connect the AI agent socket so the first message doesn't wait on it.
   useEffect(() => {
     if (open) {
+      connectWs()
       const id = window.setTimeout(() => overlayInputRef.current?.focus(), 280)
       timers.current.push(id)
       document.body.style.overflow = 'hidden'
@@ -139,11 +251,15 @@ export default function ChatWidget() {
     setInput('')
     setOpen(true)
     setTyping(true)
-    const id = window.setTimeout(() => {
-      setMsgs((m) => m.concat([{ id: `b-${Date.now()}`, role: 'bot', content: answer(text) }]))
-      setTyping(false)
-    }, reduced ? 80 : 800)
-    timers.current.push(id)
+
+    const ws = wsRef.current
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ action: 'message', message: text }))
+    } else {
+      pendingQueue.current.push(text)
+      connectWs()
+    }
+    armFallbackTimer(text)
   }
 
   const onKey = (e: React.KeyboardEvent) => {
@@ -194,6 +310,7 @@ export default function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKey}
+                onFocus={connectWs}
                 placeholder={PLACEHOLDERS[ph]}
                 aria-label="Ask the front desk"
                 className="rim-chat-input"
@@ -284,7 +401,7 @@ export default function ChatWidget() {
                       style={
                         m.role === 'user'
                           ? { maxWidth: '82%', background: 'var(--olive-deep)', color: 'var(--on-olive)', borderRadius: '18px 18px 6px 18px', padding: '12px 16px', fontSize: 14, lineHeight: 1.5 }
-                          : { maxWidth: '82%', background: 'var(--card)', border: '1px solid var(--line)', color: 'var(--ink)', borderRadius: '18px 18px 18px 6px', padding: '12px 16px', fontSize: 14, lineHeight: 1.55 }
+                          : { maxWidth: '82%', background: 'var(--card)', border: '1px solid var(--line)', color: 'var(--ink)', borderRadius: '18px 18px 18px 6px', padding: '12px 16px', fontSize: 14, lineHeight: 1.55, whiteSpace: 'pre-wrap' as const }
                       }
                     >
                       {m.content}

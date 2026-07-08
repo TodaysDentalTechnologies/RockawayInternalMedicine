@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { locations } from '../data/clinic'
-import { API_CONFIG } from '../config/api'
+import { callbackUrl } from '../config/api'
 import { Calendar, Check, ArrowRight } from './icons'
 
 // Reason-for-visit options (mirrors the Center for Primary Care form).
@@ -95,21 +95,26 @@ export default function AppointmentForm() {
     setError('')
 
     try {
-      const response = await fetch(`${API_CONFIG.CALLBACK_API}/callbacks`, {
+      // The callback API only stores name/phone/email/message, so fold the
+      // appointment details into the message (same shape as the CFPCM site).
+      const details = [
+        'Appointment request',
+        `Location: ${selectedLocation.name} — ${selectedLocation.city}`,
+        form.medicalProcedure && `Procedure: ${form.medicalProcedure}`,
+        form.preferredDate && `Preferred date: ${form.preferredDate}`,
+        form.preferredTime && `Preferred time: ${form.preferredTime}`,
+        form.message,
+      ].filter(Boolean).join(' | ')
+
+      const response = await fetch(callbackUrl(selectedLocation.id), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: `${form.firstName} ${form.lastName}`.trim(),
           phone: form.phone,
           email: form.email,
-          preferredDate: form.preferredDate,
-          preferredTime: form.preferredTime,
-          procedure: form.medicalProcedure,
-          message: form.message || '',
-          clinicId: selectedLocation.id,
-          clinicName: selectedLocation.name,
-          location: selectedLocation.fullAddress,
-          module: 'APPOINTMENT_REQUEST',
+          message: details,
+          module: 'Operations',
           source: 'WEBSITE',
         }),
       })
