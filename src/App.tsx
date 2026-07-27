@@ -9,6 +9,8 @@ import InsurancePage from './pages/InsurancePage'
 import ContactPage from './pages/ContactPage'
 import LocationsPage from './pages/LocationsPage'
 import LocationDetailPage from './pages/LocationDetailPage'
+import BlogPage from './pages/BlogPage'
+import BlogPostPage from './pages/BlogPostPage'
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/insurance" element={<InsurancePage />} />
         <Route path="/locations" element={<LocationsPage />} />
         <Route path="/locations/:id" element={<LocationDetailPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="*" element={<Home />} />
       </Route>

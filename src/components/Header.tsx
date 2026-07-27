@@ -11,6 +11,7 @@ const NAV = [
   { to: '/conditions', label: 'Conditions' },
   { to: '/services', label: 'Services' },
   { to: '/insurance', label: 'Insurance' },
+  { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Contact' },
 ]
 

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="92" viewBox="0 0 340 92" fill="none">
+  <!-- Circle "R" mark -->
+  <circle cx="46" cy="46" r="27" stroke="#1c4a2c" stroke-width="2.6"/>
+  <circle cx="65.1" cy="26.9" r="4" fill="#86a894"/>
+  <text x="46" y="56.5" text-anchor="middle" font-family="'Fraunces', Georgia, 'Times New Roman', serif" font-weight="500" font-size="32" fill="#1c4a2c">R</text>
+  <!-- Wordmark -->
+  <text x="90" y="45" font-family="'Fraunces', Georgia, 'Times New Roman', serif" font-weight="500" font-size="31" fill="#1e281f">Rockaway</text>
+  <text x="92" y="68" font-family="'DM Mono', ui-monospace, 'Courier New', monospace" font-size="12" letter-spacing="3.6" fill="#2e6b43">INTERNAL MEDICINE</text>
+</svg>
