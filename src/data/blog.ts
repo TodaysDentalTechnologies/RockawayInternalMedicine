@@ -28,7 +28,7 @@ export const posts: BlogPost[] = [
     category: 'Diabetes',
     date: '2026-07-27',
     readMinutes: 6,
-    img: '/images/blog-diabetes-cover.jpg',
+    img: '/images/blog-diabetes-cover.webp',
     excerpt:
       'Diabetes raises blood sugar when the body can’t make or use insulin well. Here’s what causes it, the warning signs to watch for, the three main types, and how it’s managed day to day.',
     intro: [

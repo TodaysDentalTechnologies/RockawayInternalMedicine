@@ -6,12 +6,13 @@
 // URL below is derived from this ONE constant so entity links never drift
 // (avoids the "#id vs /#id" mismatch that breaks entity references).
 // ─────────────────────────────────────────────────────────────
-import { site, locations, primaryLocation, type Location } from './clinic'
+import { site, locations, primaryLocation, doctor, rating, type Location } from './clinic'
 import type { ServiceItem } from './services'
 import type { BlogPost } from './blog'
 
 export const SITE_URL = 'https://rockawayinternalmedicine.com'
 export const ORG_ID = `${SITE_URL}/#medicalclinic`
+export const PHYSICIAN_ID = `${SITE_URL}/#physician`
 const LOGO = `${SITE_URL}/images/logo.png`
 
 const DAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -32,6 +33,25 @@ const openingHours = (loc: Location) =>
     )
     .filter(Boolean)
 
+const geoCoordinates = (loc: Location) => ({
+  '@type': 'GeoCoordinates',
+  latitude: loc.lat,
+  longitude: loc.lng,
+})
+
+const aggregateRating = () => ({
+  '@type': 'AggregateRating',
+  ratingValue: rating.value,
+  reviewCount: rating.count,
+  bestRating: 5,
+  worstRating: 1,
+})
+
+const areaServed = () => [
+  ...[...new Set(locations.map((l) => l.city))].map((c) => ({ '@type': 'City', name: c })),
+  { '@type': 'AdministrativeArea', name: 'Queens, New York' },
+]
+
 const postalAddress = (loc: Location) => ({
   '@type': 'PostalAddress',
   streetAddress: loc.address,
@@ -48,6 +68,7 @@ const locationNode = (loc: Location) => ({
   url: `${SITE_URL}/locations/${loc.id}`,
   telephone: loc.phoneHref.replace('tel:', ''),
   address: postalAddress(loc),
+  geo: geoCoordinates(loc),
   openingHoursSpecification: openingHours(loc),
   parentOrganization: { '@id': ORG_ID },
 })
@@ -65,9 +86,34 @@ export function businessSchema() {
     telephone: primaryLocation.phoneHref.replace('tel:', ''),
     medicalSpecialty: ['InternalMedicine', 'PrimaryCare'],
     address: postalAddress(primaryLocation),
+    geo: geoCoordinates(primaryLocation),
     openingHoursSpecification: openingHours(primaryLocation),
-    areaServed: [...new Set(locations.map((l) => l.city))].map((c) => ({ '@type': 'City', name: c })),
+    areaServed: areaServed(),
+    aggregateRating: aggregateRating(),
+    employee: { '@id': PHYSICIAN_ID },
     department: locations.map(locationNode),
+  }
+}
+
+// Sitewide physician entity — mirrored statically in index.html (same @id → dedupes).
+export function physicianSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Physician',
+    '@id': PHYSICIAN_ID,
+    name: doctor.name,
+    honorificSuffix: doctor.credential,
+    description: `${doctor.boardCertification}. Adult primary care in Jamaica and Cambria Heights, Queens, NY.`,
+    image: `${SITE_URL}${doctor.image}`,
+    url: SITE_URL,
+    telephone: primaryLocation.phoneHref.replace('tel:', ''),
+    address: postalAddress(primaryLocation),
+    medicalSpecialty: ['InternalMedicine', 'PrimaryCare'],
+    identifier: { '@type': 'PropertyValue', propertyID: 'NPI', value: doctor.npi },
+    alumniOf: { '@type': 'CollegeOrUniversity', name: doctor.education },
+    knowsLanguage: doctor.languages,
+    sameAs: [...doctor.sameAs],
+    worksFor: { '@id': ORG_ID },
   }
 }
 

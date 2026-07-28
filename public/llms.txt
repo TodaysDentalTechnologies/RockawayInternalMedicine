@@ -1,0 +1,46 @@
+# Rockaway Internal Medicine
+
+> Adult internal medicine and primary care practice with two offices in Queens, New York — Jamaica and Cambria Heights. Led by Dr. Shiva Shamtoub, DO, Board Certified in Internal Medicine. Preventive care, chronic disease management, and same-week sick visits. New and existing patients welcome. Most major insurance plans accepted.
+
+Key facts:
+
+- Jamaica office: 147-12 Rockaway Blvd, Jamaica, NY 11436 — phone 718-732-7744
+- Cambria Heights office: 219-15 Linden Blvd, Cambria Heights, NY 11411 — phone 718-509-4899
+- Hours: Monday–Friday 9:00 AM–5:00 PM, Saturday 9:00 AM–1:00 PM, Sunday closed
+- Physician: Dr. Shiva Shamtoub, DO (NPI 1366586646), Internal Medicine / Primary Care; languages: English, Persian
+- Patients: adults (internal medicine — not pediatrics)
+
+## Main pages
+
+- [Home](https://rockawayinternalmedicine.com/): Practice overview, conditions treated, insurance, and contact
+- [About](https://rockawayinternalmedicine.com/about): Practice philosophy and care team
+- [Services](https://rockawayinternalmedicine.com/services): All medical services offered
+- [Conditions](https://rockawayinternalmedicine.com/conditions): Conditions we diagnose and manage
+- [Insurance](https://rockawayinternalmedicine.com/insurance): Accepted insurance plans
+- [Locations](https://rockawayinternalmedicine.com/locations): Both office locations with hours and directions
+- [Contact](https://rockawayinternalmedicine.com/contact): Appointment requests and contact details
+- [Blog](https://rockawayinternalmedicine.com/blog): Patient education articles
+
+## Services
+
+- [Cardiology](https://rockawayinternalmedicine.com/services/cardiology): Heart health evaluations and management
+- [Diabetes Management](https://rockawayinternalmedicine.com/services/diabetes-management): Type 1 and type 2 diabetes care
+- [Hypertension Treatment](https://rockawayinternalmedicine.com/services/hypertension-treatment): Blood pressure monitoring and treatment
+- [Cholesterol Testing](https://rockawayinternalmedicine.com/services/cholesterol-testing): Lipid panels and cholesterol management
+- [Thyroid Treatment](https://rockawayinternalmedicine.com/services/thyroid-treatment): Thyroid disorder diagnosis and care
+- [Cancer Screening](https://rockawayinternalmedicine.com/services/cancer-screening): Preventive cancer screenings
+- [Neurology](https://rockawayinternalmedicine.com/services/neurology): Neurological evaluations
+- [Dermatology](https://rockawayinternalmedicine.com/services/dermatology): Skin condition evaluation and treatment
+- [Immunotherapy](https://rockawayinternalmedicine.com/services/immunotherapy): Allergy and immune therapies
+- [Physicals & Vaccinations](https://rockawayinternalmedicine.com/services/physicals-vaccinations): Annual physicals and immunizations
+- [Pain Management](https://rockawayinternalmedicine.com/services/pain-management): Chronic and acute pain care
+- [Pregnancy Testing](https://rockawayinternalmedicine.com/services/pregnancy-testing): Confidential pregnancy testing
+
+## Locations
+
+- [Jamaica office](https://rockawayinternalmedicine.com/locations/rockawayinternalmedicine): 147-12 Rockaway Blvd, Jamaica, NY 11436
+- [Cambria Heights office](https://rockawayinternalmedicine.com/locations/rockaway-cambria-heights): 219-15 Linden Blvd, Cambria Heights, NY 11411
+
+## Optional
+
+- [Sitemap](https://rockawayinternalmedicine.com/sitemap.xml): Full list of indexable URLs

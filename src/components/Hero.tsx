@@ -184,7 +184,7 @@ export default function Hero() {
             }}
           >
             <ImageSlot
-              src="/images/dr-shamtoub.png"
+              src="/images/dr-shamtoub.webp"
               alt="Board-certified internal medicine physician at Rockaway Internal Medicine"
               label="Drop a photo — your storefront, exam room, or team"
             />

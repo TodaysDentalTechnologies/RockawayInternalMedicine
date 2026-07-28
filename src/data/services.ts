@@ -12,13 +12,13 @@ export interface ServiceItem {
   faqs: Faq[]
 }
 
-// Photos live in /public/images (note the double .jpg.jpeg extension).
+// Photos live in /public/images (note the double .webp extension).
 export const services: ServiceItem[] = [
   {
     slug: 'cardiology',
     category: 'Cardiovascular',
     title: 'Cardiology',
-    img: '/images/cardiology.jpg.jpeg',
+    img: '/images/cardiology.webp',
     body: 'Heart-health evaluations, blood-pressure and cholesterol management, EKG, and coordinated cardiac care with trusted specialists.',
     faqs: [
       { q: 'When should I see someone about heart health?', a: "If you have symptoms like chest pain, shortness of breath, palpitations, or risk factors like high blood pressure or a family history of heart disease, it's worth being evaluated." },
@@ -32,7 +32,7 @@ export const services: ServiceItem[] = [
     slug: 'diabetes-management',
     category: 'Metabolic',
     title: 'Diabetes Management',
-    img: '/images/diabetes.jpg.jpeg',
+    img: '/images/diabetes.webp',
     body: 'Blood-sugar monitoring, A1C testing, nutrition counseling, and long-term control plans built around your life.',
     faqs: [
       { q: "How do I know if I'm at risk for diabetes?", a: 'Risk factors include family history, extra weight, high blood pressure, and being over 45 — a simple blood test (A1C or fasting glucose) tells us where you stand.' },
@@ -45,7 +45,7 @@ export const services: ServiceItem[] = [
     slug: 'hypertension-treatment',
     category: 'Cardiovascular',
     title: 'Hypertension Treatment',
-    img: '/images/hypertension.jpg.jpeg',
+    img: '/images/hypertension.webp',
     body: 'Personalized blood-pressure control — lifestyle guidance, medication management, and steady monitoring to protect your heart.',
     faqs: [
       { q: 'What counts as high blood pressure?', a: 'Generally a reading at or above 130/80 on more than one occasion — we confirm with proper, repeated measurements before diagnosing.' },
@@ -58,7 +58,7 @@ export const services: ServiceItem[] = [
     slug: 'cholesterol-testing',
     category: 'Cardiovascular',
     title: 'Cholesterol Testing',
-    img: '/images/cholesterol.jpg.jpeg',
+    img: '/images/cholesterol.webp',
     body: 'Complete lipid panels and treatment to assess cardiovascular risk and prevent complications before they start.',
     faqs: [
       { q: 'How often should I check my cholesterol?', a: 'Most adults every four to six years, and more often with heart-disease risk factors or if you are on treatment.' },
@@ -71,7 +71,7 @@ export const services: ServiceItem[] = [
     slug: 'thyroid-treatment',
     category: 'Endocrine',
     title: 'Thyroid Treatment',
-    img: '/images/thyroid.jpg.jpeg',
+    img: '/images/thyroid.webp',
     body: 'Diagnosis and management of hypo- and hyperthyroid conditions, with careful testing and dosing that keep you balanced.',
     faqs: [
       { q: 'What are the signs of a thyroid problem?', a: 'Fatigue, weight changes, feeling too hot or cold, hair changes, or mood shifts can all point to an under- or overactive thyroid.' },
@@ -84,7 +84,7 @@ export const services: ServiceItem[] = [
     slug: 'cancer-screening',
     category: 'Preventive',
     title: 'Cancer Screening',
-    img: '/images/cancer-screening.jpg.jpeg',
+    img: '/images/cancer-screening.webp',
     body: 'Guideline-based screenings for early detection — because catching things early is what saves lives.',
     faqs: [
       { q: 'Which cancer screenings do I need?', a: 'It depends on your age, sex, and risk — common ones include colorectal, breast, cervical, lung, and skin; we build a schedule for you.' },
@@ -97,7 +97,7 @@ export const services: ServiceItem[] = [
     slug: 'neurology',
     category: 'Neurological',
     title: 'Neurology',
-    img: '/images/neurology.jpg.jpeg',
+    img: '/images/neurology.webp',
     body: 'Evaluation and management of headaches, migraines, nerve pain, and other neurological conditions.',
     faqs: [
       { q: 'What conditions do you evaluate?', a: 'Headaches and migraines, dizziness, numbness or tingling, memory concerns, and other nervous-system symptoms.' },
@@ -110,7 +110,7 @@ export const services: ServiceItem[] = [
     slug: 'dermatology',
     category: 'Skin Health',
     title: 'Dermatology',
-    img: '/images/dermatology.jpg.jpeg',
+    img: '/images/dermatology.webp',
     body: 'Care for rashes, acne, moles, and common skin conditions — with referrals to specialists when needed.',
     faqs: [
       { q: 'What skin issues can you treat?', a: 'Rashes, acne, eczema, infections, and suspicious moles or growths — with dermatology referrals for anything specialized.' },
@@ -123,7 +123,7 @@ export const services: ServiceItem[] = [
     slug: 'immunotherapy',
     category: 'Allergy & Immune',
     title: 'Immunotherapy',
-    img: '/images/immunotherapy.jpg.jpeg',
+    img: '/images/immunotherapy.webp',
     body: 'Allergy and immune-system treatment coordinated under expert medical supervision.',
     faqs: [
       { q: 'What is immunotherapy used for?', a: "Severe allergies, allergic asthma, hay fever, and certain immune conditions that don't respond to standard treatment." },
@@ -136,7 +136,7 @@ export const services: ServiceItem[] = [
     slug: 'physicals-vaccinations',
     category: 'Preventive',
     title: 'Physicals & Vaccinations',
-    img: '/images/immunizations.jpg.jpeg',
+    img: '/images/immunizations.webp',
     body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus immunizations kept on schedule.',
     faqs: [
       { q: "What's included in a physical?", a: 'A head-to-toe exam, vitals, age-appropriate labs and screenings, a medication review, and time to talk through your health.' },
@@ -149,7 +149,7 @@ export const services: ServiceItem[] = [
     slug: 'pain-management',
     category: 'Pain & Mobility',
     title: 'Pain Management',
-    img: '/images/pain-management.jpg.jpeg',
+    img: '/images/pain-management.webp',
     body: 'Practical plans for chronic pain and migraine relief that keep you moving — not just medicated.',
     faqs: [
       { q: 'What kinds of pain do you treat?', a: 'Chronic back, joint, and nerve pain, arthritis, and recurring migraines — with a focus on keeping you active.' },
@@ -162,7 +162,7 @@ export const services: ServiceItem[] = [
     slug: 'pregnancy-testing',
     category: "Women's Health",
     title: 'Pregnancy Testing',
-    img: '/images/pregnancy.jpg.jpeg',
+    img: '/images/pregnancy.webp',
     body: 'Confidential pregnancy testing and family-planning guidance in a comfortable, supportive environment.',
     faqs: [
       { q: 'Is testing confidential?', a: 'Completely — we provide pregnancy testing and counseling in a private, judgment-free environment.' },

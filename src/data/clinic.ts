@@ -27,6 +27,9 @@ export interface Location {
   phone: string
   phoneHref: string
   timezone: string
+  // Coordinates for the GeoCoordinates schema (and future map features).
+  lat: number
+  lng: number
   // Weekly hours in this location's timezone. index 0 = Sun … 6 = Sat.
   // null = closed that day.
   hours: OpenHours[]
@@ -66,6 +69,8 @@ export const locations: Location[] = [
     phone: '718-732-7744',
     phoneHref: 'tel:+17187327744',
     timezone: 'America/New_York',
+    lat: 40.6731159,
+    lng: -73.7903648,
     hours: STANDARD_HOURS,
     hoursDisplay: STANDARD_HOURS_DISPLAY,
   },
@@ -83,6 +88,8 @@ export const locations: Location[] = [
     phone: '718-509-4899',
     phoneHref: 'tel:+17185094899',
     timezone: 'America/New_York',
+    lat: 40.6954713,
+    lng: -73.7403113,
     // NOTE: assumed same hours as the Jamaica office — confirm the Cambria
     // Heights office's real hours and adjust here if they differ.
     hours: STANDARD_HOURS,
@@ -98,6 +105,34 @@ export const site = {
   tagline: 'Internal Medicine',
   logoLetter: 'R',
   primaryLocationId: 'rockawayinternalmedicine',
+} as const
+
+// ── Physician (drives the sitewide Physician schema) ────────────
+// Verified against the NPI registry (npiregistry.cms.hhs.gov, NPI 1366586646).
+export const doctor = {
+  name: 'Dr. Shiva Shamtoub',
+  credential: 'DO',
+  npi: '1366586646',
+  boardCertification: 'Board Certified in Internal Medicine',
+  education: 'New York Institute of Technology College of Osteopathic Medicine',
+  residency: 'Staten Island University Hospital',
+  languages: ['English', 'Persian'],
+  image: '/images/dr-shamtoub.webp',
+  sameAs: [
+    'https://www.zocdoc.com/doctor/shiva-shamtoub-do-62123',
+    'https://health.usnews.com/doctors/shiva-shamtoub-771520',
+    'https://www.doximity.com/pub/shiva-shamtoub-do',
+    'https://npiregistry.cms.hhs.gov/provider-view/1366586646',
+  ],
+} as const
+
+// Aggregate patient rating used in structured data. Source: Dr. Shamtoub's
+// Zocdoc profile (4.31 stars, 791 reviews as of July 2026). UPDATE these two
+// numbers periodically so the markup keeps matching the live rating — and
+// mirror any change in the static JSON-LD block in index.html.
+export const rating = {
+  value: 4.31,
+  count: 791,
 } as const
 
 export function getLocation(id: string | undefined): Location | undefined {

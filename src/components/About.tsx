@@ -108,7 +108,7 @@ export default function About() {
             }}
           >
             <ImageSlot
-              src="/images/about-care.jpg"
+              src="/images/about-care.webp"
               alt="Clinician reviewing patient records with a stethoscope at Rockaway Internal Medicine"
               label="Drop a photo — waiting room or care team"
             />
