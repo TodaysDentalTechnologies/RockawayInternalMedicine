@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { SITE_URL } from '../data/seo'
 
@@ -15,9 +16,30 @@ interface SeoProps {
   schema?: object[]
 }
 
+// Attribute that marks the JSON-LD this app owns. The build-time prerender
+// (scripts/prerender.mjs) writes the same tag into each route's static HTML;
+// on mount we remove any existing ones and re-add the current route's schema,
+// so a prerendered page and its hydrated client never emit duplicate JSON-LD.
+const MARK = 'data-rim-jsonld'
+
 export default function Seo({ title, description, path, image, type = 'website', schema = [] }: SeoProps) {
   const canonical = path ? `${SITE_URL}${path}` : undefined
   const ogImage = image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : `${SITE_URL}/images/logo.png`
+
+  const json = JSON.stringify(schema)
+  useEffect(() => {
+    document.querySelectorAll(`script[${MARK}]`).forEach((el) => el.remove())
+    for (const s of schema) {
+      const el = document.createElement('script')
+      el.type = 'application/ld+json'
+      el.setAttribute(MARK, '')
+      el.textContent = JSON.stringify(s)
+      document.head.appendChild(el)
+    }
+    // `json` is the serialized form of `schema`; it changes exactly when the
+    // route's structured data changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [json])
 
   return (
     <Helmet prioritizeSeoTags>
@@ -35,12 +57,6 @@ export default function Seo({ title, description, path, image, type = 'website',
       <meta name="twitter:title" content={title} />
       {description ? <meta name="twitter:description" content={description} /> : null}
       <meta name="twitter:image" content={ogImage} />
-
-      {schema.map((s, i) => (
-        <script key={i} type="application/ld+json">
-          {JSON.stringify(s)}
-        </script>
-      ))}
     </Helmet>
   )
 }

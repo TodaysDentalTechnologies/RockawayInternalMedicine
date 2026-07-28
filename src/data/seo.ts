@@ -7,8 +7,9 @@
 // (avoids the "#id vs /#id" mismatch that breaks entity references).
 // ─────────────────────────────────────────────────────────────
 import { site, locations, primaryLocation, doctor, rating, type Location } from './clinic'
-import type { ServiceItem } from './services'
-import type { BlogPost } from './blog'
+import { services, type ServiceItem } from './services'
+import { posts, type BlogPost } from './blog'
+import { homeFaqs } from './faq'
 
 export const SITE_URL = 'https://rockawayinternalmedicine.com'
 export const ORG_ID = `${SITE_URL}/#medicalclinic`
@@ -174,4 +175,70 @@ export function articleSchema(p: BlogPost) {
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${p.slug}` },
   }
+}
+
+// ── Prerender manifest ──────────────────────────────────────────
+// Single source of truth for the build-time prerender (scripts/prerender.mjs):
+// every route with the exact JSON-LD it should ship in its static HTML. Uses the
+// same schema builders the pages use, so the prerendered and client-rendered
+// structured data can never drift.
+export interface PrerenderRoute {
+  path: string
+  title: string
+  schema: object[]
+}
+
+const HOME = { name: 'Home', path: '/' }
+const trail = (...rest: { name: string; path: string }[]) => breadcrumbSchema([HOME, ...rest])
+
+export function allRoutes(): PrerenderRoute[] {
+  const b = site.brand
+  const routes: PrerenderRoute[] = [
+    {
+      path: '/',
+      title: `${b} | Adult Primary Care in Jamaica & Cambria Heights, NY`,
+      schema: [businessSchema(), physicianSchema(), faqSchema(homeFaqs)],
+    },
+    { path: '/about', title: `About | ${b}`, schema: [trail({ name: 'About', path: '/about' })] },
+    { path: '/conditions', title: `Conditions We Treat | ${b}`, schema: [trail({ name: 'Conditions', path: '/conditions' })] },
+    { path: '/services', title: `Services | ${b}`, schema: [trail({ name: 'Services', path: '/services' })] },
+    { path: '/insurance', title: `Insurance Accepted | ${b}`, schema: [trail({ name: 'Insurance', path: '/insurance' })] },
+    { path: '/locations', title: `Our Locations | ${b}`, schema: [trail({ name: 'Locations', path: '/locations' })] },
+    { path: '/blog', title: `Health Blog | ${b}`, schema: [trail({ name: 'Blog', path: '/blog' })] },
+    { path: '/contact', title: `Contact | ${b}`, schema: [trail({ name: 'Contact', path: '/contact' })] },
+  ]
+
+  for (const s of services) {
+    routes.push({
+      path: `/services/${s.slug}`,
+      title: `${s.title} | ${b}`,
+      schema: [
+        serviceSchema(s),
+        faqSchema(s.faqs),
+        trail({ name: 'Services', path: '/services' }, { name: s.title, path: `/services/${s.slug}` }),
+      ],
+    })
+  }
+
+  for (const p of posts) {
+    routes.push({
+      path: `/blog/${p.slug}`,
+      title: `${p.title} | ${b}`,
+      schema: [
+        articleSchema(p),
+        faqSchema(p.faqs),
+        trail({ name: 'Blog', path: '/blog' }, { name: p.title, path: `/blog/${p.slug}` }),
+      ],
+    })
+  }
+
+  for (const loc of locations) {
+    routes.push({
+      path: `/locations/${loc.id}`,
+      title: `${loc.city} Office | ${b}`,
+      schema: [trail({ name: 'Locations', path: '/locations' }, { name: loc.city, path: `/locations/${loc.id}` })],
+    })
+  }
+
+  return routes
 }
