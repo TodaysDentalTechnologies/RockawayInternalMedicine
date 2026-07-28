@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getPost, posts } from '../data/blog'
 import { getService } from '../data/services'
-import { clinic } from '../data/clinic'
-import { ArrowRight, Clock, Plus, Minus, Calendar } from '../components/icons'
+import { site } from '../data/clinic'
+import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../components/icons'
 import ReadyCta from '../components/ReadyCta'
 import CallMenu from '../components/CallMenu'
+import Seo from '../components/Seo'
+import { articleSchema, faqSchema, breadcrumbSchema } from '../data/seo'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const formatDate = (iso: string) => {
@@ -14,6 +16,35 @@ const formatDate = (iso: string) => {
 }
 
 const PROSE = 760
+
+const RICH_LINK = { color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '3px' }
+
+// Renders inline [text](/path) markers in the body copy as real links.
+function renderRichText(text: string) {
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g
+  const out: Array<string | JSX.Element> = []
+  let last = 0
+  let k = 0
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) out.push(text.slice(last, m.index))
+    const [, label, url] = m
+    out.push(
+      url.startsWith('/') ? (
+        <Link key={k++} to={url} style={RICH_LINK}>
+          {label}
+        </Link>
+      ) : (
+        <a key={k++} href={url} style={RICH_LINK} target="_blank" rel="noopener noreferrer">
+          {label}
+        </a>
+      ),
+    )
+    last = m.index + m[0].length
+  }
+  if (last < text.length) out.push(text.slice(last))
+  return out
+}
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -44,6 +75,22 @@ export default function BlogPostPage() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: 'clamp(96px,14vh,140px) 0 clamp(64px,9vw,110px)' }}>
+      <Seo
+        title={`${post.title} | ${site.brand}`}
+        description={post.excerpt}
+        path={`/blog/${post.slug}`}
+        image={post.img}
+        type="article"
+        schema={[
+          articleSchema(post),
+          faqSchema(post.faqs),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Blog', path: '/blog' },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ]),
+        ]}
+      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Breadcrumb */}
         <button
@@ -163,7 +210,7 @@ export default function BlogPostPage() {
                 marginTop: i === 0 ? 0 : 18,
               }}
             >
-              {p}
+              {renderRichText(p)}
             </p>
           ))}
 
@@ -175,7 +222,7 @@ export default function BlogPostPage() {
               <span style={{ display: 'block', width: 54, height: 3, background: 'var(--olive)', borderRadius: 2, margin: '14px 0 0' }} />
               {sec.paragraphs.map((p, i) => (
                 <p key={i} style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.72, color: 'var(--ink-soft)', marginTop: i === 0 ? 20 : 16 }}>
-                  {p}
+                  {renderRichText(p)}
                 </p>
               ))}
             </div>
@@ -198,34 +245,54 @@ export default function BlogPostPage() {
             </p>
           )}
 
-          {/* Related service */}
+          {/* Next-step CTA — turn the read into an action */}
           {related && (
-            <Link
-              to={`/services/${related.slug}`}
-              className="rim-card reveal"
+            <div
+              className="reveal"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                marginTop: 'clamp(32px,4vw,44px)',
-                background: 'var(--card)',
-                border: '1px solid var(--line)',
-                borderRadius: 18,
-                padding: 'clamp(18px,2.4vw,24px)',
-                textDecoration: 'none',
-                color: 'inherit',
+                position: 'relative',
+                overflow: 'hidden',
+                marginTop: 'clamp(36px,5vw,52px)',
+                borderRadius: 22,
+                border: '1px solid rgba(255,255,255,.55)',
+                background: 'linear-gradient(135deg, rgba(179,209,187,.5), rgba(134,168,148,.24))',
+                boxShadow: '0 34px 70px -48px rgba(28,74,44,.55)',
+                padding: 'clamp(26px,3.6vw,42px)',
               }}
             >
-              <span style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--olive)' }}>
-                  Related care
+              <span
+                aria-hidden="true"
+                style={{ position: 'absolute', right: -60, top: -60, width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle at 40% 40%, rgba(255,255,255,.35), transparent 68%)', pointerEvents: 'none' }}
+              />
+              <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 11, fontFamily: "'DM Mono',monospace", fontSize: 11.5, letterSpacing: '.22em', textTransform: 'uppercase', color: 'var(--olive-deep)' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 11, background: 'rgba(46,107,67,.16)', color: 'var(--olive-deep)' }}>
+                  <Activity size={18} />
                 </span>
-                <span style={{ fontFamily: "'Fraunces',serif", fontSize: 'clamp(19px,2vw,23px)' }}>{related.title} at {clinic.name}</span>
+                Ready when you are
               </span>
-              <span style={{ marginLeft: 'auto', flex: 'none', color: 'var(--olive-deep)' }}>
-                <ArrowRight size={20} />
-              </span>
-            </Link>
+              <h3 style={{ position: 'relative', fontFamily: "'Fraunces',serif", fontWeight: 400, fontSize: 'clamp(25px,3vw,36px)', lineHeight: 1.08, letterSpacing: '-.01em', marginTop: 16 }}>
+                Let’s manage it together.
+              </h3>
+              <p style={{ position: 'relative', fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.62, color: 'var(--ink-soft)', marginTop: 12, maxWidth: '52ch' }}>
+                {related.body}
+              </p>
+              <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 26 }}>
+                <Link
+                  to={`/services/${related.slug}`}
+                  className="rim-cta"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'var(--olive-deep)', color: 'var(--on-olive)', padding: '14px 24px', borderRadius: 999, fontSize: 14.5, fontWeight: 600, textDecoration: 'none' }}
+                >
+                  Explore {related.title} <ArrowRight size={15} />
+                </Link>
+                <Link
+                  to="/contact"
+                  className="rim-outline-btn"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 9, border: '1.5px solid var(--olive)', background: 'transparent', color: 'var(--olive-deep)', padding: '14px 22px', borderRadius: 999, fontSize: 14.5, fontWeight: 600, textDecoration: 'none' }}
+                >
+                  Book an appointment
+                </Link>
+              </div>
+            </div>
           )}
         </article>
 

@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { getLocation, locations } from '../data/clinic'
+import { getLocation, locations, site } from '../data/clinic'
 import LocationCard from '../components/LocationCard'
 import { Calendar, ArrowRight, Phone } from '../components/icons'
+import Seo from '../components/Seo'
+import { breadcrumbSchema } from '../data/seo'
 
 // Detail page for a single office — the target of the header "Locations"
 // dropdown (/locations/:id).
@@ -37,6 +39,18 @@ export default function LocationDetailPage() {
 
   return (
     <div style={{ background: 'var(--bg)', paddingBottom: 'clamp(64px,9vw,112px)' }}>
+      <Seo
+        title={`${location.name} — ${location.city}, ${location.stateAbbr} | ${site.brand}`}
+        description={`${location.fullAddress}. Board-certified adult primary care with unhurried visits and same-week appointments. Call ${location.phone}.`}
+        path={`/locations/${location.id}`}
+        schema={[
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Locations', path: '/locations' },
+            { name: location.city, path: `/locations/${location.id}` },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section style={{ padding: 'clamp(104px,15vh,152px) 0 clamp(32px,5vw,52px)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>

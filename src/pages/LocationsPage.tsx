@@ -1,10 +1,18 @@
-import { locations } from '../data/clinic'
+import { locations, site } from '../data/clinic'
 import LocationCard from '../components/LocationCard'
+import Seo from '../components/Seo'
+import { breadcrumbSchema } from '../data/seo'
 
 // Index of all offices — one full LocationCard each.
 export default function LocationsPage() {
   return (
     <section style={{ background: 'var(--bg)', padding: 'clamp(104px,15vh,152px) 0 clamp(64px,9vw,112px)' }}>
+      <Seo
+        title={`Our Locations | ${site.brand}`}
+        description="Two Queens offices — Jamaica and Cambria Heights. Same team, same unhurried care. Choose whichever office is closest to you."
+        path="/locations"
+        schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Locations', path: '/locations' }])]}
+      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         <div className="reveal" style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono',monospace", fontSize: 12.5, letterSpacing: '.28em', textTransform: 'uppercase', color: 'var(--olive)' }}>

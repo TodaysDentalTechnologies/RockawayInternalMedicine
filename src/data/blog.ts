@@ -57,7 +57,7 @@ export const posts: BlogPost[] = [
         paragraphs: [
           'Type 1 diabetes occurs when the pancreas produces no insulin at all. It usually appears in childhood or early adulthood, and people with it need insulin injections to manage their blood sugar. Genetics can raise the risk, though the exact cause isn’t fully understood.',
           'Type 2 diabetes is the most common form and usually develops in adulthood, often tied to weight and inactivity. Here the body either doesn’t make enough insulin or can’t use it effectively, and symptoms like thirst and fatigue set in as blood sugar rises.',
-          'Gestational diabetes appears during pregnancy in women who haven’t had diabetes before. Blood sugar typically returns to normal after childbirth, but it does raise the chance of developing Type 2 diabetes later in life. Each type calls for a management plan tailored to its onset and symptoms.',
+          'Gestational diabetes appears during [pregnancy](/services/pregnancy-testing) in women who haven’t had diabetes before. Blood sugar typically returns to normal after childbirth, but it does raise the chance of developing Type 2 diabetes later in life. Each type calls for a management plan tailored to its onset and symptoms.',
         ],
       },
       {

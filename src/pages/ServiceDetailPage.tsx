@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { clinic } from '../data/clinic'
+import { clinic, site } from '../data/clinic'
 import { getService, services } from '../data/services'
 import { ArrowRight, Stethoscope, Chat, Clipboard, Plus, Minus } from '../components/icons'
 import ReadyCta from '../components/ReadyCta'
 import CallMenu from '../components/CallMenu'
+import Seo from '../components/Seo'
+import { serviceSchema, faqSchema, breadcrumbSchema } from '../data/seo'
 import type { ReactNode } from 'react'
 
 const EXPECT: { icon: ReactNode; title: string; body: string }[] = [
@@ -42,6 +44,21 @@ export default function ServiceDetailPage() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: 'clamp(96px,14vh,140px) 0 clamp(64px,9vw,110px)' }}>
+      <Seo
+        title={`${service.title} | ${site.brand}`}
+        description={service.body}
+        path={`/services/${service.slug}`}
+        image={service.img}
+        schema={[
+          serviceSchema(service),
+          faqSchema(service.faqs),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Services', path: '/services' },
+            { name: service.title, path: `/services/${service.slug}` },
+          ]),
+        ]}
+      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Breadcrumb */}
         <button

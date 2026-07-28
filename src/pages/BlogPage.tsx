@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { posts } from '../data/blog'
 import { ArrowRight, Clock, Calendar } from '../components/icons'
+import { site } from '../data/clinic'
+import Seo from '../components/Seo'
+import { breadcrumbSchema } from '../data/seo'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 export const formatDate = (iso: string) => {
@@ -13,6 +16,12 @@ export default function BlogPage() {
 
   return (
     <section style={{ background: 'var(--bg2)', padding: 'clamp(104px,15vh,152px) 0 clamp(64px,9vw,112px)' }}>
+      <Seo
+        title={`Health Library — Blog | ${site.brand}`}
+        description="Plain-language guides on the conditions we treat and the choices that keep you healthy — written by our care team."
+        path="/blog"
+        schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }])]}
+      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Hero intro */}
         <div className="reveal" style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>

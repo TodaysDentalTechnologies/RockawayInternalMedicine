@@ -1,0 +1,6 @@
+# robots.txt for Rockaway Internal Medicine
+
+User-agent: *
+Allow: /
+
+Sitemap: https://rockawayinternalmedicine.com/sitemap.xml
