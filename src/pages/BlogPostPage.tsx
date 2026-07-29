@@ -7,7 +7,7 @@ import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../component
 import ReadyCta from '../components/ReadyCta'
 import CallMenu from '../components/CallMenu'
 import Seo from '../components/Seo'
-import { articleSchema, faqSchema, breadcrumbSchema } from '../data/seo'
+import { articleSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../data/seo'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const formatDate = (iso: string) => {
@@ -83,7 +83,7 @@ export default function BlogPostPage() {
         type="article"
         schema={[
           articleSchema(post),
-          faqSchema(post.faqs),
+          faqSchema(post.faqs, `${SITE_URL}/blog/${post.slug}`),
           breadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Blog', path: '/blog' },

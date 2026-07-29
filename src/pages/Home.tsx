@@ -7,7 +7,7 @@ import Faq from '../components/Faq'
 import Contact from '../components/Contact'
 import WaveDivider from '../components/WaveDivider'
 import Seo from '../components/Seo'
-import { businessSchema, physicianSchema, faqSchema } from '../data/seo'
+import { businessSchema, physicianSchema, faqSchema, SITE_URL } from '../data/seo'
 import { homeFaqs } from '../data/faq'
 
 // The full single-scroll landing (unchanged from the original one-page site).
@@ -20,7 +20,7 @@ export default function Home() {
         title="Rockaway Internal Medicine | Adult Primary Care in Jamaica & Cambria Heights, NY"
         description="Adult internal medicine & primary care in Jamaica and Cambria Heights, Queens — preventive care, chronic disease management, and same-week sick visits. New patients welcome."
         path="/"
-        schema={[businessSchema(), physicianSchema(), faqSchema(homeFaqs)]}
+        schema={[businessSchema(), physicianSchema(), faqSchema(homeFaqs, `${SITE_URL}/`)]}
       />
       <Hero />
       <WaveDivider from="var(--bg)" to="var(--bg2)" />

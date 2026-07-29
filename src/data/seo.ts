@@ -119,9 +119,14 @@ export function physicianSchema() {
 }
 
 export function breadcrumbSchema(items: { name: string; path: string }[]) {
+  // A stable @id (derived from the page this trail ends on) lets crawlers merge
+  // the prerendered copy and the client-injected copy into ONE node instead of
+  // double-counting — same trick the MedicalWebPage/business nodes already use.
+  const last = items[items.length - 1]
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${SITE_URL}${last?.path ?? ''}#breadcrumb`,
     itemListElement: items.map((it, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -131,10 +136,13 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   }
 }
 
-export function faqSchema(faqs: { q: string; a: string }[]) {
+// `pageUrl` is the canonical URL of the page the FAQ lives on; it becomes the
+// FAQPage @id so the prerendered and client-rendered copies merge (no dupes).
+export function faqSchema(faqs: { q: string; a: string }[], pageUrl?: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    ...(pageUrl ? { '@id': `${pageUrl}#faq` } : {}),
     mainEntity: faqs.map((f) => ({
       '@type': 'Question',
       name: f.q,
@@ -197,7 +205,7 @@ export function allRoutes(): PrerenderRoute[] {
     {
       path: '/',
       title: `${b} | Adult Primary Care in Jamaica & Cambria Heights, NY`,
-      schema: [businessSchema(), physicianSchema(), faqSchema(homeFaqs)],
+      schema: [businessSchema(), physicianSchema(), faqSchema(homeFaqs, `${SITE_URL}/`)],
     },
     { path: '/about', title: `About | ${b}`, schema: [trail({ name: 'About', path: '/about' })] },
     { path: '/conditions', title: `Conditions We Treat | ${b}`, schema: [trail({ name: 'Conditions', path: '/conditions' })] },
@@ -214,7 +222,7 @@ export function allRoutes(): PrerenderRoute[] {
       title: `${s.title} | ${b}`,
       schema: [
         serviceSchema(s),
-        faqSchema(s.faqs),
+        faqSchema(s.faqs, `${SITE_URL}/services/${s.slug}`),
         trail({ name: 'Services', path: '/services' }, { name: s.title, path: `/services/${s.slug}` }),
       ],
     })
@@ -226,7 +234,7 @@ export function allRoutes(): PrerenderRoute[] {
       title: `${p.title} | ${b}`,
       schema: [
         articleSchema(p),
-        faqSchema(p.faqs),
+        faqSchema(p.faqs, `${SITE_URL}/blog/${p.slug}`),
         trail({ name: 'Blog', path: '/blog' }, { name: p.title, path: `/blog/${p.slug}` }),
       ],
     })

@@ -6,7 +6,7 @@ import { ArrowRight, Stethoscope, Chat, Clipboard, Plus, Minus } from '../compon
 import ReadyCta from '../components/ReadyCta'
 import CallMenu from '../components/CallMenu'
 import Seo from '../components/Seo'
-import { serviceSchema, faqSchema, breadcrumbSchema } from '../data/seo'
+import { serviceSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../data/seo'
 import type { ReactNode } from 'react'
 
 const EXPECT: { icon: ReactNode; title: string; body: string }[] = [
@@ -51,7 +51,7 @@ export default function ServiceDetailPage() {
         image={service.img}
         schema={[
           serviceSchema(service),
-          faqSchema(service.faqs),
+          faqSchema(service.faqs, `${SITE_URL}/services/${service.slug}`),
           breadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Services', path: '/services' },
