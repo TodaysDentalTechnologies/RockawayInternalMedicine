@@ -110,13 +110,15 @@ for (const route of routes) {
 // Apply these ONLY against a build that has already shipped the flat <path>.html
 // artifacts. Against folder artifacts, Amplify's implicit /x -> /x/ plus these
 // /x/ -> /x rules is an infinite redirect loop.
+const WWW = `https://www.${new URL(SITE_URL).host}`
 const customRules = [
-  // www -> apex, carrying the path through in the same hop.
-  {
-    source: `https://www.${new URL(SITE_URL).host}/<*>`,
-    target: `${SITE_URL}/<*>`,
-    status: '301',
-  },
+  // www -> apex. The source is a bare host with NO path wildcard: Amplify
+  // preserves the request path automatically, and the obvious
+  // `https://www.host/<*>` -> `https://host/<*>` form silently never fires
+  // (verified against this app — every www URL kept serving 200).
+  // The root needs its own rule; the bare-host rule alone does not cover "/".
+  { source: `${WWW}/`, target: `${SITE_URL}/`, status: '301' },
+  { source: WWW, target: SITE_URL, status: '301' },
   // Trailing slash -> canonical no-slash form, one rule per route.
   ...routes
     .filter((r) => r.path !== '/')
