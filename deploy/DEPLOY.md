@@ -23,33 +23,42 @@ whose title or description is out of spec fails the build instead of shipping.
 title, meta description, canonical, OG/Twitter tags and JSON-LD baked in, plus
 `dist/sitemap.xml`.
 
-## 2. Canonical URLs (one-time)
+## 2. Canonical URLs
 
-Amplify → the app → **Rewrites and redirects**. The rules must be in this
-order — first match wins:
+The build writes `dist/amplify-custom-rules.json` from the same route manifest
+as the sitemap, in this order — Amplify takes the first match:
 
 | Source | Target | Type |
 | ------ | ------ | ---- |
 | `https://www.rockawayinternalmedicine.com/<*>` | `https://rockawayinternalmedicine.com/<*>` | 301 |
-| `/<*>/` | `/<*>` | 301 |
+| `/about/`, `/services/cardiology/`, … (one per route) | the same path without the slash | 301 |
 | `/<*>` | `/index.html` | 404 (rewrite) |
 
-Rule 1 makes the bare domain canonical. Rule 2 strips trailing slashes. Rule 3
-is the SPA fallback for unknown URLs.
-
-Machine-readable copy: `deploy/amplify-custom-rules.json`. To apply it:
+Apply it:
 
 ```bash
 aws amplify update-app --app-id djn8uddcmh0dt \
-  --custom-rules file://deploy/amplify-custom-rules.json \
+  --custom-rules file://dist/amplify-custom-rules.json \
   --profile shivashamtoub --region us-east-1
 ```
 
-**Why routes are flat `.html` files, not `<route>/index.html`:** Amplify's
-directory-index behaviour 301s `/about` → `/about/` whenever `about/index.html`
-exists — the opposite of the canonical form, and it fights rule 2 into a
-redirect loop. With `about.html` on disk, Amplify serves `/about` directly at
-200. Do not change `scripts/prerender.mjs` back to directory output.
+Three Amplify rule-engine constraints shape this, all verified against the
+live app — do not "simplify" past them:
+
+- **There is no trailing-slash catch-all.** `/<*>/` is rejected outright:
+  *"The wildcard pattern in custom rules expression is invalid when followed by
+  a `/`"*. Hence one 301 per route, generated rather than hand-maintained.
+- **Routes are flat `.html` files, not `<route>/index.html`.** A folder
+  artifact is served only at `/about/` — Amplify 301s `/about` → `/about/` and
+  no rule can override it. With `about.html` on disk, `/about` serves at 200
+  with no redirect. Do not change `scripts/prerender.mjs` back to directory
+  output.
+- **Apply the rules only after the matching build is live.** Against folder
+  artifacts, Amplify's implicit `/x` → `/x/` plus these `/x/` → `/x` rules is
+  an infinite redirect loop.
+
+Custom rules also do not fire for a path that resolves to an existing
+artifact, which is why the SPA fallback never shadows a prerendered page.
 
 ## 3. Verify
 
