@@ -96,6 +96,36 @@ for (const route of routes) {
   written++
 }
 
+// Amplify custom rules, generated from the same route manifest so they can
+// never drift from the pages that exist. Apply with:
+//   aws amplify update-app --app-id djn8uddcmh0dt \
+//     --custom-rules file://dist/amplify-custom-rules.json \
+//     --profile shivashamtoub --region us-east-1
+//
+// Order matters — Amplify takes the first match. There is deliberately no
+// `/<*>/` catch-all: Amplify rejects a wildcard followed by "/" ("The wildcard
+// pattern in custom rules expression is invalid when followed by a `/`"), so
+// each route needs its own slash-stripping 301.
+//
+// Apply these ONLY against a build that has already shipped the flat <path>.html
+// artifacts. Against folder artifacts, Amplify's implicit /x -> /x/ plus these
+// /x/ -> /x rules is an infinite redirect loop.
+const customRules = [
+  // www -> apex, carrying the path through in the same hop.
+  {
+    source: `https://www.${new URL(SITE_URL).host}/<*>`,
+    target: `${SITE_URL}/<*>`,
+    status: '301',
+  },
+  // Trailing slash -> canonical no-slash form, one rule per route.
+  ...routes
+    .filter((r) => r.path !== '/')
+    .map((r) => ({ source: `${r.path}/`, target: r.path, status: '301' })),
+  // SPA fallback for anything that is not a real artifact. Must stay last.
+  { source: '/<*>', target: '/index.html', status: '404-200' },
+]
+writeFileSync(join(DIST, 'amplify-custom-rules.json'), `${JSON.stringify(customRules, null, 2)}\n`)
+
 // Generate sitemap.xml from the same route manifest so URLs can never drift
 // (non-www, no trailing slash — root "/" is the one exception).
 const sitemap =
