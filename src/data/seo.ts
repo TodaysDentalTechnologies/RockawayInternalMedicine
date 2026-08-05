@@ -139,11 +139,20 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
 // `pageUrl` is the canonical URL of the page the FAQ lives on; it becomes the
 // FAQPage @id so the prerendered and client-rendered copies merge (no dupes).
 export function faqSchema(faqs: { q: string; a: string }[], pageUrl?: string) {
+  // Defensive dedupe: a question must never appear twice inside one FAQPage —
+  // Google's validator flags duplicate Question objects as invalid.
+  const seen = new Set<string>()
+  const unique = faqs.filter((f) => {
+    const key = f.q.trim().toLowerCase()
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     ...(pageUrl ? { '@id': `${pageUrl}#faq` } : {}),
-    mainEntity: faqs.map((f) => ({
+    mainEntity: unique.map((f) => ({
       '@type': 'Question',
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -185,41 +194,179 @@ export function articleSchema(p: BlogPost) {
   }
 }
 
-// ── Prerender manifest ──────────────────────────────────────────
-// Single source of truth for the build-time prerender (scripts/prerender.mjs):
-// every route with the exact JSON-LD it should ship in its static HTML. Uses the
-// same schema builders the pages use, so the prerendered and client-rendered
-// structured data can never drift.
+// ── Route meta + prerender manifest ─────────────────────────────
+// Single source of truth for BOTH the build-time prerender (scripts/prerender.mjs)
+// AND the runtime <Seo> component: every route's title, meta description, OG
+// image/type and the exact JSON-LD it ships. Meta spec: titles 50–55 chars
+// (hard cap 60), descriptions 145–155 chars (hard cap 160) — enforced by
+// scripts/check-meta.mjs; run it after editing anything here.
 export interface PrerenderRoute {
   path: string
   title: string
+  description: string
+  /** og:image — site-relative or absolute. Defaults to the logo. */
+  image?: string
+  /** og:type. Defaults to "website". */
+  type?: 'website' | 'article'
   schema: object[]
 }
 
 const HOME = { name: 'Home', path: '/' }
 const trail = (...rest: { name: string; path: string }[]) => breadcrumbSchema([HOME, ...rest])
 
+// Crafted per-service meta (titles 50–55, descriptions 145–155), keyed by slug.
+const SERVICE_META: Record<string, { title: string; description: string }> = {
+  cardiology: {
+    title: 'Cardiology in Queens NY | Rockaway Internal Medicine',
+    description:
+      'Cardiology care in Jamaica & Cambria Heights, Queens — heart health checks, EKG, blood pressure and cholesterol management. Call 718-732-7744 to book.',
+  },
+  'diabetes-management': {
+    title: 'Diabetes Care in Queens NY | Rockaway Internal Medicine',
+    description:
+      'Diabetes management in Jamaica & Cambria Heights, Queens — A1C testing, medication and food-first guidance that fits your life. Call 718-732-7744 today.',
+  },
+  'hypertension-treatment': {
+    title: 'Hypertension Treatment | Rockaway Internal Medicine',
+    description:
+      'Hypertension treatment in Jamaica & Cambria Heights, Queens — steady blood-pressure control with meds tuned to you. Call 718-732-7744 to book a visit.',
+  },
+  'cholesterol-testing': {
+    title: 'Cholesterol Testing & Management in Jamaica, Queens',
+    description:
+      'Cholesterol testing in Jamaica & Cambria Heights, Queens — full lipid panels and risk-based treatment plans that work. Call 718-732-7744 to book today.',
+  },
+  'thyroid-treatment': {
+    title: 'Thyroid Treatment, Queens | Rockaway Internal Medicine',
+    description:
+      'Thyroid treatment in Jamaica & Cambria Heights, Queens — testing, dosing and follow-through for hypo- and hyperthyroid. Call 718-732-7744 to book now.',
+  },
+  'cancer-screening': {
+    title: 'Cancer Screening, Queens | Rockaway Internal Medicine',
+    description:
+      'Cancer screening in Jamaica & Cambria Heights, Queens — guideline-based checks for early detection when it matters most. Call 718-732-7744 to book now.',
+  },
+  neurology: {
+    title: 'Neurology in Queens NY | Rockaway Internal Medicine',
+    description:
+      'Neurology care in Jamaica & Cambria Heights, Queens — headaches, nerve pain and neurological symptoms assessed and managed. Call 718-732-7744 to book.',
+  },
+  dermatology: {
+    title: 'Dermatology in Queens NY | Rockaway Internal Medicine',
+    description:
+      'Dermatology in Jamaica & Cambria Heights, Queens — rashes, acne and moles evaluated, with referrals when needed. Call 718-732-7744 to book your visit.',
+  },
+  immunotherapy: {
+    title: 'Immunotherapy in Queens NY | Rockaway Internal Medicine',
+    description:
+      'Immunotherapy in Jamaica & Cambria Heights, Queens — allergy evaluation and treatment plans built around your triggers. Call 718-732-7744 to book now.',
+  },
+  'physicals-vaccinations': {
+    title: 'Physicals & Vaccinations | Rockaway Internal Medicine',
+    description:
+      'Physicals & vaccinations in Jamaica & Cambria Heights, Queens — head-to-toe exams plus flu, pneumonia and tetanus shots. Call 718-732-7744 to book now.',
+  },
+  'pain-management': {
+    title: 'Pain Management, Queens | Rockaway Internal Medicine',
+    description:
+      'Pain management in Jamaica & Cambria Heights, Queens — practical plans for joint pain and migraine that keep you moving. Call 718-732-7744 to book now.',
+  },
+  'pregnancy-testing': {
+    title: 'Pregnancy Testing, Queens | Rockaway Internal Medicine',
+    description:
+      'Confidential pregnancy testing in Jamaica & Cambria Heights, Queens — fast results and supportive next-step guidance. Call 718-732-7744 to book today.',
+  },
+}
+
+const LOCATION_META: Record<string, { title: string; description: string }> = {
+  rockawayinternalmedicine: {
+    title: 'Jamaica, Queens NY Office | Rockaway Internal Medicine',
+    description:
+      'Rockaway Internal Medicine, Jamaica office — 147-12 Rockaway Blvd, Jamaica, NY 11436. Hours, directions and same-week visits. Call 718-732-7744 today.',
+  },
+  'rockaway-cambria-heights': {
+    title: 'Cambria Heights NY Office | Rockaway Internal Medicine',
+    description:
+      'Rockaway Internal Medicine, Cambria Heights office — 219-15 Linden Blvd, Cambria Heights, NY 11411. Hours, directions and visits. Call 718-509-4899.',
+  },
+}
+
+const POST_META: Record<string, { title: string; description: string }> = {
+  'diabetes-causes-symptoms-types-and-treatment': {
+    title: 'Diabetes: Causes, Symptoms, Types & Treatment Guide',
+    description:
+      'Diabetes explained — causes, warning signs, the difference between types, and treatment options that work, from our Queens internal medicine team.',
+  },
+}
+
 export function allRoutes(): PrerenderRoute[] {
   const b = site.brand
   const routes: PrerenderRoute[] = [
     {
       path: '/',
-      title: `${b} | Adult Primary Care in Jamaica & Cambria Heights, NY`,
+      title: 'Rockaway Internal Medicine | Primary Care Jamaica NY',
+      description:
+        'Adult internal medicine & primary care in Jamaica and Cambria Heights, Queens — same-week sick visits, preventive & chronic care. Call 718-732-7744.',
       schema: [businessSchema(), physicianSchema(), faqSchema(homeFaqs, `${SITE_URL}/`)],
     },
-    { path: '/about', title: `About | ${b}`, schema: [trail({ name: 'About', path: '/about' })] },
-    { path: '/conditions', title: `Conditions We Treat | ${b}`, schema: [trail({ name: 'Conditions', path: '/conditions' })] },
-    { path: '/services', title: `Services | ${b}`, schema: [trail({ name: 'Services', path: '/services' })] },
-    { path: '/insurance', title: `Insurance Accepted | ${b}`, schema: [trail({ name: 'Insurance', path: '/insurance' })] },
-    { path: '/locations', title: `Our Locations | ${b}`, schema: [trail({ name: 'Locations', path: '/locations' })] },
-    { path: '/blog', title: `Health Blog | ${b}`, schema: [trail({ name: 'Blog', path: '/blog' })] },
-    { path: '/contact', title: `Contact | ${b}`, schema: [trail({ name: 'Contact', path: '/contact' })] },
+    {
+      path: '/about',
+      title: 'About Rockaway Internal Medicine — Queens NY Doctors',
+      description:
+        'About Rockaway Internal Medicine — board-certified adult primary care serving Jamaica and Cambria Heights, Queens NY. Call 718-732-7744 to book a visit.',
+      schema: [trail({ name: 'About', path: '/about' })],
+    },
+    {
+      path: '/conditions',
+      title: 'Conditions We Treat — Adult Primary Care, Queens NY',
+      description:
+        'Conditions we treat in Queens, NY — hypertension, diabetes, thyroid, cholesterol, arthritis, migraine and more adult care. Call 718-732-7744 to book.',
+      schema: [trail({ name: 'Conditions', path: '/conditions' })],
+    },
+    {
+      path: '/services',
+      title: 'Adult Internal Medicine Services in Jamaica, Queens',
+      description:
+        'Internal medicine services in Jamaica & Cambria Heights, Queens — preventive care, chronic disease management and sick visits. Call 718-732-7744 today.',
+      schema: [trail({ name: 'Services', path: '/services' })],
+    },
+    {
+      path: '/insurance',
+      title: 'Insurance Plans Accepted | Rockaway Internal Medicine',
+      description:
+        'Insurance accepted at Rockaway Internal Medicine in Queens, NY — most major medical plans welcome at both offices. Call 718-732-7744 to verify coverage.',
+      schema: [trail({ name: 'Insurance', path: '/insurance' })],
+    },
+    {
+      path: '/locations',
+      title: 'Two Locations in Jamaica & Cambria Heights, Queens',
+      description:
+        'Two Queens locations — Jamaica (147-12 Rockaway Blvd) and Cambria Heights (219-15 Linden Blvd). Hours, directions and phone. Call 718-732-7744 to book.',
+      schema: [trail({ name: 'Locations', path: '/locations' })],
+    },
+    {
+      path: '/blog',
+      title: 'Health Blog — Tips from Rockaway Internal Medicine',
+      description:
+        'Health blog from Rockaway Internal Medicine — practical guides on diabetes, blood pressure, thyroid and everyday adult health from our Queens team.',
+      schema: [trail({ name: 'Blog', path: '/blog' })],
+    },
+    {
+      path: '/contact',
+      title: 'Contact & Appointments | Rockaway Internal Medicine',
+      description:
+        'Contact Rockaway Internal Medicine — request an appointment online or call our Jamaica and Cambria Heights, Queens offices at 718-732-7744 to book today.',
+      schema: [trail({ name: 'Contact', path: '/contact' })],
+    },
   ]
 
   for (const s of services) {
+    const meta = SERVICE_META[s.slug]
     routes.push({
       path: `/services/${s.slug}`,
-      title: `${s.title} | ${b}`,
+      title: meta ? meta.title : `${s.title} | ${b}`,
+      description: meta ? meta.description : s.body,
+      image: s.img,
       schema: [
         serviceSchema(s),
         faqSchema(s.faqs, `${SITE_URL}/services/${s.slug}`),
@@ -229,9 +376,13 @@ export function allRoutes(): PrerenderRoute[] {
   }
 
   for (const p of posts) {
+    const meta = POST_META[p.slug]
     routes.push({
       path: `/blog/${p.slug}`,
-      title: `${p.title} | ${b}`,
+      title: meta ? meta.title : `${p.title} | ${b}`,
+      description: meta ? meta.description : p.excerpt,
+      image: p.img,
+      type: 'article',
       schema: [
         articleSchema(p),
         faqSchema(p.faqs, `${SITE_URL}/blog/${p.slug}`),
@@ -241,12 +392,24 @@ export function allRoutes(): PrerenderRoute[] {
   }
 
   for (const loc of locations) {
+    const meta = LOCATION_META[loc.id]
     routes.push({
       path: `/locations/${loc.id}`,
-      title: `${loc.city} Office | ${b}`,
+      title: meta ? meta.title : `${loc.city} Office | ${b}`,
+      description: meta
+        ? meta.description
+        : `${site.brand} ${loc.city} office — ${loc.fullAddress}. Call ${loc.phone}.`,
       schema: [trail({ name: 'Locations', path: '/locations' }, { name: loc.city, path: `/locations/${loc.id}` })],
     })
   }
 
   return routes
+}
+
+// Runtime lookup used by <Seo>: normalizes trailing slashes so "/x" and "/x/"
+// resolve to the same route meta.
+const ROUTE_INDEX = new Map(allRoutes().map((r) => [r.path, r]))
+export function routeMeta(pathname: string): PrerenderRoute | undefined {
+  const path = pathname !== '/' && pathname.endsWith('/') ? pathname.replace(/\/+$/, '') : pathname
+  return ROUTE_INDEX.get(path)
 }
