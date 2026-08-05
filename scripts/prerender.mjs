@@ -83,8 +83,14 @@ for (const route of routes) {
     html = html.replace(/<title>.*?<\/title>/s, () => `<title>${escapeText(route.title)}</title>`)
   }
 
-  // "/" stays dist/index.html; "/services/cardiology" -> dist/services/cardiology/index.html
-  const file = route.path === '/' ? join(DIST, 'index.html') : join(DIST, route.path, 'index.html')
+  // "/" stays dist/index.html; "/services/cardiology" -> dist/services/cardiology.html
+  //
+  // FLAT files, not <route>/index.html: Amplify Hosting 301s /about -> /about/
+  // whenever about/index.html exists (its directory-index rule), which is the
+  // opposite of the canonical form. With about.html it serves /about at 200 and
+  // never redirects; the "/<*>/ -> /<*>" rule in deploy/amplify-custom-rules.json
+  // strips the slash off anyone arriving at the old form.
+  const file = route.path === '/' ? join(DIST, 'index.html') : join(DIST, `${route.path}.html`)
   mkdirSync(dirname(file), { recursive: true })
   writeFileSync(file, html)
   written++

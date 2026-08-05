@@ -1,102 +1,84 @@
-# Deploying to S3 + CloudFront
+# Deploying
 
-The site is a static build served from an S3 bucket behind CloudFront (aliases
-`rockawayinternalmedicine.com` and `www.rockawayinternalmedicine.com`). S3 has
-no rewrite engine, so URL rules that would normally live in `.htaccess` are
-split between a CloudFront Function and CloudFront's error-response config.
+The site is hosted on **AWS Amplify Hosting**, app `djn8uddcmh0dt`
+(`RockawayInternalMedicine`) in AWS account `310971188857` — the
+`shivashamtoub` environment. Amplify builds from the `main` branch of
+`github.com/TodaysDentalTechnologies/RockawayInternalMedicine`.
 
-Replace `BUCKET` and `DIST_ID` below with your bucket name and distribution ID.
+## 1. Deploy
 
-## 1. Build
-
-```bash
-npm run build
-```
-
-This runs Vite and then `scripts/prerender.mjs`, which writes one `index.html`
-per route with that page's title, meta description, canonical, OG/Twitter tags
-and JSON-LD baked in, plus a generated `dist/sitemap.xml`.
-
-## 2. Upload with correct cache headers
-
-Because every route is prerendered, **every** `.html` file must stay uncached —
-not just the root one.
+Auto-build is off, so a push does not deploy on its own. Push, then start a job:
 
 ```bash
-# Content-hashed bundles — safe to cache forever.
-aws s3 sync dist/ s3://BUCKET/ --delete \
-  --exclude "*.html" --exclude "*.txt" --exclude "*.xml" \
-  --exclude "images/*" \
-  --cache-control "public, max-age=31536000, immutable"
-
-# Images keep stable names, so cache for a month rather than a year.
-aws s3 sync dist/images/ s3://BUCKET/images/ --delete \
-  --cache-control "public, max-age=2592000"
-
-# Every prerendered page — never cached at the edge.
-aws s3 sync dist/ s3://BUCKET/ \
-  --exclude "*" --include "*.html" \
-  --cache-control "public, max-age=0, must-revalidate" \
-  --content-type "text/html; charset=utf-8"
-
-# robots.txt / sitemap.xml / llms.txt — short TTL so SEO edits land quickly.
-aws s3 cp dist/robots.txt s3://BUCKET/robots.txt --cache-control "public, max-age=3600"
-aws s3 cp dist/sitemap.xml s3://BUCKET/sitemap.xml --cache-control "public, max-age=3600"
-aws s3 cp dist/llms.txt s3://BUCKET/llms.txt --cache-control "public, max-age=3600"
+git push origin main
+aws amplify start-job --app-id djn8uddcmh0dt --branch-name main \
+  --job-type RELEASE --profile shivashamtoub --region us-east-1
 ```
 
-## 3. Invalidate the edge cache
+The Amplify build runs `npm run build`, which is `tsc` → `check-meta` →
+`vite build` → `prerender`. `check-meta` runs **before** the bundle so a route
+whose title or description is out of spec fails the build instead of shipping.
+
+`scripts/prerender.mjs` writes one static `.html` per route with that page's
+title, meta description, canonical, OG/Twitter tags and JSON-LD baked in, plus
+`dist/sitemap.xml`.
+
+## 2. Canonical URLs (one-time)
+
+Amplify → the app → **Rewrites and redirects**. The rules must be in this
+order — first match wins:
+
+| Source | Target | Type |
+| ------ | ------ | ---- |
+| `https://www.rockawayinternalmedicine.com/<*>` | `https://rockawayinternalmedicine.com/<*>` | 301 |
+| `/<*>/` | `/<*>` | 301 |
+| `/<*>` | `/index.html` | 404 (rewrite) |
+
+Rule 1 makes the bare domain canonical. Rule 2 strips trailing slashes. Rule 3
+is the SPA fallback for unknown URLs.
+
+Machine-readable copy: `deploy/amplify-custom-rules.json`. To apply it:
 
 ```bash
-aws cloudfront create-invalidation --distribution-id DIST_ID --paths "/*"
+aws amplify update-app --app-id djn8uddcmh0dt \
+  --custom-rules file://deploy/amplify-custom-rules.json \
+  --profile shivashamtoub --region us-east-1
 ```
 
-Run this on every deploy.
+**Why routes are flat `.html` files, not `<route>/index.html`:** Amplify's
+directory-index behaviour 301s `/about` → `/about/` whenever `about/index.html`
+exists — the opposite of the canonical form, and it fights rule 2 into a
+redirect loop. With `about.html` on disk, Amplify serves `/about` directly at
+200. Do not change `scripts/prerender.mjs` back to directory output.
 
-## 4. Fallback for unknown URLs (one-time)
-
-CloudFront → your distribution → **Error pages** → create two entries:
-
-| HTTP error code | Customize response | Response page path | HTTP response code |
-| --------------- | ------------------ | ------------------ | ------------------ |
-| 403 Forbidden   | Yes                | `/index.html`      | 200                |
-| 404 Not Found   | Yes                | `/index.html`      | 200                |
-
-## 5. Canonical-URL redirects (one-time)
-
-`deploy/cloudfront-function.js` 301s `www.` to the bare domain, strips trailing
-slashes, and maps clean URLs to their prerendered `index.html` objects.
-
-1. CloudFront → **Functions** → Create function, runtime `cloudfront-js-2.0`
-2. Paste the contents of `deploy/cloudfront-function.js`
-3. Use the **Test** tab before publishing:
-   - Host `www.rockawayinternalmedicine.com`, URI `/services/cardiology/` →
-     301 to `https://rockawayinternalmedicine.com/services/cardiology`
-   - Host `rockawayinternalmedicine.com`, URI `/services/cardiology/` →
-     301 to `/services/cardiology`
-   - Host `rockawayinternalmedicine.com`, URI `/services/cardiology` →
-     pass-through, URI rewritten to `/services/cardiology/index.html`
-4. Save → **Publish**
-5. Distribution → Behaviors → default behavior → **Function associations** →
-   Viewer request → select the function
-6. Confirm both aliases (bare + www) are on this same distribution.
-
-## 6. Compression (one-time)
-
-Distribution → Behaviors → default behavior → **Compress objects
-automatically: Yes** (gzip/brotli).
-
-## 7. Verify
+## 3. Verify
 
 ```bash
 curl -sI https://www.rockawayinternalmedicine.com/                      # 301 -> bare domain
-curl -sI https://www.rockawayinternalmedicine.com/services/cardiology/  # 301 -> bare, no slash (one hop)
+curl -sI https://www.rockawayinternalmedicine.com/services/cardiology/  # 301 -> bare, no slash
 curl -sI https://rockawayinternalmedicine.com/services/cardiology/      # 301 -> /services/cardiology
-curl -sI https://rockawayinternalmedicine.com/services/cardiology       # 200
+curl -sI https://rockawayinternalmedicine.com/services/cardiology       # 200, no redirect
 curl -sI https://rockawayinternalmedicine.com/nonsense-page             # 200 (app shell)
-curl -s  https://rockawayinternalmedicine.com/ | grep -c 'name="description"'   # 1
-curl -s  https://rockawayinternalmedicine.com/services/cardiology | grep -c ld+json  # 3
+curl -s  https://rockawayinternalmedicine.com/services/cardiology | grep -c 'name="description"'  # 1
+curl -s  https://rockawayinternalmedicine.com/services/cardiology | grep -c 'ld+json'             # 3
 ```
 
-Then in Search Console: submit `sitemap.xml`, and Request Indexing on any URLs
+Then in Search Console: submit `sitemap.xml` and Request Indexing on any URLs
 previously reported with errors.
+
+## 4. Meta titles and descriptions
+
+Titles are 50–55 chars, descriptions 145–155, enforced by
+`scripts/check-meta.mjs`. Hand-written copy lives in the `SERVICE_META` /
+`LOCATION_META` / `POST_META` maps in `src/data/seo.ts`. Anything not in those
+maps falls back to `src/data/generated-meta.ts`, which
+`node scripts/gen-meta.mjs` writes by generating compliant meta with Claude for
+every route currently out of spec:
+
+```bash
+node scripts/gen-meta.mjs        # rewrites generated-meta.ts for failing routes
+node scripts/check-meta.mjs      # confirm everything passes
+```
+
+Review the generated copy before committing — it is a first draft, not a
+rubber stamp.

@@ -10,6 +10,7 @@ import { site, locations, primaryLocation, doctor, rating, type Location } from 
 import { services, type ServiceItem } from './services'
 import { posts, type BlogPost } from './blog'
 import { homeFaqs } from './faq'
+import { GENERATED_META } from './generated-meta'
 
 export const SITE_URL = 'https://rockawayinternalmedicine.com'
 export const ORG_ID = `${SITE_URL}/#medicalclinic`
@@ -214,6 +215,21 @@ export interface PrerenderRoute {
 const HOME = { name: 'Home', path: '/' }
 const trail = (...rest: { name: string; path: string }[]) => breadcrumbSchema([HOME, ...rest])
 
+interface Meta {
+  title: string
+  description: string
+}
+
+// Meta resolution order, per route:
+//   1. the hand-written map below (crafted copy — always wins)
+//   2. ./generated-meta.ts (written by `node scripts/gen-meta.mjs`)
+//   3. a plain derived fallback, which is the ONLY tier that can break the
+//      length spec — that is exactly how a 97-char blog title shipped. The
+//      build now runs scripts/check-meta.mjs before bundling, so anything
+//      sitting on tier 3 and out of spec fails the build instead of deploying.
+const resolveMeta = (path: string, hand: Meta | undefined, fallback: Meta): Meta =>
+  hand ?? GENERATED_META[path] ?? fallback
+
 // Crafted per-service meta (titles 50–55, descriptions 145–155), keyed by slug.
 const SERVICE_META: Record<string, { title: string; description: string }> = {
   cardiology: {
@@ -292,6 +308,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'how-hypertension-treatment-can-protect-your-heart': {
+    title: 'Hypertension Treatment: Protect Your Heart & Health',
+    description:
+      'How hypertension treatment protects your heart: a 5-point systolic drop cuts cardiovascular risk about 10%. Our Queens NY doctors explain what works.',
+  },
   'diabetes-causes-symptoms-types-and-treatment': {
     title: 'Diabetes: Causes, Symptoms, Types & Treatment Guide',
     description:
@@ -361,11 +382,12 @@ export function allRoutes(): PrerenderRoute[] {
   ]
 
   for (const s of services) {
-    const meta = SERVICE_META[s.slug]
+    const path = `/services/${s.slug}`
+    const meta = resolveMeta(path, SERVICE_META[s.slug], { title: `${s.title} | ${b}`, description: s.body })
     routes.push({
-      path: `/services/${s.slug}`,
-      title: meta ? meta.title : `${s.title} | ${b}`,
-      description: meta ? meta.description : s.body,
+      path,
+      title: meta.title,
+      description: meta.description,
       image: s.img,
       schema: [
         serviceSchema(s),
@@ -376,11 +398,12 @@ export function allRoutes(): PrerenderRoute[] {
   }
 
   for (const p of posts) {
-    const meta = POST_META[p.slug]
+    const path = `/blog/${p.slug}`
+    const meta = resolveMeta(path, POST_META[p.slug], { title: `${p.title} | ${b}`, description: p.excerpt })
     routes.push({
-      path: `/blog/${p.slug}`,
-      title: meta ? meta.title : `${p.title} | ${b}`,
-      description: meta ? meta.description : p.excerpt,
+      path,
+      title: meta.title,
+      description: meta.description,
       image: p.img,
       type: 'article',
       schema: [
@@ -392,14 +415,16 @@ export function allRoutes(): PrerenderRoute[] {
   }
 
   for (const loc of locations) {
-    const meta = LOCATION_META[loc.id]
+    const path = `/locations/${loc.id}`
+    const meta = resolveMeta(path, LOCATION_META[loc.id], {
+      title: `${loc.city} Office | ${b}`,
+      description: `${site.brand} ${loc.city} office — ${loc.fullAddress}. Call ${loc.phone}.`,
+    })
     routes.push({
-      path: `/locations/${loc.id}`,
-      title: meta ? meta.title : `${loc.city} Office | ${b}`,
-      description: meta
-        ? meta.description
-        : `${site.brand} ${loc.city} office — ${loc.fullAddress}. Call ${loc.phone}.`,
-      schema: [trail({ name: 'Locations', path: '/locations' }, { name: loc.city, path: `/locations/${loc.id}` })],
+      path,
+      title: meta.title,
+      description: meta.description,
+      schema: [trail({ name: 'Locations', path: '/locations' }, { name: loc.city, path })],
     })
   }
 
