@@ -813,6 +813,10 @@ h4 {
     padding: clamp(22px, 2.4vw, 30px);
   }
 }
+/* Cards after the first sit closer together than the hero → first-card gap. */
+.rim-blog-feature + .rim-blog-feature {
+  margin-top: clamp(22px, 3vw, 36px);
+}
 .rim-blog-feature:hover {
   transform: translateY(-4px);
   border-color: rgba(46, 107, 67, 0.4);
