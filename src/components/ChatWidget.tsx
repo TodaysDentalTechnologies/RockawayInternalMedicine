@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { locations, site } from '../data/clinic'
+import { locations, site, mapsSearchUrl } from '../data/clinic'
 import { API_CONFIG } from '../config/api'
 import { Send, Close, Chat } from './icons'
 
 const linkStyle: React.CSSProperties = { color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }
-const mapsUrl = (address: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
 
 // Rotating hint text shown in the input placeholder.
 const PLACEHOLDERS = [
@@ -59,7 +58,7 @@ function answer(text: string): ReactNode {
         {locations.map((loc, i) => (
           <span key={loc.id}>
             {i > 0 && '; '}
-            <strong>{loc.fullAddress}</strong> (<a href={mapsUrl(loc.fullAddress)} target="_blank" rel="noopener noreferrer" style={linkStyle}>directions</a>)
+            <strong>{loc.fullAddress}</strong> (<a href={mapsSearchUrl(loc)} target="_blank" rel="noopener noreferrer" style={linkStyle}>directions</a>)
           </span>
         ))}
         .

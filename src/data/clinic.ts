@@ -27,6 +27,14 @@ export interface Location {
   phone: string
   phoneHref: string
   timezone: string
+  /**
+   * The name this office is listed under on Google Business Profile, used to
+   * build the map links. Searching the address alone returns a generic
+   * "Building" pin with no hours/reviews; leading with the listed business name
+   * resolves to the real place card. Only set this when the listing name is not
+   * `name` (e.g. the Cambria Heights office is listed as "2020 Medical Center").
+   */
+  mapsName?: string
   // Coordinates for the GeoCoordinates schema (and future map features).
   lat: number
   lng: number
@@ -87,6 +95,10 @@ export const locations: Location[] = [
     fullAddress: '219-15 Linden Blvd, Cambria Heights, NY 11411',
     phone: '718-509-4899',
     phoneHref: 'tel:+17185094899',
+    // This office's Google Business Profile is still listed as "2020 Medical
+    // Center" (same phone). Searching that name is what makes the map open the
+    // place card instead of an unlabelled building pin.
+    mapsName: '2020 Medical Center',
     timezone: 'America/New_York',
     lat: 40.6954713,
     lng: -73.7403113,
@@ -126,11 +138,13 @@ export const doctor = {
   ],
 } as const
 
-// Aggregate patient rating used in structured data. Source: Dr. Shamtoub's
-// Zocdoc profile (4.31 stars, 791 reviews as of July 2026). UPDATE these two
-// numbers periodically so the markup keeps matching the live rating — and
-// mirror any change in the static JSON-LD block in index.html.
-export const rating = {
+// Dr. Shamtoub's Zocdoc rating (4.31 stars / 791 reviews as of July 2026).
+// Kept for reference only — deliberately NOT emitted as schema aggregateRating.
+// Google's review-snippet policy forbids marking up ratings collected on a
+// different site, so publishing Zocdoc's figures as this practice's own rating
+// risks a manual action. The stars Google shows in Search/Maps come from its
+// Business Profile reviews instead.
+export const zocdocRating = {
   value: 4.31,
   count: 791,
 } as const
@@ -145,10 +159,19 @@ export const primaryLocation: Location =
   getLocation(site.primaryLocationId) ?? locations[0]
 
 // Google Maps helpers.
+//
+// The query leads with the office's Business Profile name, then the address.
+// Address-only queries resolve to an unlabelled "Building" result with no
+// hours, reviews or photos; leading with the listed name resolves the actual
+// place card. `iwloc=B` keeps that card open in the embed, and z=17 frames the
+// block rather than the whole neighbourhood.
+const mapsQuery = (loc: Location): string =>
+  encodeURIComponent(`${loc.mapsName ?? loc.name}, ${loc.fullAddress}`)
+
 export const mapsSearchUrl = (loc: Location): string =>
-  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.fullAddress)}`
+  `https://www.google.com/maps/search/?api=1&query=${mapsQuery(loc)}`
 export const mapsEmbedUrl = (loc: Location): string =>
-  `https://maps.google.com/maps?q=${encodeURIComponent(loc.fullAddress)}&z=16&output=embed`
+  `https://maps.google.com/maps?q=${mapsQuery(loc)}&z=17&iwloc=B&output=embed`
 
 // ── Backward-compatible singletons (primary location) ───────────
 // Existing components import { clinic } / { clinic, hours } from here.

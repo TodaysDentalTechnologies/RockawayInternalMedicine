@@ -6,7 +6,7 @@
 // URL below is derived from this ONE constant so entity links never drift
 // (avoids the "#id vs /#id" mismatch that breaks entity references).
 // ─────────────────────────────────────────────────────────────
-import { site, locations, primaryLocation, doctor, rating, type Location } from './clinic'
+import { site, locations, primaryLocation, doctor, type Location } from './clinic'
 import { services, type ServiceItem } from './services'
 import { posts, type BlogPost } from './blog'
 import { homeFaqs } from './faq'
@@ -41,13 +41,12 @@ const geoCoordinates = (loc: Location) => ({
   longitude: loc.lng,
 })
 
-const aggregateRating = () => ({
-  '@type': 'AggregateRating',
-  ratingValue: rating.value,
-  reviewCount: rating.count,
-  bestRating: 5,
-  worstRating: 1,
-})
+// NOTE: no aggregateRating is emitted. The only ratings we hold are Dr.
+// Shamtoub's Zocdoc figures, and Google's review-snippet policy is explicit
+// that you must not aggregate ratings collected on another site into your own
+// markup. Google builds the star rating shown beside the practice in Search and
+// Maps from its Business Profile reviews instead. If first-party reviews are
+// ever collected on this site, add the block back sourced from those.
 
 const areaServed = () => [
   ...[...new Set(locations.map((l) => l.city))].map((c) => ({ '@type': 'City', name: c })),
@@ -91,7 +90,6 @@ export function businessSchema() {
     geo: geoCoordinates(primaryLocation),
     openingHoursSpecification: openingHours(primaryLocation),
     areaServed: areaServed(),
-    aggregateRating: aggregateRating(),
     employee: { '@id': PHYSICIAN_ID },
     department: locations.map(locationNode),
   }
