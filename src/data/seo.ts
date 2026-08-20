@@ -306,10 +306,20 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'the-importance-of-regular-cancer-screening-for-early-detection': {
+    title: 'Cancer Screening Guide: Why Early Detection Matters',
+    description:
+      'Screening finds breast, cervical, colorectal, lung and prostate cancer before symptoms start. Our Queens NY doctors explain the tests and schedules.',
+  },
   'how-hypertension-treatment-can-protect-your-heart': {
     title: 'Hypertension Treatment: Protect Your Heart & Health',
     description:
       'How hypertension treatment protects your heart: a 5-point systolic drop cuts cardiovascular risk about 10%. Our Queens NY doctors explain what works.',
+  },
+  'early-thyroid-treatment-can-make-a-difference': {
+    title: 'Early Thyroid Treatment: Spot the Signs, Act Sooner',
+    description:
+      'Fatigue, weight changes or mood swings can signal a thyroid problem. See why early diagnosis and levothyroxine work best, from our Queens NY doctors.',
   },
   'diabetes-causes-symptoms-types-and-treatment': {
     title: 'Diabetes: Causes, Symptoms, Types & Treatment Guide',
