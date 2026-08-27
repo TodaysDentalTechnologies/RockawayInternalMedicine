@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'cholesterol-testing-is-a-key-step-in-protecting-your-heart': {
+    title: 'Cholesterol Testing: A Key Step to Protect Your Heart',
+    description:
+      'A cholesterol test measures LDL, HDL and triglycerides to gauge your heart risk. Our Queens NY doctors explain what the numbers mean and what to do next.',
+  },
   'the-importance-of-regular-cancer-screening-for-early-detection': {
     title: 'Cancer Screening Guide: Why Early Detection Matters',
     description:
