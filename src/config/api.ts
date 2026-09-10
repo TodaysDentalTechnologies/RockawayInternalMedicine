@@ -20,7 +20,10 @@ export const API_CONFIG = {
   CALLBACK_API: 'https://api.shivashamtoub.flowance.ai/callback',
 
   // WebSocket API — AI chatbot (clinicId + agentId are required query params)
-  WEBSOCKET_API: `wss://wss.shivashamtoub.flowance.ai/ai-agents?clinicId=${AI_CLINIC_ID}&agentId=${AI_AGENT_ID}`,
+  // The practice's assistant on the Flowance platform. The id in the address is
+  // the one the platform knows the Jamaica office by; the site's one chat serves
+  // both offices. AI_CLINIC_ID above stays for the messages the chat still sends.
+  WEBSOCKET_API: 'wss://api.flowance.ai/webchat/rockaway-internal-medicine-jamaica',
 }
 
 // Site location id → backend clinicId (callback table / clinic-config key)
