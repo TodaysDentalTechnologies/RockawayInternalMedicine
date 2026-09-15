@@ -15,7 +15,8 @@ const formatDate = (iso: string) => {
   return `${MONTHS[m - 1]} ${d}, ${y}`
 }
 
-const PROSE = 760
+// Reading column width. Widened from 760 so article pages fill large screens more like the blog index grid.
+const PROSE = 980
 
 const RICH_LINK = { color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: '3px' }
 
@@ -91,7 +92,7 @@ export default function BlogPostPage() {
           ]),
         ]}
       />
-      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
+      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Breadcrumb */}
         <button
           onClick={() => navigate('/blog')}
@@ -106,7 +107,7 @@ export default function BlogPostPage() {
             color: 'var(--olive)',
           }}
         >
-          <span style={{ transform: 'translateY(-1px)' }}>←</span> Health library
+          <span style={{ transform: 'translateY(-1px)' }}>←</span> Health blog
         </button>
 
         {/* Hero — two-column interactive spotlight, matching the blog's featured section */}
@@ -321,7 +322,7 @@ export default function BlogPostPage() {
               </h2>
             </div>
 
-            <div style={{ maxWidth: 840, margin: 'clamp(32px,4vw,48px) auto 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ maxWidth: PROSE, margin: 'clamp(32px,4vw,48px) auto 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
               {post.faqs.map((f, i) => {
                 const open = openFaq === i
                 return (

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { posts } from '../data/blog'
-import { ArrowRight, Clock, Calendar } from '../components/icons'
+import { ArrowRight } from '../components/icons'
 import { site } from '../data/clinic'
 import Seo from '../components/Seo'
 import { breadcrumbSchema } from '../data/seo'
@@ -9,6 +9,12 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 export const formatDate = (iso: string) => {
   const [y, m, d] = iso.split('-').map(Number)
   return `${MONTHS[m - 1]} ${d}, ${y}`
+}
+
+/** "Sep 2026" — the short month + year shown on each card, like the dentistinconcord blog grid. */
+const shortDate = (iso: string) => {
+  const [y, m] = iso.split('-').map(Number)
+  return `${MONTHS[m - 1].slice(0, 3)} ${y}`
 }
 
 export default function BlogPage() {
@@ -20,7 +26,8 @@ export default function BlogPage() {
         path="/blog"
         schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }])]}
       />
-      <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
+      {/* Wider than the site's usual 1140px so the three-column grid fills large screens, like the dentistinconcord blog. */}
+      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Hero intro */}
         <div className="reveal" style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>
           <span
@@ -36,7 +43,7 @@ export default function BlogPage() {
             }}
           >
             <span style={{ width: 22, height: 1.5, background: 'var(--olive)' }} />
-            Health library
+            Health blog
             <span style={{ width: 22, height: 1.5, background: 'var(--olive)' }} />
           </span>
           <h1
@@ -49,66 +56,41 @@ export default function BlogPage() {
               marginTop: 18,
             }}
           >
-            Notes on <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>staying well.</em>
+            Health tips and advice from <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>our doctors.</em>
           </h1>
           <p style={{ fontSize: 'clamp(15px,1.5vw,18px)', lineHeight: 1.65, color: 'var(--ink-soft)', marginTop: 22 }}>
             Plain-language guides on the conditions we treat and the choices that keep you healthy — written by our care team.
           </p>
         </div>
 
-        {/* Every post uses the same spotlight card — one consistent layout. */}
-        {posts.map((p, i) => (
-          <Link
-            key={p.slug}
-            to={`/blog/${p.slug}`}
-            className="rim-blog-feature reveal"
-            aria-label={p.title}
-          >
-            <div className="rim-blog-feat-media">
-              <img
-                src={p.img}
-                alt={p.title}
-                /* First card is the LCP image; the rest can defer. */
-                loading={i === 0 ? 'eager' : 'lazy'}
-                onError={(e) => (e.currentTarget.style.display = 'none')}
-              />
-            </div>
+        {/* Card grid — three across on desktop, two on tablet, one on phones. Each card opens the article. */}
+        <div className="rim-blog-grid">
+          {posts.map((p, i) => (
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="rim-blog-card reveal" aria-label={p.title}>
+              <div className="rim-blog-card-media">
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  /* The first row is above the fold; the rest can defer. */
+                  loading={i < 3 ? 'eager' : 'lazy'}
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+                <span className="rim-blog-card-tag">{p.category}</span>
+              </div>
 
-            <div className="rim-blog-feat-body">
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  fontFamily: "'DM Mono',monospace",
-                  fontSize: 11.5,
-                  letterSpacing: '.22em',
-                  textTransform: 'uppercase',
-                  color: 'var(--olive)',
-                }}
-              >
-                <span style={{ width: 20, height: 1.5, background: 'var(--olive)' }} /> {p.category}
-              </span>
-              <h2 style={{ fontFamily: "'Fraunces',serif", fontWeight: 400, fontSize: 'clamp(27px,3.4vw,42px)', lineHeight: 1.08, letterSpacing: '-.015em', marginTop: 16 }}>
-                {p.title}
-              </h2>
-              <p style={{ fontSize: 'clamp(15px,1.4vw,16.5px)', lineHeight: 1.66, color: 'var(--ink-soft)', marginTop: 16 }}>
-                {p.excerpt}
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginTop: 22, fontFamily: "'DM Mono',monospace", fontSize: 12.5, color: 'var(--ink-soft)' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                  <Calendar size={14} /> {formatDate(p.date)}
+              <div className="rim-blog-card-body">
+                <span className="rim-blog-card-meta">
+                  {shortDate(p.date)} · {p.readMinutes} min read
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-                  <Clock size={14} /> {p.readMinutes} min read
+                <h2 className="rim-blog-card-title">{p.title}</h2>
+                <p className="rim-blog-card-excerpt">{p.excerpt}</p>
+                <span className="rim-blog-card-read">
+                  Read article <ArrowRight size={15} />
                 </span>
               </div>
-              <span className="rim-blog-read">
-                Read the full article <ArrowRight size={16} />
-              </span>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   )

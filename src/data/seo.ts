@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'how-dermatology-services-help-protect-your-skin-health': {
+    title: 'Dermatology Services: How They Protect Skin Health',
+    description:
+      'How dermatology services protect your skin: early detection, skin cancer screenings, acne and eczema care, and skincare advice from our Queens NY doctors.',
+  },
   'cholesterol-testing-is-a-key-step-in-protecting-your-heart': {
     title: 'Cholesterol Testing: A Key Step to Protect Your Heart',
     description:
