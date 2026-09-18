@@ -23,6 +23,86 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: 'migraine-symptoms-and-causes',
+    title: 'Migraine Symptoms and Causes: What You Need to Know',
+    category: 'Neurology',
+    date: '2026-09-18',
+    readMinutes: 3,
+    img: '/images/blog-migraine-symptoms-and-causes.webp',
+    excerpt: 'Many people get a strong, pulsing headache that stops daily life. They may see an aura, feel nausea, or want to lie in a dark room. This pain can come often or once in a while. A person may not know the cause or the best treatment for migraine.',
+    intro: [
+      'Many people get a strong, pulsing headache that stops daily life. They may see an aura, feel nausea, or want to lie in a dark room. This pain can come often or once in a while. A person may not know the cause or the best treatment for migraine.',
+      'Migraine is a neurological condition that affects about 12 percent of people. Doctors use symptoms, frequency, and tests to aid diagnosis. Here you will know the common and uncommon symptoms, causes and triggers, and note treatment and medication options. If recurring migraines are affecting your daily life, [request an appointment](/contact) to discuss your symptoms and care options.',
+    ],
+    sections: [
+      {
+        heading: 'Recognizing Migraine Symptoms and Phases',
+        paragraphs: [
+          'Migraine symptoms can vary widely from person to person. Understanding the different phases and signs helps individuals identify their unique migraine patterns.',
+        ],
+      },
+      {
+        heading: 'Prodrome, aura, attack, postdrome',
+        paragraphs: [
+          'Prodrome marks the early stage of a migraine. It usually happens one to two days before an actual attack. People often experience mood changes, cravings for certain foods, or fatigue during this phase. Aura occurs next and lasts from a few minutes to an hour. Visual disturbances like flashing lights or blind spots can happen here.',
+          'The attack itself is when pain peaks. This part can last anywhere from four hours to three days without treatment. Patients commonly describe it as throbbing or pulsating on one side of the head.',
+          'Afterward comes postdrome, where individuals feel drained and may have difficulty concentrating. Understanding these phases helps those affected better manage their migraine symptoms and causes associated with migraines in neurology.',
+        ],
+      },
+      {
+        heading: 'Common and uncommon symptoms',
+        paragraphs: [
+          'Migraine symptoms can vary widely. Many people experience common signs like severe headaches, nausea, and sensitivity to light or sound. Some may even feel auras, which are sensory disturbances that occur before the headache starts.',
+          'Uncommon symptoms exist too; these include vertigo, difficulty speaking, or tingling sensations in the face or hands. These variations can make migraines difficult to recognize. A person might feel fatigue and confusion during a migraine’s postdrome phase. This stage often follows an intense headache and can leave individuals feeling drained for hours or days afterward.',
+          'Recognizing both common and uncommon symptoms helps manage migraines effectively. Understanding these signs is crucial in identifying migraine triggers early on. A [neurological evaluation](/services/neurology) can help assess recurring headaches and other symptoms.',
+        ],
+      },
+      {
+        heading: 'Main Causes and Triggers of Migraine',
+        paragraphs: [
+          'Stress often sparks migraines for many people. Hormonal changes and specific foods can also trigger these intense headaches.',
+        ],
+      },
+      {
+        heading: 'Biological, hormonal, and environmental factors',
+        paragraphs: [
+          'Biological, hormonal, and environmental factors play a significant role in migraine symptoms and causes. Changes in brain chemicals can trigger migraines. Hormones also influence these headaches, especially during menstruation or pregnancy. Environmental elements like weather changes can increase the likelihood of an attack.',
+          'Many people notice that certain foods bring on migraines. Common triggers include aged cheeses, processed meats, and alcohol. Sleep disruptions often contribute as well; irregular sleep patterns or lack of rest can heighten sensitivity to pain. Understanding these factors helps individuals manage their migraine symptoms effectively.',
+        ],
+      },
+      {
+        heading: 'Common migraine triggers',
+        paragraphs: [
+          'Migraine symptoms often stem from various common triggers. Stress plays a significant role in many people’s migraine attacks. Many individuals report that difficult situations at work or home can lead to intense pain.',
+          'Certain foods also trigger migraines for some, including aged cheeses and processed meats. Changes in sleep patterns can cause trouble as well; both too much sleep and lack of it may spark an attack.',
+          'Hormonal changes frequently affect those who experience migraines, especially women during their menstrual cycles. Bright lights or strong smells can worsen symptoms too. Even weather changes might impact some individuals with migraines, linking fluctuations in temperature to increased headache frequency.',
+          'Understanding these triggers helps manage migraine symptoms effectively and improves daily life quality for those affected by this condition. If migraine attacks regularly disrupt your daily life, speak with your doctor about [pain management options](/services/pain-management) tailored to your symptoms and triggers.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: 'What are common signs of a migraine?',
+        a: 'Migraine symptoms include a strong and pulsing headache. Pain often sits on one side. You may see a visual warning before pain starts. You may feel sick and lose appetite. You may get light sensitivity and sound sensitivity.',
+      },
+      {
+        q: 'What causes migraines?',
+        a: 'Many factors can cause migraines. Genes can play a role. Changes in brain chemicals can start attacks. Stress and lack of sleep can trigger them. Hormone shifts can cause more attacks. Certain foods, smells, and bright lights can bring one on.',
+      },
+      {
+        q: 'How do I tell a migraine from other headaches?',
+        a: 'Migraines bring throbbing pain and medium to severe intensity. The pain often lasts hours to days. You may have nausea and visual warnings. Ordinary tension headaches usually cause mild, steady pain on both sides.',
+      },
+      {
+        q: 'When should I see a doctor about migraines?',
+        a: 'See a doctor for new or worse pain. Seek care for sudden severe pain, fever, numbness, or weakness. Talk to a doctor if attacks rise in number or stop responding to treatment. Keep a diary of symptoms, light sensitivity, triggers, and medicines to share.',
+      },
+    ],
+    relatedServiceSlug: 'neurology',
+    disclaimer:
+      'This article is for general education and isn’t a substitute for personalized medical advice. Talk with your provider about your specific situation.',
+  },
+  {
     slug: 'how-dermatology-services-help-protect-your-skin-health',
     title: 'How Dermatology Services Help Protect Your Skin Health',
     category: 'Skin Health',

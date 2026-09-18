@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'migraine-symptoms-and-causes': {
+    title: 'Migraine Symptoms and Causes: Signs, Phases, Triggers',
+    description:
+      'Migraine symptoms, phases and triggers explained — aura, nausea, light sensitivity, stress and food triggers — by our Queens NY internal medicine team.',
+  },
   'how-dermatology-services-help-protect-your-skin-health': {
     title: 'Dermatology Services: How They Protect Skin Health',
     description:
