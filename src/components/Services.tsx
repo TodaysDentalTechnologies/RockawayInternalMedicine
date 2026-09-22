@@ -119,7 +119,7 @@ export default function Services() {
             Primary care, <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>end to end.</em>
           </SectionHeading>
           <p className="reveal">
-            From the annual physical to the years-long management of a chronic condition — one practice, one record, one team.
+            From your routine annual physical exam to the complex, long-term monitoring of a persistent illness, our clinic provides fully integrated care. We combine your entire medical history into a unified health record managed by a cohesive team of specialists. This ensures that whether you are visiting us for advanced diagnostics or standard preventive care services, your treatment is seamless, highly accurate, and completely coordinated.
           </p>
         </div>
 

@@ -9,6 +9,8 @@ export interface ServiceItem {
   title: string
   img: string
   body: string
+  /** Longer hero paragraph for the service page; `body` stays the short card line. */
+  intro?: string
   faqs: Faq[]
 }
 
@@ -20,6 +22,7 @@ export const services: ServiceItem[] = [
     title: 'Cardiology',
     img: '/images/cardiology.webp',
     body: 'Heart-health evaluations, blood-pressure and cholesterol management, EKG, and coordinated cardiac care with trusted specialists.',
+    intro: 'Protect your heart with professional cardiovascular screenings, routine electrocardiograms (EKG), and comprehensive blood pressure management. Our experienced internal medicine team provides unified, preventive cardiac care plans to optimize your long-term circulatory health and mitigate stroke and heart disease risks.',
     faqs: [
       { q: 'When should I see someone about heart health?', a: "If you have symptoms like chest pain, shortness of breath, palpitations, or risk factors like high blood pressure or a family history of heart disease, it's worth being evaluated." },
       { q: 'What tests are used to check heart health?', a: 'We start with a history and exam, blood pressure, and an in-office EKG, then order bloodwork or specialist imaging when it is warranted.' },
@@ -34,6 +37,7 @@ export const services: ServiceItem[] = [
     title: 'Diabetes Management',
     img: '/images/diabetes.webp',
     body: 'Blood-sugar monitoring, A1C testing, nutrition counseling, and long-term control plans built around your life.',
+    intro: 'Take charge of your metabolic health through proactive glucose tracking, professional A1C screening, and personalized dietary guidance. Our clinical team designs structured, sustainable care pathways tailored to your daily schedule to ensure excellent glycemic control and reduce long-term complications.',
     faqs: [
       { q: "How do I know if I'm at risk for diabetes?", a: 'Risk factors include family history, extra weight, high blood pressure, and being over 45 — a simple blood test (A1C or fasting glucose) tells us where you stand.' },
       { q: 'What does diabetes management involve here?', a: 'Regular A1C checks, medication when needed, nutrition counseling, and monitoring for complications — all coordinated in one place.' },
@@ -47,6 +51,7 @@ export const services: ServiceItem[] = [
     title: 'Hypertension Treatment',
     img: '/images/hypertension.webp',
     body: 'Personalized blood-pressure control — lifestyle guidance, medication management, and steady monitoring to protect your heart.',
+    intro: 'Protect your vascular system with specialized blood pressure management, tailored prescription adjustments, and preventive lifestyle interventions. Our physicians provide continuous, routine tracking to lower your cardiovascular risks and ensure steady, stable baseline metrics for overall cardiac wellness.',
     faqs: [
       { q: 'What counts as high blood pressure?', a: 'Generally a reading at or above 130/80 on more than one occasion — we confirm with proper, repeated measurements before diagnosing.' },
       { q: 'Will I need medication?', a: 'Not always — mild cases often respond to diet, activity, and stress changes; when medication helps, we start low and adjust carefully.' },
@@ -60,6 +65,7 @@ export const services: ServiceItem[] = [
     title: 'Cholesterol Testing',
     img: '/images/cholesterol.webp',
     body: 'Complete lipid panels and treatment to assess cardiovascular risk and prevent complications before they start.',
+    intro: 'Evaluate your lipid profile with comprehensive blood analysis, custom cholesterol management strategies, and expert cardiovascular risk assessments. Our preventive medicine team helps you optimize your healthy HDL and LDL balance to protect your arterial wellness and intercept metabolic complications before they can impact your life.',
     faqs: [
       { q: 'How often should I check my cholesterol?', a: 'Most adults every four to six years, and more often with heart-disease risk factors or if you are on treatment.' },
       { q: 'Do I need to fast before the test?', a: 'Sometimes — for a full lipid panel we may ask you to fast 9–12 hours, and we will tell you in advance.' },
@@ -73,6 +79,7 @@ export const services: ServiceItem[] = [
     title: 'Thyroid Treatment',
     img: '/images/thyroid.webp',
     body: 'Diagnosis and management of hypo- and hyperthyroid conditions, with careful testing and dosing that keep you balanced.',
+    intro: 'Optimize your metabolic baseline through precision hormone testing, targeted endocrine evaluations, and comprehensive care for underactive or overactive gland conditions. Our clinical team provides specialized monitoring and highly calibrated therapeutic frameworks designed to stabilize your energy levels, regulate systemic metabolism, and restore long-term hormonal balance.',
     faqs: [
       { q: 'What are the signs of a thyroid problem?', a: 'Fatigue, weight changes, feeling too hot or cold, hair changes, or mood shifts can all point to an under- or overactive thyroid.' },
       { q: 'How is thyroid disease diagnosed?', a: 'A simple blood test (TSH, and sometimes T4/T3) tells us how your thyroid is working; we may check antibodies too.' },
@@ -86,6 +93,7 @@ export const services: ServiceItem[] = [
     title: 'Cancer Screening',
     img: '/images/cancer-screening.webp',
     body: 'Guideline-based screenings for early detection — because catching things early is what saves lives.',
+    intro: 'Stay ahead of your health with routine preventive evaluations, advanced diagnostic panels, and evidence-based screening protocols designed for early detection. Our primary care team coordinates age-appropriate diagnostic tests to intercept health changes at their earliest, most treatable stages, giving you definitive answers and long-term peace of mind.',
     faqs: [
       { q: 'Which cancer screenings do I need?', a: 'It depends on your age, sex, and risk — common ones include colorectal, breast, cervical, lung, and skin; we build a schedule for you.' },
       { q: 'When should screening start?', a: 'Guidelines vary by test, but many begin between 40 and 50 — sooner if you have a family history or other risk factors.' },
@@ -99,6 +107,7 @@ export const services: ServiceItem[] = [
     title: 'Neurology',
     img: '/images/neurology.webp',
     body: 'Evaluation and management of headaches, migraines, nerve pain, and other neurological conditions.',
+    intro: 'Access specialized care for central nervous system health with comprehensive clinical evaluations and targeted management plans for chronic migraines, severe headaches, and persistent nerve discomfort. Our experienced medical team provides expert diagnostic mapping for complex neurological symptoms, helping you find sustainable paths toward long-term symptom relief and improved cognitive wellness.',
     faqs: [
       { q: 'What conditions do you evaluate?', a: 'Headaches and migraines, dizziness, numbness or tingling, memory concerns, and other nervous-system symptoms.' },
       { q: 'When should I worry about headaches?', a: 'Sudden severe headaches, ones with vision or speech changes, or a new pattern after age 50 deserve prompt evaluation.' },
@@ -112,6 +121,7 @@ export const services: ServiceItem[] = [
     title: 'Dermatology',
     img: '/images/dermatology.webp',
     body: 'Care for rashes, acne, moles, and common skin conditions — with referrals to specialists when needed.',
+    intro: 'Receive expert clinical evaluations for persistent skin irritation, acne flare-ups, abnormal mole checking, and a broad range of dermatological concerns. Our medical team offers direct diagnostic assessments right in our office, smoothly coordinating trusted pathways to advanced clinical specialists when highly complex therapeutic procedures are required.',
     faqs: [
       { q: 'What skin issues can you treat?', a: 'Rashes, acne, eczema, infections, and suspicious moles or growths — with dermatology referrals for anything specialized.' },
       { q: 'When should I get a mole checked?', a: 'If it changes in size, shape, or color, itches, or bleeds — those changes are worth a look promptly.' },
@@ -125,6 +135,7 @@ export const services: ServiceItem[] = [
     title: 'Immunotherapy',
     img: '/images/immunotherapy.webp',
     body: 'Allergy and immune-system treatment coordinated under expert medical supervision.',
+    intro: 'Build long-term environmental resilience with specialized allergy testing, customized desensitization pathways, and targeted immune-system support. Guided by experienced internal medicine physicians, our practice coordinates precise, evidence-based therapeutic protocols designed to safely reduce your chronic sensitivity triggers and restore balanced immune health.',
     faqs: [
       { q: 'What is immunotherapy used for?', a: "Severe allergies, allergic asthma, hay fever, and certain immune conditions that don't respond to standard treatment." },
       { q: 'How does it work?', a: 'It gradually trains your immune system to tolerate triggers, reducing reactions over time under close supervision.' },
@@ -138,6 +149,7 @@ export const services: ServiceItem[] = [
     title: 'Physicals & Vaccinations',
     img: '/images/immunizations.webp',
     body: 'School, work, and travel physicals plus flu, pneumonia, shingles, and tetanus immunizations kept on schedule.',
+    intro: 'Complete your mandatory employment clearances, academic wellness certifications, or international transit physicals while keeping up with essential seasonal immunizations. Our clinic provides reliable, on-schedule medical clearances and routine vaccine updates to safeguard you against community viral strains and keep your health documentation fully current.',
     faqs: [
       { q: "What's included in a physical?", a: 'A head-to-toe exam, vitals, age-appropriate labs and screenings, a medication review, and time to talk through your health.' },
       { q: 'Which vaccines do you offer?', a: 'Flu, pneumonia, shingles, tetanus/Tdap, and others — plus school, work, and travel requirements.' },
@@ -151,6 +163,7 @@ export const services: ServiceItem[] = [
     title: 'Pain Management',
     img: '/images/pain-management.webp',
     body: 'Practical plans for chronic pain and migraine relief that keep you moving — not just medicated.',
+    intro: 'Reclaim your daily function with targeted therapeutic pathways engineered to address persistent joint discomfort, nerve irritation, and muscle tension. Our medical practice prioritizes comprehensive physical interventions and non-invasive recovery plans to lower your reliance on heavy medication, target the true source of your discomfort, and restore healthy lifestyle mobility.',
     faqs: [
       { q: 'What kinds of pain do you treat?', a: 'Chronic back, joint, and nerve pain, arthritis, and recurring migraines — with a focus on keeping you active.' },
       { q: 'Will I just be given medication?', a: 'No — we look for the cause and combine practical strategies, therapy referrals, and medication only when appropriate.' },
@@ -164,6 +177,7 @@ export const services: ServiceItem[] = [
     title: 'Pregnancy Testing',
     img: '/images/pregnancy.webp',
     body: 'Confidential pregnancy testing and family-planning guidance in a comfortable, supportive environment.',
+    intro: 'Access reliable, private lab evaluations and comprehensive reproductive wellness consultations tailored to your unique journey. Our compassionate healthcare providers offer clear, precise clinical insights and early prenatal guidance in a highly secure space to help you navigate your next choices with confidence.',
     faqs: [
       { q: 'Is testing confidential?', a: 'Completely — we provide pregnancy testing and counseling in a private, judgment-free environment.' },
       { q: 'How soon can pregnancy be detected?', a: 'A urine test is usually accurate about a week after a missed period; we can confirm with a blood test if needed.' },

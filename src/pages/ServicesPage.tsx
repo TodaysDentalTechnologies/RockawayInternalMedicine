@@ -47,9 +47,14 @@ export default function ServicesPage() {
           >
             Care for the <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>whole you.</em>
           </h1>
-          <p style={{ fontSize: 'clamp(15px,1.5vw,18px)', lineHeight: 1.65, color: 'var(--ink-soft)', marginTop: 22 }}>
-            A coordinated team delivering preventive, chronic, and specialized care under one roof — thorough, unhurried,
-            and centered on you.
+        </div>
+
+        <div className="reveal" style={{ maxWidth: 860, margin: 'clamp(22px,3vw,30px) auto 0' }}>
+          <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.72, color: 'var(--ink-soft)' }}>
+            At Rockaway Internal Medicine, our adult primary care clinic provides a fully integrated approach to patient wellness by housing twelve distinct medical specializations under one roof. We combine routine preventive care services and comprehensive annual physical exams with advanced specialty fields like clinical neurology, diagnostic cardiology, and targeted dermatology. By merging these essential branches of medicine, our medical team can smoothly track intersecting systemic health issues, moving fluidly from standard physicals and vaccinations to highly complex oncological cancer screenings, targeted thyroid treatments, and specialized immunotherapy options.
+          </p>
+          <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.72, color: 'var(--ink-soft)', marginTop: 16 }}>
+            Managing your health should never feel fragmented or uncoordinated. Our practice excels in long-term chronic disease management, creating customized therapeutic pathways for intersecting metabolic conditions such as advanced diabetes, chronic hypertension, specialized lipid cholesterol testing, and early pregnancy testing services. Whether you are seeking sustainable pain management therapies for lingering discomfort or looking to establish a proactive baseline for lifelong vitality, our clinic provides the unhurried, expert diagnostic evaluations required to handle your total well-being in one unified environment.
           </p>
         </div>
 

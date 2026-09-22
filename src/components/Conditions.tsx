@@ -56,7 +56,18 @@ const CATEGORIES = [
   "Women's Health",
 ]
 
-export default function Conditions() {
+interface Props {
+  /** Intro paragraph under the heading — each page supplies its own copy. */
+  intro?: string
+}
+
+export const HOME_CONDITIONS_INTRO =
+  'Finding reliable chronic disease management shouldn\'t feel rushed. Our clinical team provides thorough, evidence-based diagnostic evaluations for a wide variety of systemic health conditions. From routine preventive healthcare services to advanced tracking for complex internal illnesses, we prioritize detailed patient consultations to create a treatment framework that is completely individualized, highly protective, and centered entirely on your lifelong wellness.'
+
+export const CONDITIONS_PAGE_INTRO =
+  'Whether you need immediate attention for sudden medical concerns or comprehensive chronic disease management for ongoing health issues, our clinical specialists provide the personalized care you deserve. We emphasize deep, unhurried doctor-patient relationships and rigorous diagnostic evaluations to build proactive treatment frameworks centered entirely on your long-term wellness.'
+
+export default function Conditions({ intro = HOME_CONDITIONS_INTRO }: Props = {}) {
   const navigate = useNavigate()
   const [active, setActive] = useState('All Conditions')
 
@@ -97,11 +108,14 @@ export default function Conditions() {
             Expert diagnosis for a wide range of{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--olive)' }}>conditions.</em>
           </h2>
-          <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.65, color: 'var(--ink-soft)', marginTop: 20 }}>
-            From acute illnesses to chronic disease management, our team is here to help —
-            thorough, unhurried, and centered on you.
-          </p>
         </div>
+
+        <p
+          className="reveal"
+          style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.72, color: 'var(--ink-soft)', maxWidth: 680, margin: '20px auto 0' }}
+        >
+          {intro}
+        </p>
 
         {/* Category filter */}
         <div

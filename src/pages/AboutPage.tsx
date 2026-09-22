@@ -1,4 +1,5 @@
 import About from '../components/About'
+import AboutDetail, { AboutHeading } from '../components/AboutDetail'
 import Seo from '../components/Seo'
 import { site } from '../data/clinic'
 import { breadcrumbSchema } from '../data/seo'
@@ -12,7 +13,9 @@ export default function AboutPage() {
         path="/about"
         schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }])]}
       />
+      <AboutHeading />
       <About />
+      <AboutDetail />
     </div>
   )
 }

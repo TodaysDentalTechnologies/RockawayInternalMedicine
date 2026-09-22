@@ -1,6 +1,6 @@
 import Hero from '../components/Hero'
 import About from '../components/About'
-import Conditions from '../components/Conditions'
+import Conditions, { HOME_CONDITIONS_INTRO } from '../components/Conditions'
 import Services from '../components/Services'
 import Insurance from '../components/Insurance'
 import Faq from '../components/Faq'
@@ -25,7 +25,7 @@ export default function Home() {
       <Hero />
       <WaveDivider from="var(--bg)" to="var(--bg2)" />
       <About />
-      <Conditions />
+      <Conditions intro={HOME_CONDITIONS_INTRO} />
       <Services />
       <WaveDivider from="var(--bg2)" to="var(--dark)" />
       <Insurance />

@@ -109,8 +109,8 @@ export default function ServiceDetailPage() {
               {service.title}
             </h1>
             <span style={{ display: 'block', width: 66, height: 3, background: 'var(--olive)', borderRadius: 2, marginTop: 16 }} />
-            <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.68, color: 'var(--ink-soft)', marginTop: 22, maxWidth: '46ch' }}>
-              {service.body}
+            <p style={{ fontSize: 'clamp(15px,1.5vw,17px)', lineHeight: 1.68, color: 'var(--ink-soft)', marginTop: 22, maxWidth: '52ch' }}>
+              {service.intro ?? service.body}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 30 }}>
               <button

@@ -1,4 +1,4 @@
-import Conditions from '../components/Conditions'
+import Conditions, { CONDITIONS_PAGE_INTRO } from '../components/Conditions'
 import Seo from '../components/Seo'
 import { site } from '../data/clinic'
 import { breadcrumbSchema } from '../data/seo'
@@ -12,7 +12,7 @@ export default function ConditionsPage() {
         path="/conditions"
         schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Conditions', path: '/conditions' }])]}
       />
-      <Conditions />
+      <Conditions intro={CONDITIONS_PAGE_INTRO} />
     </div>
   )
 }
