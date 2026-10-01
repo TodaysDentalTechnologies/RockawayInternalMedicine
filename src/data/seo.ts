@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'arthritis-early-signs-common-types-and-treatment-options': {
+    title: 'Arthritis: Early Signs, Common Types and Treatment',
+    description:
+      'Arthritis early signs, common types and treatment options explained: joint pain, stiffness, osteoarthritis and rheumatoid arthritis, by our Queens NY team.',
+  },
   'migraine-symptoms-and-causes': {
     title: 'Migraine Symptoms and Causes: Signs, Phases, Triggers',
     description:

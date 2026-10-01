@@ -23,6 +23,67 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: 'arthritis-early-signs-common-types-and-treatment-options',
+    title: 'Arthritis: Early Signs, Common Types, and Treatment Options',
+    category: 'Pain & Mobility',
+    date: '2026-10-01',
+    readMinutes: 3,
+    img: '/images/blog-arthritis-early-signs-common-types-and-treatment-options.webp',
+    excerpt: 'Early signs include joint pain, stiffness, swelling, and inflammation. Stiffness may be more noticeable after waking up or sitting for an extended period. These symptoms can make everyday activities, such as gripping objects or walking, more difficult. These symptoms can point to osteoarthritis or rheumatoid arthritis and prompt a diagnosis.',
+    intro: [],
+    sections: [
+      {
+        heading: 'Recognizing Early Signs and Symptoms of Arthritis',
+        paragraphs: [
+          'Early signs include joint pain, stiffness, swelling, and inflammation. Stiffness may be more noticeable after waking up or sitting for an extended period. These symptoms can make everyday activities, such as gripping objects or walking, more difficult. These symptoms can point to osteoarthritis or rheumatoid arthritis and prompt a diagnosis.',
+          '[Doctors](/) look for persistent symptoms and changes over weeks. One person reported relief after physical therapy and medications, which helped manage pain and improve motion. Early detection helps start treatment and long term management of this chronic condition.',
+        ],
+      },
+      {
+        heading: 'Common Types of Arthritis and How They Differ',
+        paragraphs: [
+          'Osteoarthritis affects cartilage and bone, and it causes joint pain, stiffness, and reduced range of motion. Rheumatoid arthritis is an autoimmune disease that brings inflammation, swelling, and joint pain in both small and large joints.',
+          'Psoriatic arthritis can follow psoriasis and adds swelling and nail changes. Each type shows different patterns of symptoms and different declines in mobility.',
+          'Doctors use symptoms, physical exams, blood tests, and imaging for diagnosis. Treatment often blends medications, physical therapy, and lifestyle changes to manage pain and inflammation.',
+          '[Early diagnosis](/contact) helps protect range of motion and preserve mobility, leading into effective treatment options and management strategies.',
+        ],
+      },
+      {
+        heading: 'Effective Treatment Options and Management Strategies',
+        paragraphs: [
+          'Arthritis management focuses on reducing pain and improving mobility. Many people find relief through physical therapy. This approach helps strengthen muscles around joints, increasing range of motion. Physical activity can also reduce stiffness and inflammation.',
+          'Doctors often recommend medication to [manage symptoms](/services/pain-management). Nonsteroidal anti-inflammatory drugs (NSAIDs) relieve joint pain and swelling for many individuals. Corticosteroids may be prescribed for more severe cases of rheumatoid arthritis.',
+          'Some patients explore alternative treatments like acupuncture or dietary changes to aid in their treatment journey.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: 'What are the early signs of arthritis?',
+        a: 'Early signs are joint pain, stiffness, swelling, and inflammation. You may lose range of motion. These symptoms can cut mobility. See a doctor for diagnosis.',
+      },
+      {
+        q: 'What are the common types of arthritis?',
+        a: 'Common types include Osteoarthritis and Rheumatoid arthritis. Osteoarthritis is wear and tear of the joint. Rheumatoid is an autoimmune form that causes inflammation and joint pain.',
+      },
+      {
+        q: 'How do doctors make a diagnosis?',
+        a: 'Doctors ask about symptoms and check joint pain, stiffness, swelling, and range of motion. They use a physical exam, blood tests, and X-rays. Tests can show signs of Rheumatoid disease or Osteoarthritis.',
+      },
+      {
+        q: 'What treatment options exist?',
+        a: 'Treatment can include medicines to lower inflammation and ease pain. Physical therapy can restore range of motion and boost mobility. In some cases, surgery helps repair the joint.',
+      },
+      {
+        q: 'How can people manage daily life with arthritis?',
+        a: 'Pace tasks and use joint aids to protect joints. Do gentle exercise to keep range of motion. Use medicines and diet to control inflammation. Talk with your doctor about a treatment plan for better mobility.',
+      },
+    ],
+    relatedServiceSlug: 'pain-management',
+    disclaimer:
+      'This article is for general education and isn’t a substitute for personalized medical advice. Talk with your provider about your specific situation.',
+  },
+  {
     slug: 'migraine-symptoms-and-causes',
     title: 'Migraine Symptoms and Causes: What You Need to Know',
     category: 'Neurology',
