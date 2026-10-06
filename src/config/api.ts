@@ -17,7 +17,8 @@ export const AI_AGENT_ID = '7bf043fa-8e74-4526-9602-7f632a5edf88'
 
 export const API_CONFIG = {
   // Callback API — POST /callback/{clinicId} creates an appointment/callback record
-  CALLBACK_API: 'https://api.shivashamtoub.flowance.ai/callback',
+  // on the Flowance platform (Operations → Call-backs).
+  CALLBACK_API: 'https://api.flowance.ai/callback',
 
   // WebSocket API — AI chatbot (clinicId + agentId are required query params)
   // The practice's assistant on the Flowance platform. The id in the address is
@@ -26,13 +27,13 @@ export const API_CONFIG = {
   WEBSOCKET_API: 'wss://api.flowance.ai/webchat/rockaway-internal-medicine-jamaica',
 }
 
-// Site location id → backend clinicId (callback table / clinic-config key)
+// Site location id → the Flowance clinic id each office's call-backs file under
 const BACKEND_CLINIC_IDS: Record<string, string> = {
-  rockawayinternalmedicine: 'rockawayinternalmedicine',
-  'rockaway-cambria-heights': '2020medicalcenter',
+  rockawayinternalmedicine: 'rockaway-internal-medicine-jamaica',
+  'rockaway-cambria-heights': 'rockaway-internal-medicine-cambria-heights',
 }
 
 export function callbackUrl(locationId: string): string {
-  const clinicId = BACKEND_CLINIC_IDS[locationId] ?? 'rockawayinternalmedicine'
+  const clinicId = BACKEND_CLINIC_IDS[locationId] ?? 'rockaway-internal-medicine-jamaica'
   return `${API_CONFIG.CALLBACK_API}/${clinicId}`
 }
