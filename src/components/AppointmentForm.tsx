@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { locations } from '../data/clinic'
 import { callbackUrl } from '../config/api'
+import { CAPTCHA_RETRY_MESSAGE, TURNSTILE_SITE_KEY, isCaptchaRejection, useCaptcha } from '../utils/turnstile'
 import { Calendar, Check, ArrowRight } from './icons'
 import ServiceSearchSelect from './ServiceSearchSelect'
 
@@ -80,6 +81,7 @@ export default function AppointmentForm() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+  const { slot: captchaSlot, token: getCaptchaToken, reset: resetCaptcha } = useCaptcha()
 
   const change = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -107,6 +109,7 @@ export default function AppointmentForm() {
         form.message,
       ].filter(Boolean).join(' | ')
 
+      const captchaToken = await getCaptchaToken()
       const response = await fetch(callbackUrl(selectedLocation.id), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -117,8 +120,15 @@ export default function AppointmentForm() {
           message: details,
           module: 'Operations',
           source: 'WEBSITE',
+          ...(captchaToken ? { captchaToken } : {}),
         }),
       })
+
+      // Turned away by the captcha: nothing was saved, so keep the form as typed.
+      if (await isCaptchaRejection(response)) {
+        setError(CAPTCHA_RETRY_MESSAGE)
+        return
+      }
 
       if (!response.ok) throw new Error('Failed to submit appointment request')
 
@@ -128,6 +138,7 @@ export default function AppointmentForm() {
       console.error('Appointment submission error:', err)
       setError(`Something went wrong. Please try again or call us at ${selectedLocation.phone}.`)
     } finally {
+      resetCaptcha()
       setSubmitting(false)
     }
   }
@@ -271,6 +282,9 @@ export default function AppointmentForm() {
             ))}.
           </p>
         </div>
+
+        {/* Cloudflare verification: invisible unless Cloudflare asks for a click */}
+        {TURNSTILE_SITE_KEY ? <div ref={captchaSlot} /> : null}
 
         {/* Error */}
         {error && (
