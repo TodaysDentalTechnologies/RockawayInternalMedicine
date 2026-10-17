@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'acid-reflux-vs-gerd-understanding-symptoms-and-treatment': {
+    title: 'Acid Reflux vs. GERD: Symptoms and Treatment Options',
+    description:
+      'Acid reflux vs. GERD explained: heartburn and regurgitation symptoms, when reflux becomes chronic, home care and treatment options, by our Queens NY team.',
+  },
   'arthritis-early-signs-common-types-and-treatment-options': {
     title: 'Arthritis: Early Signs, Common Types and Treatment',
     description:
