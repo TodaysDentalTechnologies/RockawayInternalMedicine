@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'adult-vaccinations-which-shots-do-you-need-and-when': {
+    title: 'Adult Vaccinations: Which Shots Do You Need and When?',
+    description:
+      'Adult vaccinations explained: flu, Tdap, shingles and hepatitis B shots, a schedule by age group and why staying up to date matters, by our Queens NY team.',
+  },
   'acid-reflux-vs-gerd-understanding-symptoms-and-treatment': {
     title: 'Acid Reflux vs. GERD: Symptoms and Treatment Options',
     description:

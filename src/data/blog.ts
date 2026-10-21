@@ -23,6 +23,99 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: 'adult-vaccinations-which-shots-do-you-need-and-when',
+    title: 'Adult Vaccinations: Which Shots Do You Need And When?',
+    category: 'Preventive Care',
+    date: '2026-10-21',
+    readMinutes: 5,
+    img: '/images/blog-adult-vaccinations-which-shots-do-you-need-and-when.webp',
+    excerpt: 'Many adults skip shots because they do not know which ones they need. They worry about side effects, cost, or time. This common confusion keeps people from getting needed protection.',
+    intro: [
+      'Many adults skip shots because they do not know which ones they need. They worry about side effects, cost, or time. This common confusion keeps people from getting needed protection.',
+      'One clear fact helps: [vaccines](/services/physicals-vaccinations) cut the risk of some serious illnesses by a lot. Here you will know key adult vaccines, who needs them, and a simple schedule for taking them.',
+    ],
+    sections: [
+      {
+        heading: 'Recommended Vaccinations for Adults',
+        paragraphs: [
+          '[Doctors](/) have a few important shots they suggest for grown-ups. Some of these can keep you out of the clinic and save a lot of headaches—sometimes literally!',
+        ],
+      },
+      {
+        heading: 'Influenza (Flu)',
+        paragraphs: [
+          'The CDC recommends an annual flu vaccine for all adults. It lowers the risk of flu illness, hospital stays, and death. Effectiveness often runs between 40 and 60 percent. The U.S. reports millions of flu cases in some seasons, and roughly 12,000 to 61,000 deaths each year.',
+          'Clinics, pharmacies, and workplace programs offer vaccines in the fall and winter. Adults should get a dose every year. A nurse reported getting a flu shot last October, feeling arm soreness for a day, and then avoiding flu that winter.',
+          'Older adults and people with chronic conditions face higher risk from the flu. Special high-dose and adjuvanted vaccines help adults 65 and older. Studies show those shots give better protection for that age group.',
+          'People may get a flu vaccine alongside COVID or Tdap shots at many clinics. Pharmacies often provide vaccines, immunizations, and booster shots without an appointment. One pharmacist noted that offering multiple vaccines in one visit raised adult vaccine uptake.',
+        ],
+      },
+      {
+        heading: 'Tdap (Tetanus, Diphtheria, and Pertussis)',
+        paragraphs: [
+          'After discussing the flu shot, it’s time to consider Tdap. This vaccine protects against three serious diseases: tetanus, diphtheria, and pertussis. Adults need this booster shot every ten years. New mothers should get it during each pregnancy to protect their newborns.',
+          'Tetanus causes painful muscle stiffness. Diphtheria can lead to breathing issues and heart problems. Pertussis, or whooping cough, spreads easily among people of all ages. Keeping up with vaccinations helps maintain overall health and prevents outbreaks in communities. Regular immunizations also play a key role in disease prevention for adults as they age.',
+        ],
+      },
+      {
+        heading: 'Shingles (Zoster)',
+        paragraphs: [
+          'Transitioning from Tdap, shingles are another important concern for adults. Shingles, also known as zoster, can cause a painful rash. This condition comes from the same virus that causes chickenpox. Adults who have chickenpox can develop shingles later in life.',
+          'The vaccine significantly reduces the risk of getting shingles. The Centers for Disease Control and Prevention (CDC) recommends that adults 50 years and older get vaccinated against shingles.',
+          'Timing matters; a single dose is all it takes to protect against this painful disease. Having the vaccine not only lowers the chance of developing shingles but also helps prevent complications such as long-term nerve pain.',
+        ],
+      },
+      {
+        heading: 'Hepatitis B',
+        paragraphs: [
+          'After discussing shingles, it’s time to focus on Hepatitis B. This virus spreads through contact with infected bodily fluids. It can cause serious liver problems and even lead to cancer.',
+          'Adults who haven\'t been vaccinated should consider getting this shot. The vaccine is safe and effective.',
+          'Health professionals recommend the Hepatitis B vaccine for anyone at risk. This includes people with multiple sexual partners or those who share needles. Routine vaccinations help prevent serious diseases like hepatitis, ensuring a healthier community overall. Staying current with vaccines keeps adults protected from threats that lurk in everyday life.',
+        ],
+      },
+      {
+        heading: 'Vaccination Schedule by Age Group',
+        paragraphs: [
+          'This schedule shows which shots adults need by age.',
+          '19–29 years — Recommended vaccines: Influenza, yearly; Tdap once as adult if not received; Hepatitis B, if not previously vaccinated. Notes and timing: Get a flu shot every season, ideally by October. Follow Tdap with Td or Tdap booster every 10 years. Hep B is a 2 or 3 dose series, depending on the vaccine used.',
+          '30–49 years — Recommended vaccines: Influenza, yearly; Tdap if missed earlier; Hepatitis B for adults through age 59, if not done. Notes and timing: Annual flu prevents seasonal complications and hospital visits. One Tdap protects against tetanus, diphtheria, and pertussis. Hep B series protects the liver and prevents chronic disease.',
+          '50–64 years — Recommended vaccines: Influenza, yearly; Shingles, Shingrix, two doses; Tdap or Td booster every 10 years as needed; Hepatitis B if not completed. Notes and timing: Shingrix is given as two doses, 2 to 6 months apart. Clinical trials show Shingrix above 90% efficacy in this group. Many adults note milder symptoms after flu shots than from flu.',
+          '65 years and older — Recommended vaccines: Influenza, yearly; Shingles, Shingrix, two doses; Tdap or Td booster every 10 years; Hepatitis B based on risk and provider advice. Notes and timing: Older adults face higher risk from flu complications. Shingrix cuts shingles risk substantially for seniors. Talk with a clinician about Hep B if risk factors exist.',
+          'Any adult with special risk — Recommended vaccines: Influenza, yearly; Hepatitis B if at risk (healthcare workers, diabetes, injection drug use); Tdap if pregnant, each pregnancy during weeks 27–36. Notes and timing: Pregnant people get Tdap each pregnancy to protect newborns. Healthcare workers should complete Hep B series and check titers. People with chronic conditions should follow provider guidance.',
+        ],
+      },
+      {
+        heading: 'Importance of Staying Up to Date with Vaccinations',
+        paragraphs: [
+          'Vaccinations play a critical role in health for adults. Keeping shots current helps people avoid serious diseases. Flu shots reduce the risk of severe illness every year. Tdap protects against tetanus, diphtheria, and pertussis; these can be dangerous if left unchecked. Adults also need vaccines like shingles to prevent painful outbreaks.',
+          'Staying updated with vaccinations means staying healthy. Ignoring recommended immunizations can lead to new infections spreading in communities. Health experts encourage [regular check-ups](/contact) to review vaccination needs as life changes occur, such as age or lifestyle shifts.',
+          'Boosters are often necessary too; they keep immunity strong against certain diseases over time. Vaccination isn’t just personal—it’s a community effort that protects everyone’s well-being.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: 'What adult vaccinations do I need?',
+        a: 'Adults typically need vaccines for flu, tetanus, and COVID-19. Depending on your age and health history, you may also require shots for shingles or pneumonia.',
+      },
+      {
+        q: 'When should I get vaccinated as an adult?',
+        a: 'Timing varies based on the vaccine. The flu shot is recommended annually in the fall. Other vaccines, like tetanus boosters, are needed every ten years or so.',
+      },
+      {
+        q: 'Are there any side effects to adult vaccinations?',
+        a: 'Yes, side effects can occur but they are usually mild. You might feel sore at the injection site or experience a low-grade fever; these symptoms often pass within a few days.',
+      },
+      {
+        q: 'Can I catch diseases even if I\'m vaccinated?',
+        a: 'Vaccines significantly reduce your risk of disease but no vaccine is 100% effective. It’s still wise to practice good hygiene and stay informed about outbreaks in your area.',
+      },
+    ],
+    relatedServiceSlug: 'physicals-vaccinations',
+    disclaimer:
+      'This article is for general education and isn’t a substitute for personalized medical advice. Talk with your provider about your specific situation.',
+  },
+  {
     slug: 'acid-reflux-vs-gerd-understanding-symptoms-and-treatment',
     title: 'Acid Reflux Vs. GERD: Understanding Symptoms And Treatment',
     category: 'Digestive Health',
