@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { getLocation, locations, site } from '../data/clinic'
-import LocationCard from '../components/LocationCard'
-import { Calendar, ArrowRight, Phone } from '../components/icons'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { getLocation, locations, site } from '../../data/clinic'
+import LocationCard from '../LocationCard'
+import { Calendar, ArrowRight, Phone } from '../icons'
+import Seo from '../Seo'
+import { breadcrumbSchema } from '../../data/seo'
 
 // Detail page for a single office — the target of the header "Locations"
 // dropdown (/locations/:id).

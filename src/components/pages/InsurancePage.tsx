@@ -1,7 +1,7 @@
-import Insurance from '../components/Insurance'
-import Seo from '../components/Seo'
-import { site } from '../data/clinic'
-import { breadcrumbSchema } from '../data/seo'
+import Insurance from '../Insurance'
+import Seo from '../Seo'
+import { site } from '../../data/clinic'
+import { breadcrumbSchema } from '../../data/seo'
 
 export default function InsurancePage() {
   return (

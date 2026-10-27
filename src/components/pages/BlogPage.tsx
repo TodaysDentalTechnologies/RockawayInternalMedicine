@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { posts } from '../data/blog'
-import { ArrowRight } from '../components/icons'
-import { site } from '../data/clinic'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { posts } from '../../data/blog'
+import { ArrowRight } from '../icons'
+import { site } from '../../data/clinic'
+import Seo from '../Seo'
+import { breadcrumbSchema } from '../../data/seo'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 export const formatDate = (iso: string) => {

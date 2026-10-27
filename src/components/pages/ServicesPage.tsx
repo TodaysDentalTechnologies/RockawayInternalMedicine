@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from '../components/icons'
-import { services } from '../data/services'
-import { site } from '../data/clinic'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { ArrowRight } from '../icons'
+import { services } from '../../data/services'
+import { site } from '../../data/clinic'
+import Seo from '../Seo'
+import { breadcrumbSchema } from '../../data/seo'
 
 export default function ServicesPage() {
   const navigate = useNavigate()

@@ -1,13 +1,13 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getPost, posts } from '../data/blog'
-import { getService } from '../data/services'
-import { site } from '../data/clinic'
-import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../components/icons'
-import ReadyCta from '../components/ReadyCta'
-import CallMenu from '../components/CallMenu'
-import Seo from '../components/Seo'
-import { articleSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../data/seo'
+import { getPost, posts } from '../../data/blog'
+import { getService } from '../../data/services'
+import { site } from '../../data/clinic'
+import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../icons'
+import ReadyCta from '../ReadyCta'
+import CallMenu from '../CallMenu'
+import Seo from '../Seo'
+import { articleSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../../data/seo'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const formatDate = (iso: string) => {

@@ -1,7 +1,7 @@
-import Conditions, { CONDITIONS_PAGE_INTRO } from '../components/Conditions'
-import Seo from '../components/Seo'
-import { site } from '../data/clinic'
-import { breadcrumbSchema } from '../data/seo'
+import Conditions, { CONDITIONS_PAGE_INTRO } from '../Conditions'
+import Seo from '../Seo'
+import { site } from '../../data/clinic'
+import { breadcrumbSchema } from '../../data/seo'
 
 export default function ConditionsPage() {
   return (

@@ -1,7 +1,7 @@
-import Contact from '../components/Contact'
-import Seo from '../components/Seo'
-import { site } from '../data/clinic'
-import { breadcrumbSchema } from '../data/seo'
+import Contact from '../Contact'
+import Seo from '../Seo'
+import { site } from '../../data/clinic'
+import { breadcrumbSchema } from '../../data/seo'
 
 export default function ContactPage() {
   return (

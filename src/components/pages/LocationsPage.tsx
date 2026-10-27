@@ -1,7 +1,7 @@
-import { locations, site } from '../data/clinic'
-import LocationCard from '../components/LocationCard'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { locations, site } from '../../data/clinic'
+import LocationCard from '../LocationCard'
+import Seo from '../Seo'
+import { breadcrumbSchema } from '../../data/seo'
 
 // Index of all offices — one full LocationCard each.
 export default function LocationsPage() {

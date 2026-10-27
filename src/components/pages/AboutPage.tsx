@@ -1,8 +1,8 @@
-import About from '../components/About'
-import AboutDetail, { AboutHeading } from '../components/AboutDetail'
-import Seo from '../components/Seo'
-import { site } from '../data/clinic'
-import { breadcrumbSchema } from '../data/seo'
+import About from '../About'
+import AboutDetail, { AboutHeading } from '../AboutDetail'
+import Seo from '../Seo'
+import { site } from '../../data/clinic'
+import { breadcrumbSchema } from '../../data/seo'
 
 export default function AboutPage() {
   return (
