@@ -26,9 +26,8 @@ export type PageName =
   | 'contact'
 
 // The one React island on every page (rendered client:only by src/pages/*.astro):
-// the same tree main.tsx + App.tsx rendered for a route, minus the router and
-// Helmet — shared chrome from <Layout> around the page component. Detail pages
-// get their URL segment as `slug`.
+// shared chrome from <Layout> around the page component. Detail pages get their
+// URL segment as `slug`.
 export default function PageRoot({ page, slug = '' }: { page: PageName; slug?: string }) {
   return (
     <StrictMode>

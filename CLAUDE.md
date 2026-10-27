@@ -1,7 +1,5 @@
 # Astro migration
 
-Follow MIGRATION.md (Rockaway Internal Medicine: Astro migration plan) during the migration.
-
 ## Rules (apply to every step)
 
 1. Don't change any visible text, images, alt text, page titles, meta descriptions, structured data, or files in `src/data/`.
