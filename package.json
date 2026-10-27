@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/check-meta.mjs && astro build",
+    "build": "node scripts/check-meta.mjs && astro build && node scripts/postbuild.mjs",
     "check-meta": "node scripts/check-meta.mjs",
     "gen-meta": "node scripts/gen-meta.mjs",
     "preview": "astro preview",
