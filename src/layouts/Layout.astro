@@ -1,0 +1,79 @@
+---
+// The <head> of every page: what index.html carried, plus the per-route tags
+// scripts/prerender.mjs used to inject (description, canonical, Open Graph,
+// Twitter, JSON-LD). Pages pass their entry from allRoutes() in src/data/seo.ts,
+// the same manifest scripts/check-meta.mjs validates.
+import '../index.css'
+import { SITE_URL } from '../data/seo'
+
+interface Props {
+  title: string
+  description: string
+  /** Canonical path, e.g. "/services/cardiology". */
+  path: string
+  /** og:image — absolute URL or site-relative path. Defaults to the logo. */
+  image?: string
+  /** og:type. Defaults to "website". */
+  type?: 'website' | 'article'
+  /** JSON-LD schema objects (one <script> each). */
+  schema: object[]
+}
+
+const { title, description, path, image, type = 'website', schema } = Astro.props
+
+const canonical = `${SITE_URL}${path}`
+const ogImage = image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : `${SITE_URL}/images/logo.png`
+// JSON-LD lives inside <script>, so the only thing that must be escaped is a
+// sequence that could close the tag early.
+const jsonLd = (obj: object) => JSON.stringify(obj).replace(/</g, '\\u003c')
+
+const fonts =
+  'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Manrope:wght@300..800&family=DM+Mono:wght@400;500&display=swap'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#2e6b43" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Non-blocking font load: media="print" defers CSS parsing off the critical
+         path; onload swaps it to "all". <noscript> keeps fonts for no-JS visitors. -->
+    <link rel="preload" as="style" href={fonts} />
+    <link rel="stylesheet" href={fonts} media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href={fonts} />
+    </noscript>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-JTY9DG2180"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JTY9DG2180');
+    </script>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="Rockaway Internal Medicine" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {schema.map((s) => <script is:inline type="application/ld+json" set:html={jsonLd(s)} />)}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
