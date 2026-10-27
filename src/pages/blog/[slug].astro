@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import PageRoot from '../../components/PageRoot.tsx'
+import { routeMeta } from '../../data/seo'
+import { posts } from '../../data/blog'
+
+export function getStaticPaths() {
+  return posts.map((p) => ({ params: { slug: p.slug } }))
+}
+
+const { slug } = Astro.params
+const route = routeMeta(`/blog/${slug}`)!
+---
+
+<Layout {...route}>
+  <PageRoot page="post" slug={slug} client:only="react" />
+</Layout>
