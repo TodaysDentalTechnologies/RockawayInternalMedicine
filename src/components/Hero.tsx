@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { clinic } from '../data/clinic'
 import { useClinicStatus } from '../hooks/useClinicStatus'
 import ImageSlot from './ImageSlot'
@@ -9,7 +8,6 @@ const TRUST = ['Board-certified', 'Most major plans', 'Same-week visits']
 
 export default function Hero() {
   const status = useClinicStatus()
-  const navigate = useNavigate()
 
   return (
     <section
@@ -98,7 +96,7 @@ export default function Hero() {
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 36, animation: 'rimRise .9s cubic-bezier(.22,.61,.36,1) .28s both' }}>
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => window.location.assign('/contact')}
               className="rim-cta"
               style={{
                 display: 'inline-flex',

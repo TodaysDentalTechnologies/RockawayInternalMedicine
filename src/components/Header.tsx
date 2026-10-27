@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { locations, site } from '../data/clinic'
 import { useScrolled } from '../hooks/useReveal'
 import { useClinicStatus } from '../hooks/useClinicStatus'
@@ -18,8 +17,8 @@ const NAV = [
 export default function Header() {
   const scrolled = useScrolled(24)
   const status = useClinicStatus()
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+  // Islands are client:only, so window exists on the first render.
+  const { pathname } = window.location
   const [menuOpen, setMenuOpen] = useState(false)
   const [locOpen, setLocOpen] = useState(false)
   const locRef = useRef<HTMLDivElement>(null)
@@ -30,7 +29,7 @@ export default function Header() {
   const go = (to: string) => {
     setMenuOpen(false)
     setLocOpen(false)
-    navigate(to)
+    window.location.assign(to)
   }
 
   // Close the locations dropdown on outside click.

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   Gauge,
   Flask,
@@ -68,7 +67,6 @@ export const CONDITIONS_PAGE_INTRO =
   'Whether you need immediate attention for sudden medical concerns or comprehensive chronic disease management for ongoing health issues, our clinical specialists provide the personalized care you deserve. We emphasize deep, unhurried doctor-patient relationships and rigorous diagnostic evaluations to build proactive treatment frameworks centered entirely on your long-term wellness.'
 
 export default function Conditions({ intro = HOME_CONDITIONS_INTRO }: Props = {}) {
-  const navigate = useNavigate()
   const [active, setActive] = useState('All Conditions')
 
   const visible =
@@ -214,7 +212,7 @@ export default function Conditions({ intro = HOME_CONDITIONS_INTRO }: Props = {}
         >
           Don't see your condition listed?{' '}
           <button
-            onClick={() => navigate('/contact')}
+            onClick={() => window.location.assign('/contact')}
             style={{ color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3, background: 'none', border: 0, padding: 0, font: 'inherit', cursor: 'pointer' }}
           >
             Call us

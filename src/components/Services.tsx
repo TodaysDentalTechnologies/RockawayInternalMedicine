@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { services } from '../data/services'
 import SectionHeading from './SectionHeading'
-import { useNavigate } from 'react-router-dom'
 import { Activity, ArrowRight, Check } from './icons'
 
 // The three "hero" specialties shown as large image cards. The middle card is
@@ -65,7 +64,6 @@ const FINDER: { concern: string; kicker: string; title: string; desc: string }[]
 ]
 
 export default function Services() {
-  const navigate = useNavigate()
   const [sel, setSel] = useState<number>(-1)
   const [flip, setFlip] = useState(false)
   const timer = useRef<number | null>(null)
@@ -131,7 +129,7 @@ export default function Services() {
             return (
               <button
                 key={f.slug}
-                onClick={() => navigate(`/services/${s.slug}`)}
+                onClick={() => window.location.assign(`/services/${s.slug}`)}
                 className={`rim-feat reveal rim-rise${i === 1 ? ' rim-feat-offset' : ''}`}
                 style={{ transitionDelay: `${i * 0.06}s` }}
                 aria-label={`${s.title} — view details`}
@@ -171,7 +169,7 @@ export default function Services() {
           </span>
           <div className="rim-spec-grid" style={{ marginTop: 24 }}>
             {services.map((s) => (
-              <button key={s.slug} className="rim-spec" onClick={() => navigate(`/services/${s.slug}`)}>
+              <button key={s.slug} className="rim-spec" onClick={() => window.location.assign(`/services/${s.slug}`)}>
                 <span className="rim-spec-dot" aria-hidden="true">
                   <Check size={14} />
                 </span>
@@ -184,7 +182,7 @@ export default function Services() {
         {/* Explore all services */}
         <div className="reveal" style={{ textAlign: 'center', marginTop: 'clamp(40px,5vw,60px)' }}>
           <button
-            onClick={() => navigate('/services')}
+            onClick={() => window.location.assign('/services')}
             className="rim-cta"
             style={{
               display: 'inline-flex',
@@ -329,7 +327,7 @@ export default function Services() {
                   <p style={{ fontSize: 14.5, lineHeight: 1.62, color: 'var(--ink-soft)' }}>{active.desc}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 10 }}>
                     <button
-                      onClick={() => navigate('/contact')}
+                      onClick={() => window.location.assign('/contact')}
                       className="rim-cta"
                       style={{
                         display: 'inline-flex',
@@ -347,7 +345,7 @@ export default function Services() {
                       <ArrowRight size={14} />
                     </button>
                     <button
-                      onClick={() => navigate('/contact')}
+                      onClick={() => window.location.assign('/contact')}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
