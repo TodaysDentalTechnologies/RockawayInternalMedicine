@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'what-happens-during-an-ekg-a-guide-for-first-time-patients': {
+    title: 'What Happens During an EKG? A First-Time Patient Guide',
+    description:
+      'What to expect at your first EKG: how to prepare, where the electrodes go, how long the test takes and which heart problems it can help your doctor find.',
+  },
   'adult-vaccinations-which-shots-do-you-need-and-when': {
     title: 'Adult Vaccinations: Which Shots Do You Need and When?',
     description:
