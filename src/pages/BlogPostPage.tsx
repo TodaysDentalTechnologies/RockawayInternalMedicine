@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getPost, posts } from '../data/blog'
 import { getService } from '../data/services'
