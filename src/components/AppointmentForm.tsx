@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { locations } from '../data/clinic'
 import { callbackUrl } from '../config/api'
 import { CAPTCHA_RETRY_MESSAGE, TURNSTILE_SITE_KEY, isCaptchaRejection, useCaptcha } from '../utils/turnstile'
@@ -76,7 +75,6 @@ const EMPTY = {
 // the Center for Primary Care site, styled for Rockaway. Posts to the shared
 // callback API; on failure it degrades gracefully to a "call us" message.
 export default function AppointmentForm() {
-  const navigate = useNavigate()
   const [form, setForm] = useState(EMPTY)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -171,7 +169,7 @@ export default function AppointmentForm() {
               <Calendar size={16} /> Schedule another
             </button>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => window.location.assign('/')}
               className="rim-outline-btn"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 9, border: '1.5px solid var(--olive)', background: 'transparent', color: 'var(--olive-deep)', padding: '13px 22px', borderRadius: 999, fontSize: 14.5, fontWeight: 600 }}
             >

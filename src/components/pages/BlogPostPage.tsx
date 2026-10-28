@@ -1,13 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getPost, posts } from '../data/blog'
-import { getService } from '../data/services'
-import { site } from '../data/clinic'
-import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../components/icons'
-import ReadyCta from '../components/ReadyCta'
-import CallMenu from '../components/CallMenu'
-import Seo from '../components/Seo'
-import { articleSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../data/seo'
+import { useEffect, useState, type JSX } from 'react'
+import { getPost, posts } from '../../data/blog'
+import { getService } from '../../data/services'
+import { ArrowRight, Clock, Plus, Minus, Calendar, Activity } from '../icons'
+import ReadyCta from '../ReadyCta'
+import CallMenu from '../CallMenu'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const formatDate = (iso: string) => {
@@ -32,9 +28,9 @@ function renderRichText(text: string) {
     const [, label, url] = m
     out.push(
       url.startsWith('/') ? (
-        <Link key={k++} to={url} style={RICH_LINK}>
+        <a key={k++} href={url} style={RICH_LINK}>
           {label}
-        </Link>
+        </a>
       ) : (
         <a key={k++} href={url} style={RICH_LINK} target="_blank" rel="noopener noreferrer">
           {label}
@@ -47,9 +43,7 @@ function renderRichText(text: string) {
   return out
 }
 
-export default function BlogPostPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
+export default function BlogPostPage({ slug }: { slug: string }) {
   const post = getPost(slug)
   const [openFaq, setOpenFaq] = useState(0)
 
@@ -63,9 +57,9 @@ export default function BlogPostPage() {
           <p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 14 }}>
             That article doesn’t exist. Browse the rest of our health library instead.
           </p>
-          <Link to="/blog" style={{ display: 'inline-block', marginTop: 22, color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+          <a href="/blog" style={{ display: 'inline-block', marginTop: 22, color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
             ← Back to the blog
-          </Link>
+          </a>
         </div>
       </section>
     )
@@ -76,26 +70,10 @@ export default function BlogPostPage() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: 'clamp(96px,14vh,140px) 0 clamp(64px,9vw,110px)' }}>
-      <Seo
-        title={`${post.title} | ${site.brand}`}
-        description={post.excerpt}
-        path={`/blog/${post.slug}`}
-        image={post.img}
-        type="article"
-        schema={[
-          articleSchema(post),
-          faqSchema(post.faqs, `${SITE_URL}/blog/${post.slug}`),
-          breadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Blog', path: '/blog' },
-            { name: post.title, path: `/blog/${post.slug}` },
-          ]),
-        ]}
-      />
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Breadcrumb */}
         <button
-          onClick={() => navigate('/blog')}
+          onClick={() => window.location.assign('/blog')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -155,7 +133,7 @@ export default function BlogPostPage() {
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 30 }}>
               <button
-                onClick={() => navigate('/contact')}
+                onClick={() => window.location.assign('/contact')}
                 className="rim-cta"
                 style={{
                   display: 'inline-flex',
@@ -278,20 +256,20 @@ export default function BlogPostPage() {
                 {related.body}
               </p>
               <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 26 }}>
-                <Link
-                  to={`/services/${related.slug}`}
+                <a
+                  href={`/services/${related.slug}`}
                   className="rim-cta"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'var(--olive-deep)', color: 'var(--on-olive)', padding: '14px 24px', borderRadius: 999, fontSize: 14.5, fontWeight: 600, textDecoration: 'none' }}
                 >
                   Explore {related.title} <ArrowRight size={15} />
-                </Link>
-                <Link
-                  to="/contact"
+                </a>
+                <a
+                  href="/contact"
                   className="rim-outline-btn"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 9, border: '1.5px solid var(--olive)', background: 'transparent', color: 'var(--olive-deep)', padding: '14px 22px', borderRadius: 999, fontSize: 14.5, fontWeight: 600, textDecoration: 'none' }}
                 >
                   Book an appointment
-                </Link>
+                </a>
               </div>
             </div>
           )}
@@ -380,9 +358,9 @@ export default function BlogPostPage() {
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
               {more.map((m) => (
-                <Link
+                <a
                   key={m.slug}
-                  to={`/blog/${m.slug}`}
+                  href={`/blog/${m.slug}`}
                   className="rim-outline-btn"
                   style={{
                     border: '1px solid var(--line)',
@@ -396,14 +374,14 @@ export default function BlogPostPage() {
                   }}
                 >
                   {m.title}
-                </Link>
+                </a>
               ))}
-              <Link
-                to="/blog"
+              <a
+                href="/blog"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '10px 6px', fontSize: 14, fontWeight: 600, color: 'var(--olive-deep)', textDecoration: 'none' }}
               >
                 View all <ArrowRight size={14} />
-              </Link>
+              </a>
             </div>
           </div>
         )}

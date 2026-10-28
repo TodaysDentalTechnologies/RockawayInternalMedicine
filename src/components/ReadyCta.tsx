@@ -1,11 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import { site } from '../data/clinic'
 import { Calendar, MapPin, ArrowRight } from './icons'
 import CallMenu from './CallMenu'
 
 // "Ready to get started?" closing CTA card — themed to the site's green.
 export default function ReadyCta() {
-  const navigate = useNavigate()
 
   const lift = (e: React.MouseEvent<HTMLElement>, on: boolean) => {
     e.currentTarget.style.transform = on ? 'translateY(-2px)' : 'none'
@@ -38,7 +36,7 @@ export default function ReadyCta() {
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 30 }}>
           <button
-            onClick={() => navigate('/contact')}
+            onClick={() => window.location.assign('/contact')}
             onMouseEnter={(e) => lift(e, true)}
             onMouseLeave={(e) => lift(e, false)}
             style={{
@@ -79,7 +77,7 @@ export default function ReadyCta() {
         <div style={{ height: 1, background: 'rgba(255,255,255,.18)', margin: 'clamp(28px,4vw,40px) auto 0', maxWidth: 520 }} />
 
         <button
-          onClick={() => navigate('/locations')}
+          onClick={() => window.location.assign('/locations')}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 9, marginTop: 'clamp(20px,3vw,28px)', color: 'var(--on-dark-soft)', fontSize: 14.5, background: 'none', border: 0, cursor: 'pointer' }}
         >
           <MapPin size={17} /> View our two Queens locations <ArrowRight size={15} />

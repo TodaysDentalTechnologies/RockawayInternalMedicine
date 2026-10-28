@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import BackToTop from './BackToTop'
@@ -11,22 +10,17 @@ import { useReveal } from '../hooks/useReveal'
 // assistant. Flip to false to hide the chat bar / launcher / overlay everywhere.
 const CHAT_ENABLED = true
 
-// Shared chrome for every page: header, footer, floating widgets. The routed
-// page renders into <Outlet />. Re-runs reveal animations and scrolls to the
-// top on every navigation.
-export default function Layout() {
-  const { pathname } = useLocation()
-  useReveal(pathname)
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
+// Shared chrome for every page: header, footer, floating widgets. The page
+// renders into <main>. Every URL is its own full page load, so the reveal
+// animations run once on mount.
+export default function Layout({ children }: { children: ReactNode }) {
+  useReveal()
 
   return (
     <>
       <Header />
       <main>
-        <Outlet />
+        {children}
       </main>
       <Footer />
       <BackToTop />

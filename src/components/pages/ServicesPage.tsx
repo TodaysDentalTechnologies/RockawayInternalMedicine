@@ -1,21 +1,10 @@
-import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from '../components/icons'
-import { services } from '../data/services'
-import { site } from '../data/clinic'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { ArrowRight } from '../icons'
+import { services } from '../../data/services'
 
 export default function ServicesPage() {
-  const navigate = useNavigate()
 
   return (
     <section style={{ background: 'var(--bg2)', padding: 'clamp(104px,15vh,152px) 0 clamp(64px,9vw,112px)' }}>
-      <Seo
-        title={`Our Services | ${site.brand}`}
-        description="Coordinated preventive, chronic, and specialized care under one roof — cardiology, diabetes management, thyroid, dermatology, cancer screening, and more."
-        path="/services"
-        schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }])]}
-      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Hero */}
         <div className="reveal" style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>
@@ -94,7 +83,7 @@ export default function ServicesPage() {
                     {s.body}
                   </p>
                   <button
-                    onClick={() => navigate(`/services/${s.slug}`)}
+                    onClick={() => window.location.assign(`/services/${s.slug}`)}
                     className="rim-outline-btn"
                     style={{
                       alignSelf: 'flex-start',

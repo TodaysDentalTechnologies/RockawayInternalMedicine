@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { locations, site, mapsSearchUrl } from '../data/clinic'
 import { useClinicStatus } from '../hooks/useClinicStatus'
 import { Phone, MapPin } from './icons'
@@ -23,7 +22,6 @@ const h4Style: React.CSSProperties = {
 
 export default function Footer() {
   const status = useClinicStatus()
-  const navigate = useNavigate()
 
   return (
     <footer style={{ background: '#0e2416', color: 'var(--on-olive)' }}>
@@ -69,7 +67,7 @@ export default function Footer() {
             {LINKS.map((l) => (
               <button
                 key={l.to}
-                onClick={() => navigate(l.to)}
+                onClick={() => window.location.assign(l.to)}
                 className="rim-foot-link"
                 style={{ textAlign: 'left', fontSize: 15, color: 'rgba(232,239,230,.82)' }}
               >
@@ -86,7 +84,7 @@ export default function Footer() {
             {locations.map((loc) => (
               <div key={loc.id} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 <button
-                  onClick={() => navigate(`/locations/${loc.id}`)}
+                  onClick={() => window.location.assign(`/locations/${loc.id}`)}
                   className="rim-foot-link"
                   style={{ textAlign: 'left', fontSize: 15.5, fontWeight: 600, color: 'var(--on-olive)' }}
                 >

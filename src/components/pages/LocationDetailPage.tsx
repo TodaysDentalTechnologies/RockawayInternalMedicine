@@ -1,15 +1,10 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { getLocation, locations, site } from '../data/clinic'
-import LocationCard from '../components/LocationCard'
-import { Calendar, ArrowRight, Phone } from '../components/icons'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { getLocation, locations } from '../../data/clinic'
+import LocationCard from '../LocationCard'
+import { Calendar, ArrowRight, Phone } from '../icons'
 
 // Detail page for a single office — the target of the header "Locations"
 // dropdown (/locations/:id).
-export default function LocationDetailPage() {
-  const { id } = useParams()
-  const navigate = useNavigate()
+export default function LocationDetailPage({ slug: id }: { slug: string }) {
   const location = getLocation(id)
 
   if (!location) {
@@ -22,7 +17,7 @@ export default function LocationDetailPage() {
             {locations.map((loc) => (
               <button
                 key={loc.id}
-                onClick={() => navigate(`/locations/${loc.id}`)}
+                onClick={() => window.location.assign(`/locations/${loc.id}`)}
                 className="rim-outline-btn"
                 style={{ border: '1.5px solid var(--olive)', background: 'transparent', color: 'var(--olive-deep)', padding: '12px 22px', borderRadius: 999, fontSize: 14.5, fontWeight: 600 }}
               >
@@ -39,18 +34,6 @@ export default function LocationDetailPage() {
 
   return (
     <div style={{ background: 'var(--bg)', paddingBottom: 'clamp(64px,9vw,112px)' }}>
-      <Seo
-        title={`${location.name} — ${location.city}, ${location.stateAbbr} | ${site.brand}`}
-        description={`${location.fullAddress}. Board-certified adult primary care with unhurried visits and same-week appointments. Call ${location.phone}.`}
-        path={`/locations/${location.id}`}
-        schema={[
-          breadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Locations', path: '/locations' },
-            { name: location.city, path: `/locations/${location.id}` },
-          ]),
-        ]}
-      />
       {/* Hero */}
       <section style={{ padding: 'clamp(104px,15vh,152px) 0 clamp(32px,5vw,52px)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
@@ -67,7 +50,7 @@ export default function LocationDetailPage() {
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 30 }}>
               <button
-                onClick={() => navigate('/contact')}
+                onClick={() => window.location.assign('/contact')}
                 className="rim-cta"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 11, background: 'var(--olive-deep)', color: 'var(--on-olive)', padding: '15px 26px', borderRadius: 999, fontSize: 15.5, fontWeight: 600 }}
               >
@@ -98,7 +81,7 @@ export default function LocationDetailPage() {
               {others.map((loc) => (
                 <button
                   key={loc.id}
-                  onClick={() => navigate(`/locations/${loc.id}`)}
+                  onClick={() => window.location.assign(`/locations/${loc.id}`)}
                   className="rim-outline-btn"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 10, border: '1.5px solid var(--olive)', background: 'transparent', color: 'var(--olive-deep)', padding: '13px 22px', borderRadius: 999, fontSize: 14.5, fontWeight: 600 }}
                 >

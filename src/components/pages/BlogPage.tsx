@@ -1,9 +1,5 @@
-import { Link } from 'react-router-dom'
-import { posts } from '../data/blog'
-import { ArrowRight } from '../components/icons'
-import { site } from '../data/clinic'
-import Seo from '../components/Seo'
-import { breadcrumbSchema } from '../data/seo'
+import { posts } from '../../data/blog'
+import { ArrowRight } from '../icons'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 export const formatDate = (iso: string) => {
@@ -20,12 +16,6 @@ const shortDate = (iso: string) => {
 export default function BlogPage() {
   return (
     <section style={{ background: 'var(--bg2)', padding: 'clamp(104px,15vh,152px) 0 clamp(64px,9vw,112px)' }}>
-      <Seo
-        title={`Health Library — Blog | ${site.brand}`}
-        description="Plain-language guides on the conditions we treat and the choices that keep you healthy — written by our care team."
-        path="/blog"
-        schema={[breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }])]}
-      />
       {/* Wider than the site's usual 1140px so the three-column grid fills large screens, like the dentistinconcord blog. */}
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Hero intro */}
@@ -66,7 +56,7 @@ export default function BlogPage() {
         {/* Card grid — three across on desktop, two on tablet, one on phones. Each card opens the article. */}
         <div className="rim-blog-grid">
           {posts.map((p, i) => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="rim-blog-card reveal" aria-label={p.title}>
+            <a key={p.slug} href={`/blog/${p.slug}`} className="rim-blog-card reveal" aria-label={p.title}>
               <div className="rim-blog-card-media">
                 <img
                   src={p.img}
@@ -88,7 +78,7 @@ export default function BlogPage() {
                   Read article <ArrowRight size={15} />
                 </span>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

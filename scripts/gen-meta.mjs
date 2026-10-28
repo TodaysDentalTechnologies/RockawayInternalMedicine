@@ -53,7 +53,7 @@ const userPrompt = (url, title, description) =>
 
 // ── parse + validate ────────────────────────────────────────────
 // The model is asked for HTML-escaped output, but these strings are stored as
-// plain TS and escaped again at render time by scripts/prerender.mjs. Undo the
+// plain TS and escaped again at render time by src/layouts/Layout.astro. Undo the
 // escaping here or "&" ships as "&amp;amp;".
 const unescapeHtml = (s) =>
   s

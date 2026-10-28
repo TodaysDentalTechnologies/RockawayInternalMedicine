@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { clinic, site } from '../data/clinic'
-import { getService, services } from '../data/services'
-import { ArrowRight, Stethoscope, Chat, Clipboard, Plus, Minus } from '../components/icons'
-import ReadyCta from '../components/ReadyCta'
-import CallMenu from '../components/CallMenu'
-import Seo from '../components/Seo'
-import { serviceSchema, faqSchema, breadcrumbSchema, SITE_URL } from '../data/seo'
+import { clinic } from '../../data/clinic'
+import { getService, services } from '../../data/services'
+import { ArrowRight, Stethoscope, Chat, Clipboard, Plus, Minus } from '../icons'
+import ReadyCta from '../ReadyCta'
+import CallMenu from '../CallMenu'
 import type { ReactNode } from 'react'
 
 const EXPECT: { icon: ReactNode; title: string; body: string }[] = [
@@ -15,9 +12,7 @@ const EXPECT: { icon: ReactNode; title: string; body: string }[] = [
   { icon: <Clipboard size={20} />, title: 'A plan built around you', body: 'Care and follow-up tailored to your needs — coordinated with the rest of your care under one roof.' },
 ]
 
-export default function ServiceDetailPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const navigate = useNavigate()
+export default function ServiceDetailPage({ slug }: { slug: string }) {
   const service = getService(slug)
   const [openFaq, setOpenFaq] = useState(0)
 
@@ -32,9 +27,9 @@ export default function ServiceDetailPage() {
           <p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--ink-soft)', marginTop: 14 }}>
             That service doesn't exist. Browse everything we offer instead.
           </p>
-          <Link to="/services" style={{ display: 'inline-block', marginTop: 22, color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+          <a href="/services" style={{ display: 'inline-block', marginTop: 22, color: 'var(--olive-deep)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
             ← Back to all services
-          </Link>
+          </a>
         </div>
       </section>
     )
@@ -44,25 +39,10 @@ export default function ServiceDetailPage() {
 
   return (
     <section style={{ background: 'var(--bg)', padding: 'clamp(96px,14vh,140px) 0 clamp(64px,9vw,110px)' }}>
-      <Seo
-        title={`${service.title} | ${site.brand}`}
-        description={service.body}
-        path={`/services/${service.slug}`}
-        image={service.img}
-        schema={[
-          serviceSchema(service),
-          faqSchema(service.faqs, `${SITE_URL}/services/${service.slug}`),
-          breadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Services', path: '/services' },
-            { name: service.title, path: `/services/${service.slug}` },
-          ]),
-        ]}
-      />
       <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 clamp(18px,4vw,48px)' }}>
         {/* Breadcrumb */}
         <button
-          onClick={() => navigate('/services')}
+          onClick={() => window.location.assign('/services')}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -114,7 +94,7 @@ export default function ServiceDetailPage() {
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 30 }}>
               <button
-                onClick={() => navigate('/contact')}
+                onClick={() => window.location.assign('/contact')}
                 className="rim-cta"
                 style={{
                   display: 'inline-flex',
@@ -295,9 +275,9 @@ export default function ServiceDetailPage() {
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 16 }}>
             {others.map((o) => (
-              <Link
+              <a
                 key={o.slug}
-                to={`/services/${o.slug}`}
+                href={`/services/${o.slug}`}
                 className="rim-outline-btn"
                 style={{
                   border: '1px solid var(--line)',
@@ -311,14 +291,14 @@ export default function ServiceDetailPage() {
                 }}
               >
                 {o.title}
-              </Link>
+              </a>
             ))}
-            <Link
-              to="/services"
+            <a
+              href="/services"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '10px 6px', fontSize: 14, fontWeight: 600, color: 'var(--olive-deep)', textDecoration: 'none' }}
             >
               View all <ArrowRight size={14} />
-            </Link>
+            </a>
           </div>
         </div>
 

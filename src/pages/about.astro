@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro'
+import PageRoot from '../components/PageRoot.tsx'
+import { routeMeta } from '../data/seo'
+
+const route = routeMeta('/about')!
+---
+
+<Layout {...route}>
+  <PageRoot page="about" client:only="react" />
+</Layout>

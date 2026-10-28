@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import SectionHeading from './SectionHeading'
 import ImageSlot from './ImageSlot'
 import { Calendar, ArrowRight } from './icons'
@@ -22,7 +21,6 @@ const PRINCIPLES = [
 ]
 
 export default function About() {
-  const navigate = useNavigate()
   return (
     <section id="about" style={{ background: 'var(--bg2)', padding: 'clamp(72px,9vw,124px) 0' }}>
       <div
@@ -73,7 +71,7 @@ export default function About() {
 
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16, marginTop: 34 }}>
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => window.location.assign('/contact')}
               className="rim-cta"
               style={{
                 display: 'inline-flex',
