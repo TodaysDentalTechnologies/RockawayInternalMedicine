@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'allergy-immunotherapy-how-it-works-and-who-may-benefit': {
+    title: 'Allergy Immunotherapy: How It Works and Who Benefits',
+    description:
+      'Learn how allergy immunotherapy works, who may benefit, what treatment involves, and how Rockaway Internal Medicine in Queens can help you find relief.',
+  },
   'what-happens-during-an-ekg-a-guide-for-first-time-patients': {
     title: 'What Happens During an EKG? A First-Time Patient Guide',
     description:

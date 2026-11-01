@@ -23,6 +23,89 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: 'allergy-immunotherapy-how-it-works-and-who-may-benefit',
+    title: 'Allergy Immunotherapy: How It Works And Who May Benefit',
+    category: 'Allergy & Immunology',
+    date: '2026-10-30',
+    readMinutes: 4,
+    img: '/images/blog-allergy-immunotherapy-how-it-works-and-who-may-benefit.webp',
+    excerpt: 'Many people battle sniffles, itchy eyes, and sneezing for months each year. Some take pills or sprays that only mask symptoms. Others worry about asthma flare ups from allergies.',
+    intro: [
+      'Many people battle sniffles, itchy eyes, and sneezing for months each year. Some take pills or sprays that only mask symptoms. Others worry about asthma flare ups from allergies.',
+      'Allergy immunotherapy trains the immune system to tolerate allergens over time. It can cut symptoms and lower the need for medicines. Here you will know how the treatment works, the two main types, and understand who may benefit and why.',
+    ],
+    sections: [
+      {
+        heading: 'Allergy Immunotherapy Overview',
+        paragraphs: [
+          '[Allergy immunotherapy](/services/immunotherapy) trains the immune system to tolerate allergens. It reduces sensitization through gradual desensitization, also called hyposensitization. Patients get repeated exposure to small doses of pollen, dust mites, mold, or pet antigen.',
+          'Doctors aim to cut symptoms and lower medication needs, and to reduce risk of asthma flare ups.',
+          'Two main delivery methods exist, SCIT and SLIT. SCIT uses injections in a clinic. SLIT uses daily drops or tablets under the tongue at home. Treatment can take three to five years. Rare reactions include anaphylaxis, so clinicians monitor closely during the build‑up phase.',
+        ],
+      },
+      {
+        heading: 'Allergy Immunotherapy Process',
+        paragraphs: [
+          '[Doctors](/) use allergy immunotherapy to gently introduce tiny bits of allergens to the body. Over time, this process can help calm down the immune system’s wild reaction and bring steady allergy relief.',
+        ],
+      },
+      {
+        heading: 'Gradual Desensitization to Allergens',
+        paragraphs: [
+          'Allergy immunotherapy helps the immune system respond better to allergens. This process takes time but can lead to lasting allergy relief.',
+          'Patients receive small doses of allergens over time. These doses gradually increase. This exposure helps the body recognize the allergen as harmless.',
+          'The body builds a tolerance through consistent and controlled exposure. This reduces symptoms and improves quality of life.',
+          'Desensitization can take several months or years, depending on the individual and their treatment plan. Patience is key in this journey toward relief.',
+          'Patients often start with weekly injections or drops at first. Later, they may shift to monthly visits for maintenance doses.',
+          'Most patients notice improvement within a few months, while some may take longer to see results. Each person’s response varies, contributing to the uniqueness of each treatment experience.',
+          'Side effects may occur but are usually mild, such as swelling or redness at the injection site. Serious reactions are rare but require immediate attention.',
+          'Allergy immunotherapy benefits those with chronic allergies or asthma linked to specific allergens, making it a valuable option for many individuals seeking help.',
+          'This gradual process of desensitization offers hope for those suffering from troublesome allergic reactions. With commitment and proper guidance, many find relief from their symptoms over time.',
+        ],
+      },
+      {
+        heading: 'Allergy Immunotherapy Types: SCIT and SLIT',
+        paragraphs: [
+          'Here are the two main ways immunotherapy works.',
+          'SCIT (Subcutaneous Immunotherapy) — How it is given: - Shots into the arm; - Small allergen doses start low and climb. Frequency: - Build-up phase: weekly to biweekly for 3 to 6 months. - Maintenance: every 4 to 8 weeks. Time to noticeable benefit: - Many notice changes by 6 months. - Better control often by year one. Typical duration: - Common plan runs 3 to 5 years. - Some stay longer for lasting relief.',
+          'SLIT (Sublingual Immunotherapy) — How it is given: - Tablets or drops held under the tongue; - The patient takes it home after the first dose in the clinic. Frequency: - Daily dosing is typical. - The first dose is often watched for 30 minutes. Time to noticeable benefit: - Many report relief in 3 to 6 months. - Some need a full season to see gains. Typical duration: - The usual course spans 3 years. - Some extend treatment based on results.',
+        ],
+      },
+      {
+        heading: 'Allergy Immunotherapy Candidates',
+        paragraphs: [
+          'Allergy immunotherapy serves as a beacon of hope for many people dealing with chronic allergies. Individuals with persistent symptoms often find themselves trapped in a cycle of medications and discomfort.',
+          'Some candidates may face allergic reactions that disrupt their daily lives, triggering sneezing fits or itchy eyes. Allergy sufferers who experience these challenges might benefit from this treatment option.',
+          'Young children and adults alike can explore allergy immunotherapy if they are open to committing time to the procedure.',
+          'Candidates should discuss their situations with healthcare professionals before starting treatment. For example, someone with asthma could experience enhanced relief by addressing their allergies through immunotherapy.',
+          'A [consultation](/contact) helps doctors identify whether specific allergens trigger symptoms and assess health history. Those prepared for gradual desensitization find effective management of their immune response possible within 3-5 years on average.',
+          'With determination and guidance, individuals can actively take control of their allergy management journey while enjoying life more fully again!',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: 'What is allergy immunotherapy?',
+        a: 'Allergy immunotherapy is a treatment that helps people with allergies. It works by gradually exposing the body to allergens, which can help reduce sensitivity over time.',
+      },
+      {
+        q: 'Who can benefit from allergy immunotherapy?',
+        a: 'People suffering from allergic rhinitis, asthma, or insect sting allergies may find relief through this treatment. If you struggle with these issues and medications are not enough, it might be worth considering.',
+      },
+      {
+        q: 'How does allergy immunotherapy work?',
+        a: 'The process involves receiving small doses of allergens in either shots or tablets under the tongue. This exposure trains your immune system to respond better when faced with those allergens in real life.',
+      },
+      {
+        q: 'Are there any side effects of allergy immunotherapy?',
+        a: 'Yes, some individuals may experience mild reactions like swelling at the injection site or itching in the mouth for sublingual treatments. However, serious side effects are rare; it\'s always good to discuss concerns with your doctor before starting treatment.',
+      },
+    ],
+    relatedServiceSlug: 'immunotherapy',
+    disclaimer:
+      'This article is for general education and isn’t a substitute for personalized medical advice. Talk with your provider about your specific situation.',
+  },
+  {
     slug: 'what-happens-during-an-ekg-a-guide-for-first-time-patients',
     title: 'What Happens During An EKG? A Guide For First-Time Patients',
     category: 'Preventive Care',
