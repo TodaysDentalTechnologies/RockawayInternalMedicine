@@ -41,9 +41,11 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       # Hashed assets first, so new pages never point at files that aren't uploaded yet.
+      # No --delete: old hashed files stay, so a page loaded just before a deploy
+      # can still fetch the chunks it refers to.
       - name: Upload hashed assets
         run: >
-          aws s3 sync dist/_astro "s3://$BUCKET/_astro" --delete
+          aws s3 sync dist/_astro "s3://$BUCKET/_astro"
           --cache-control "public,max-age=31536000,immutable"
 
       - name: Upload other files

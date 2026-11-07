@@ -37,33 +37,50 @@ only `main`, so other branches can't deploy.
 
 ### Upload and caching
 
-The workflow runs three `aws s3 sync --delete` passes, each limited to its own
-files, so `--delete` in one pass never removes another pass's files:
+The workflow runs three `aws s3 sync` passes, each limited to its own files:
 
-| Pass | Files | `Cache-Control` |
-| ---- | ----- | --------------- |
-| 1 | `dist/_astro/` → `s3://…/_astro/` | `public,max-age=31536000,immutable` |
-| 2 | everything else except `*.html` | `public,max-age=3600` |
-| 3 | `*.html` only, with `Content-Type: text/html; charset=utf-8` | `no-cache` |
+| Pass | Files | `Cache-Control` | `--delete` |
+| ---- | ----- | --------------- | ---------- |
+| 1 | `dist/_astro/` → `s3://…/_astro/` | `public,max-age=31536000,immutable` | no |
+| 2 | everything else except `*.html` | `public,max-age=3600` | yes |
+| 3 | `*.html` only, with `Content-Type: text/html; charset=utf-8` | `no-cache` | yes |
 
 Hashed assets go first, so a new page never points at a file that isn't
-uploaded yet. Then the workflow invalidates `/*`.
+uploaded yet. Old hashed files are never deleted, so a visitor whose page
+loaded just before a deploy can still fetch the JS chunks it refers to.
+Passes 2 and 3 delete files that are no longer in the build; their filters
+keep them from touching each other's files. Then the workflow invalidates `/*`.
 
 ### Deploying by hand
 
-Use this only if GitHub Actions is down. The deploy role can't be assumed
-outside GitHub Actions, so use your own credentials for account `310971188857`
-(the `shivashamtoub` profile below). Deploy from a clean, up-to-date `main`:
+Use this only if GitHub Actions is down. The deploy role can only be assumed
+from GitHub Actions, so you use your own access to account `310971188857`.
+
+**1. Build locally** from a clean, up-to-date `main`:
 
 ```bash
 git switch main && git pull
 npm ci
 npm run build
+tar -czf rockaway-dist.tar.gz -C dist .
+```
 
-export AWS_PROFILE=shivashamtoub AWS_REGION=us-east-1
+**2. Open AWS CloudShell in the site's account.** No local AWS CLI is needed.
+
+1. Sign in to the AWS console as your IAM user in the Todays Dental account
+   (`851620242036`).
+2. Switch role: account `310971188857`, role `OrganizationAccountAccessRole`.
+3. Select region **US East (N. Virginia) `us-east-1`** and open CloudShell.
+4. **Actions → Upload file**, and choose `rockaway-dist.tar.gz`. It lands in
+   the CloudShell home folder.
+
+**3. Unpack and upload** in CloudShell:
+
+```bash
+rm -rf dist && mkdir dist && tar -xzf rockaway-dist.tar.gz -C dist
 BUCKET=rockawayinternalmedicine-site-310971188857
 
-aws s3 sync dist/_astro "s3://$BUCKET/_astro" --delete \
+aws s3 sync dist/_astro "s3://$BUCKET/_astro" \
   --cache-control "public,max-age=31536000,immutable"
 aws s3 sync dist "s3://$BUCKET" --delete \
   --exclude "_astro/*" --exclude "*.html" --exclude "amplify-custom-rules.json" \
@@ -76,6 +93,16 @@ aws cloudfront create-invalidation --distribution-id E2EN9X1JYKGDD9 --paths "/*"
 
 These are the same commands the workflow runs. If you change one, change the
 other.
+
+**Alternative, with a local AWS CLI:** if you have the AWS CLI set up with a
+profile for account `310971188857`, skip the tarball and CloudShell. After
+step 1, run the commands from step 3 in the repo root, but **skip the first
+line** (`rm -rf dist && … tar -xzf …`): there's no tarball to unpack, and it
+would delete your build. Set these first:
+
+```bash
+export AWS_PROFILE=<your profile> AWS_REGION=us-east-1
+```
 
 ## 2. URL rules
 
@@ -105,9 +132,14 @@ Don't change `build.format: 'file'` in `astro.config.mjs` to directory output.
 commit it, then update, test and publish the function. A push to `main`
 doesn't publish it; this is a separate, manual step.
 
+Run these in CloudShell after the role switch above, with `url-rules.js`
+uploaded through **Actions → Upload file**. With a local AWS CLI, set
+`AWS_PROFILE` and `AWS_REGION` as in section 1 and use
+`CODE=infra/cloudfront/url-rules.js` instead.
+
 ```bash
-export AWS_PROFILE=shivashamtoub AWS_REGION=us-east-1
 FN=rockaway-url-rules
+CODE=url-rules.js
 
 # 1. Upload the new code to the DEVELOPMENT stage, keeping the runtime and comment.
 ETAG=$(aws cloudfront describe-function --name $FN --query ETag --output text)
@@ -115,7 +147,7 @@ CONFIG=$(aws cloudfront describe-function --name $FN \
   --query FunctionSummary.FunctionConfig --output json)
 aws cloudfront update-function --name $FN --if-match "$ETAG" \
   --function-config "$CONFIG" \
-  --function-code fileb://infra/cloudfront/url-rules.js
+  --function-code "fileb://$CODE"
 
 # 2. Test the DEVELOPMENT stage. Change the uri and host to try other cases.
 cat > /tmp/event.json <<'EOF'
