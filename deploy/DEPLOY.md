@@ -1,64 +1,170 @@
 # Deploying
 
-The site is hosted on **AWS Amplify Hosting**, app `djn8uddcmh0dt`
-(`RockawayInternalMedicine`) in AWS account `310971188857` — the
-`shivashamtoub` environment. Amplify builds from the `main` branch of
-`github.com/TodaysDentalTechnologies/RockawayInternalMedicine`.
+The site is static files in **S3**, served by **CloudFront**, in AWS account
+`310971188857`, region `us-east-1`:
+
+| What | ID |
+| ---- | -- |
+| S3 bucket | `rockawayinternalmedicine-site-310971188857`. Private, read only by CloudFront through Origin Access Control (OAC) |
+| CloudFront distribution | `E2EN9X1JYKGDD9` (`d1dooth725uas3.cloudfront.net`), serving `rockawayinternalmedicine.com` and `www.rockawayinternalmedicine.com` |
+| CloudFront Function | `rockaway-url-rules` (viewer request). Its code is `infra/cloudfront/url-rules.js` |
+| GitHub deploy role | `arn:aws:iam::310971188857:role/rockaway-github-deploy`. Assumed through GitHub OIDC, and trusted only for `refs/heads/main` of `github.com/TodaysDentalTechnologies/RockawayInternalMedicine` |
 
 ## 1. Deploy
 
-Auto-build is off, so a push does not deploy on its own. Push, then start a job:
+Every push to `main` deploys. The GitHub Actions workflow
+`.github/workflows/deploy.yml` builds the site, uploads `dist/` to the bucket
+and invalidates the CloudFront cache. To redeploy without a new commit, run the
+**Deploy** workflow from the Actions tab (`workflow_dispatch`). Deploys never
+overlap: a second one waits until the first finishes.
+
+The workflow uses no stored AWS keys or secrets. It gets short-lived
+credentials by assuming the deploy role through OIDC, and the role trusts
+only `main`, so other branches can't deploy.
+
+### The build
+
+`npm run build` is `check-meta` → `astro build` → `postbuild`:
+
+- `scripts/check-meta.mjs` runs **before** the build, so a route whose title or
+  description is out of spec fails the build instead of shipping.
+- `astro build` writes one static `.html` per route, with that page's title,
+  meta description, canonical, OG/Twitter tags and JSON-LD in the `<head>`.
+  Pages are flat files (`dist/about.html`, `dist/services/cardiology.html`),
+  not `about/index.html`. Hashed JS is in `dist/_astro/`.
+- `scripts/postbuild.mjs` writes `dist/sitemap.xml` from the same route
+  manifest (`allRoutes()` in `src/data/seo.ts`).
+
+### Upload and caching
+
+The workflow runs three `aws s3 sync` passes, each limited to its own files:
+
+| Pass | Files | `Cache-Control` | `--delete` |
+| ---- | ----- | --------------- | ---------- |
+| 1 | `dist/_astro/` → `s3://…/_astro/` | `public,max-age=31536000,immutable` | no |
+| 2 | everything else except `*.html` | `public,max-age=3600` | yes |
+| 3 | `*.html` only, with `Content-Type: text/html; charset=utf-8` | `no-cache` | yes |
+
+Hashed assets go first, so a new page never points at a file that isn't
+uploaded yet. Old hashed files are never deleted, so a visitor whose page
+loaded just before a deploy can still fetch the JS chunks it refers to.
+Passes 2 and 3 delete files that are no longer in the build; their filters
+keep them from touching each other's files. Then the workflow invalidates `/*`.
+
+### Deploying by hand
+
+Use this only if GitHub Actions is down. The deploy role can only be assumed
+from GitHub Actions, so you use your own access to account `310971188857`.
+
+**1. Build locally** from a clean, up-to-date `main`:
 
 ```bash
-git push origin main
-aws amplify start-job --app-id djn8uddcmh0dt --branch-name main \
-  --job-type RELEASE --profile shivashamtoub --region us-east-1
+git switch main && git pull
+npm ci
+npm run build
+tar -czf rockaway-dist.tar.gz -C dist .
 ```
 
-The Amplify build runs `npm run build`, which is `tsc` → `check-meta` →
-`vite build` → `prerender`. `check-meta` runs **before** the bundle so a route
-whose title or description is out of spec fails the build instead of shipping.
+**2. Open AWS CloudShell in the site's account.** No local AWS CLI is needed.
 
-`scripts/prerender.mjs` writes one static `.html` per route with that page's
-title, meta description, canonical, OG/Twitter tags and JSON-LD baked in, plus
-`dist/sitemap.xml`.
+1. Sign in to the AWS console as your IAM user in the Todays Dental account
+   (`851620242036`).
+2. Switch role: account `310971188857`, role `OrganizationAccountAccessRole`.
+3. Select region **US East (N. Virginia) `us-east-1`** and open CloudShell.
+4. **Actions → Upload file**, and choose `rockaway-dist.tar.gz`. It lands in
+   the CloudShell home folder.
 
-## 2. Canonical URLs
-
-The build writes `dist/amplify-custom-rules.json` from the same route manifest
-as the sitemap, in this order — Amplify takes the first match:
-
-| Source | Target | Type |
-| ------ | ------ | ---- |
-| `https://www.rockawayinternalmedicine.com/<*>` | `https://rockawayinternalmedicine.com/<*>` | 301 |
-| `/about/`, `/services/cardiology/`, … (one per route) | the same path without the slash | 301 |
-| `/<*>` | `/index.html` | 404 (rewrite) |
-
-Apply it:
+**3. Unpack and upload** in CloudShell:
 
 ```bash
-aws amplify update-app --app-id djn8uddcmh0dt \
-  --custom-rules file://dist/amplify-custom-rules.json \
-  --profile shivashamtoub --region us-east-1
+rm -rf dist && mkdir dist && tar -xzf rockaway-dist.tar.gz -C dist
+BUCKET=rockawayinternalmedicine-site-310971188857
+
+aws s3 sync dist/_astro "s3://$BUCKET/_astro" \
+  --cache-control "public,max-age=31536000,immutable"
+aws s3 sync dist "s3://$BUCKET" --delete \
+  --exclude "_astro/*" --exclude "*.html" --exclude "amplify-custom-rules.json" \
+  --cache-control "public,max-age=3600"
+aws s3 sync dist "s3://$BUCKET" --delete \
+  --exclude "*" --include "*.html" \
+  --cache-control "no-cache" --content-type "text/html; charset=utf-8"
+aws cloudfront create-invalidation --distribution-id E2EN9X1JYKGDD9 --paths "/*"
 ```
 
-Three Amplify rule-engine constraints shape this, all verified against the
-live app — do not "simplify" past them:
+These are the same commands the workflow runs. If you change one, change the
+other.
 
-- **There is no trailing-slash catch-all.** `/<*>/` is rejected outright:
-  *"The wildcard pattern in custom rules expression is invalid when followed by
-  a `/`"*. Hence one 301 per route, generated rather than hand-maintained.
-- **Routes are flat `.html` files, not `<route>/index.html`.** A folder
-  artifact is served only at `/about/` — Amplify 301s `/about` → `/about/` and
-  no rule can override it. With `about.html` on disk, `/about` serves at 200
-  with no redirect. Do not change `scripts/prerender.mjs` back to directory
-  output.
-- **Apply the rules only after the matching build is live.** Against folder
-  artifacts, Amplify's implicit `/x` → `/x/` plus these `/x/` → `/x` rules is
-  an infinite redirect loop.
+**Alternative, with a local AWS CLI:** if you have the AWS CLI set up with a
+profile for account `310971188857`, skip the tarball and CloudShell. After
+step 1, run the commands from step 3 in the repo root, but **skip the first
+line** (`rm -rf dist && … tar -xzf …`): there's no tarball to unpack, and it
+would delete your build. Set these first:
 
-Custom rules also do not fire for a path that resolves to an existing
-artifact, which is why the SPA fallback never shadows a prerendered page.
+```bash
+export AWS_PROFILE=<your profile> AWS_REGION=us-east-1
+```
+
+## 2. URL rules
+
+Canonical URLs are the bare domain with no trailing slash
+(`https://rockawayinternalmedicine.com/services/cardiology`). The CloudFront
+Function `rockaway-url-rules` enforces this on every request:
+
+| Request | Result |
+| ------- | ------ |
+| any path on `www.rockawayinternalmedicine.com` | 301 to the same path on the bare domain, with any trailing slash removed |
+| `/services/cardiology/` (trailing slash) | 301 to `/services/cardiology` |
+| `/` | serves `/index.html` |
+| `/services/cardiology` (no dot in the last segment) | serves `/services/cardiology.html` |
+| `/favicon.svg`, `/_astro/…` (dot in the last segment) | served as is |
+
+Redirects keep the query string. A path with no matching file in the bucket
+makes S3 return 403 (the bucket is private) or 404, and the distribution's
+custom error responses for both serve `/index.html` with status 200, so
+unknown URLs show the home page.
+
+Because of the `/x` → `/x.html` rule, pages **must** stay flat `.html` files.
+Don't change `build.format: 'file'` in `astro.config.mjs` to directory output.
+
+### Changing the rules
+
+`infra/cloudfront/url-rules.js` is the source for the function. Edit it,
+commit it, then update, test and publish the function. A push to `main`
+doesn't publish it; this is a separate, manual step.
+
+Run these in CloudShell after the role switch above, with `url-rules.js`
+uploaded through **Actions → Upload file**. With a local AWS CLI, set
+`AWS_PROFILE` and `AWS_REGION` as in section 1 and use
+`CODE=infra/cloudfront/url-rules.js` instead.
+
+```bash
+FN=rockaway-url-rules
+CODE=url-rules.js
+
+# 1. Upload the new code to the DEVELOPMENT stage, keeping the runtime and comment.
+ETAG=$(aws cloudfront describe-function --name $FN --query ETag --output text)
+CONFIG=$(aws cloudfront describe-function --name $FN \
+  --query FunctionSummary.FunctionConfig --output json)
+aws cloudfront update-function --name $FN --if-match "$ETAG" \
+  --function-config "$CONFIG" \
+  --function-code "fileb://$CODE"
+
+# 2. Test the DEVELOPMENT stage. Change the uri and host to try other cases.
+cat > /tmp/event.json <<'EOF'
+{"version":"1.0","context":{"eventType":"viewer-request"},"viewer":{"ip":"203.0.113.1"},
+ "request":{"method":"GET","uri":"/services/cardiology/","querystring":{},
+ "headers":{"host":{"value":"rockawayinternalmedicine.com"}},"cookies":{}}}
+EOF
+ETAG=$(aws cloudfront describe-function --name $FN --query ETag --output text)
+aws cloudfront test-function --name $FN --if-match "$ETAG" --stage DEVELOPMENT \
+  --event-object fileb:///tmp/event.json --query TestResult
+
+# 3. Publish DEVELOPMENT to LIVE. The distribution uses LIVE.
+aws cloudfront publish-function --name $FN --if-match "$ETAG"
+```
+
+Publishing takes a few minutes to reach every edge location. Then run the
+checks in section 3.
 
 ## 3. Verify
 

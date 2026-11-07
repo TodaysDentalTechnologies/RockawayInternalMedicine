@@ -15,7 +15,7 @@ Requires Node 22.12 or newer (see `.nvmrc`).
 ```bash
 npm install     # install dependencies
 npm run dev     # start the dev server (http://localhost:4321)
-npm run build   # check meta, build every page into dist/, write sitemap + Amplify rules
+npm run build   # check meta, build every page into dist/, write sitemap
 npm run preview # preview the production build locally
 npx astro check # type-check .astro and .tsx files
 ```
@@ -23,8 +23,8 @@ npx astro check # type-check .astro and .tsx files
 ## How pages are built
 
 Astro builds one static HTML file per URL, flat rather than in folders
-(`dist/about.html`, `dist/services/cardiology.html`), because Amplify redirects
-`/about` to `/about/` when a folder index exists (see `deploy/DEPLOY.md`).
+(`dist/about.html`, `dist/services/cardiology.html`), because the CloudFront
+URL rules serve `/about` from `about.html` (see `deploy/DEPLOY.md`).
 
 - `src/pages/*.astro` — one file per URL. Detail pages (`services/[slug]`,
   `blog/[slug]`, `locations/[slug]`) list their URLs in `getStaticPaths` from
@@ -39,8 +39,8 @@ Astro builds one static HTML file per URL, flat rather than in folders
 Every URL is a full page load, so navigation uses plain links and
 `window.location`. There is no client-side router.
 
-After `astro build`, `scripts/postbuild.mjs` writes `dist/sitemap.xml` and
-`dist/amplify-custom-rules.json` from the same route manifest. Before the build,
+After `astro build`, `scripts/postbuild.mjs` writes `dist/sitemap.xml` from the
+same route manifest. Before the build,
 `scripts/check-meta.mjs` fails it if any title or description is out of spec.
 
 ## Project structure
