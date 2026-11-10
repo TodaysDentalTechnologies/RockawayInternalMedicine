@@ -22,7 +22,7 @@ function handler(event) {
     return redirect('https://rockawayinternalmedicine.com' + clean + qs(req.querystring));
   }
   if (slash) {
-    return redirect(clean + qs(req.querystring));
+    return redirect('https://rockawayinternalmedicine.com' + clean + qs(req.querystring));
   }
   if (uri === '/') {
     req.uri = '/index.html';
