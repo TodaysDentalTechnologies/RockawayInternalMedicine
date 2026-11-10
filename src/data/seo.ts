@@ -306,6 +306,11 @@ const LOCATION_META: Record<string, { title: string; description: string }> = {
 }
 
 const POST_META: Record<string, { title: string; description: string }> = {
+  'persistent-skin-rashes-common-causes-and-when-to-see-a-doctor': {
+    title: 'Persistent Skin Rashes: Causes and When to See a Doctor',
+    description:
+      'Learn common causes of persistent skin rashes, the warning signs that need a doctor, and how Rockaway Internal Medicine in Queens can help you find relief.',
+  },
   'allergy-immunotherapy-how-it-works-and-who-may-benefit': {
     title: 'Allergy Immunotherapy: How It Works and Who Benefits',
     description:

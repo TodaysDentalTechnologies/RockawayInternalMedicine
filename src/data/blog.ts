@@ -23,6 +23,114 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: 'persistent-skin-rashes-common-causes-and-when-to-see-a-doctor',
+    title: 'Persistent Skin Rashes: Common Causes And When To See A Doctor',
+    category: 'Skin Health',
+    date: '2026-11-10',
+    readMinutes: 6,
+    img: '/images/blog-persistent-skin-rashes-common-causes-and-when-to-see-a-doctor.webp',
+    excerpt: 'Many people wake up with a rash that will not go away. It itches, flakes, or stings. It can hurt sleep and work. It can feel like a bad houseguest that will not leave.',
+    intro: [
+      'Many people wake up with a rash that will not go away. It itches, flakes, or stings. It can hurt sleep and work. It can feel like a bad houseguest that will not leave.',
+      'One fact helps right away, multiple causes can make a rash last. Eczema, psoriasis, allergies, and infections are common culprits. Here you will understand the likely causes, key symptoms, simple home care, and clear signs to see a doctor.',
+    ],
+    sections: [
+      {
+        heading: 'Common Causes of Persistent Skin Rashes',
+        paragraphs: [
+          'Sometimes, skin rashes stick around longer than a house guest who doesn’t take the hint. These red and itchy patches may signal more than just dry weather or too much time in the sun.',
+        ],
+      },
+      {
+        heading: 'Allergic Reactions',
+        paragraphs: [
+          'Allergic reactions happen when the immune system overreacts to a harmless trigger. Contact with metals, fragrances, or plants can cause red, itchy patches or swollen bumps. Hives often flare fast, within minutes to hours, and they can move around the body. A rash may burn, sting, or itch and may mimic eczema or dermatitis.',
+          'A dermatologist recalled treating a patient who broke out in full-body hives after eating nuts. Clinicians use history, exam, and sometimes patch or blood tests to reach a diagnosis.',
+          'Antihistamines and topical steroids treat most reactions. Seek [urgent care](/contact) for throat tightness, facial swelling, or trouble breathing.',
+        ],
+      },
+      {
+        heading: 'Eczema and Psoriasis',
+        paragraphs: [
+          'Eczema and psoriasis are two common skin conditions that cause discomfort. Eczema often leads to dry, itchy patches on the skin. It can appear anywhere, but it usually shows up on hands, arms, and the inside of elbows.',
+          'This condition may arise from allergies or irritants in daily life. Many people find that stress can make their eczema worse too.',
+          'Psoriasis affects many individuals as well. It results in red patches covered with thick scales. These areas commonly occur on elbows, knees, and the scalp. Psoriasis is an autoimmune disorder; this means the body’s immune system attacks healthy cells by mistake.',
+          'Both eczema and psoriasis require proper diagnosis for effective [treatment options](/services/dermatology) to be explored later on.',
+        ],
+      },
+      {
+        heading: 'Fungal or Bacterial Infections',
+        paragraphs: [
+          'Fungal and bacterial infections cause many persistent skin rashes. These infections can appear in various ways, like red patches or blisters that itch. For instance, athletes often develop fungal infections due to sweaty conditions. A classic example is ringworm. It spreads easily through contact with infected objects or skin.',
+          'Bacterial infections also lead to rashes that need attention. Impetigo is a common one among children. This infection creates crusty sores on the face but can occur anywhere on the body.',
+          'Both types of infections require proper treatment to avoid complications and manage symptoms effectively. Seeking medical help can be crucial for those experiencing severe irritation or pain from these conditions.',
+        ],
+      },
+      {
+        heading: 'When to See a Doctor',
+        paragraphs: [
+          'Persistent skin rashes can signal bigger problems. If they spread quickly or come with fever, get medical help right away.',
+        ],
+      },
+      {
+        heading: 'Warning Signs That Require Medical Attention',
+        paragraphs: [
+          'Persistent skin rashes can cause discomfort and stress. Not all rashes need medical attention, but some signs do warrant a visit to the [doctor](/).',
+          'A rash that spreads quickly might indicate an underlying issue that needs urgent care. It can signal an infection or allergic reaction that requires treatment.',
+          'If the rash comes with fever, it may suggest a serious infection. High temperatures often accompany conditions that could worsen without medical help.',
+          'Severe itching can drive anyone to distraction. If the itch becomes unbearable, a healthcare professional should evaluate it for proper relief options.',
+          'The appearance of blisters or open sores is concerning. These symptoms often suggest a bacterial or viral infection that needs immediate evaluation.',
+          'Rashes accompanied by swelling in other areas can be alarming. This reaction could mean an allergic response or inflammation needing further investigation.',
+          'Any rash that suddenly appears after exposure to allergens warrants attention too. Quick action can help prevent complications from allergies like contact dermatitis or hives.',
+          'Patients with chronic conditions such as eczema or psoriasis should seek advice if they notice significant changes in their rash\'s appearance or behavior.',
+          'If the rash persists for more than two weeks despite home treatment, contacting a physician is wise. Lack of improvement may signal a need for different treatment approaches.',
+          'Recognizing these warning signs helps ensure timely care and leads to better outcomes for persistent skin rashes.',
+        ],
+      },
+      {
+        heading: 'Managing and Treating Persistent Skin Rashes',
+        paragraphs: [
+          'Managing and treating persistent skin rashes can feel overwhelming. However, both home remedies and medical treatments offer relief for many.',
+        ],
+      },
+      {
+        heading: 'At-Home Care and Medical Treatment Options',
+        paragraphs: [
+          'Here are practical home care steps and medical options for persistent rashes.',
+          'At-Home Care — Summary points: Wash gently with a mild cleanser. Pat skin dry; Apply fragrance-free moisturizer twice daily. Use thicker creams at night; Use cool compresses for itching. Keep nails short to avoid breaks; Wear cotton and loose clothing. Avoid wool and tight fabrics; Try over-the-counter hydrocortisone, for short stints only; Use OTC antifungal cream for ringworm or athlete’s foot; Track triggers in a simple diary. Note foods, soaps, and products used.',
+          'Over-the-Counter Options — Summary points: Hydrocortisone 1% for mild inflammation; Antihistamines at night to reduce itch and improve sleep; Barrier creams for cracked skin, such as petrolatum; Antifungal creams containing clotrimazole for suspected tinea.',
+          'Topical Prescription Treatments — Summary points: Topical corticosteroids, varying strengths by area. Use as directed; Topical calcineurin inhibitors for face or delicate skin; Prescription antifungals for stubborn fungal infections.',
+          'Oral and Systemic Medications — Summary points: Oral antibiotics for bacterial infections confirmed by a doctor; Oral antifungals for widespread or scalp tinea; Systemic immunosuppressants, such as methotrexate, for severe disease; Biologic injections like dupilumab, approved in 2017 for moderate to severe atopic dermatitis.',
+          'Procedures and Phototherapy — Summary points: Phototherapy with narrowband UVB for chronic eczema and psoriasis; Skin culture or scraping to identify bacteria or fungi; Skin biopsy when diagnosis is unclear.',
+          'Diagnostic Tests — Summary points: Patch testing for contact allergies. Helps find hidden triggers; Blood tests to rule out systemic causes in select cases; Culture results guide targeted antibiotic or antifungal choices.',
+          'Follow-Up and Monitoring — Summary points: Schedule follow-up within 2 to 6 weeks after starting treatment; Adjust therapy if no improvement in 4 to 6 weeks; Seek urgent care for spreading redness, fever, or pain.',
+          'First-Hand Note — Summary points: The author recalls battling chronic eczema for two years; Topical steroids eased flares within days; Phototherapy brought steady gains after three months; Keeping a trigger diary revealed a detergent as a culprit.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: 'What causes persistent skin rashes?',
+        a: 'Persistent skin rashes can come from many sources. Common culprits include allergies, irritants, infections, and underlying health conditions like eczema or psoriasis. Sometimes stress can even play a role.',
+      },
+      {
+        q: 'When should I see a doctor for my rash?',
+        a: 'If your rash lasts more than a couple of weeks or worsens over time, it\'s time to consult a doctor. Seek help if you notice swelling, pain, or if the rash spreads quickly. These signs may indicate something serious.',
+      },
+      {
+        q: 'Can home remedies help with persistent skin rashes?',
+        a: 'Home remedies might provide relief for mild cases. Oatmeal baths or aloe vera gel can soothe irritation; however, they are not substitutes for medical advice when dealing with severe symptoms.',
+      },
+      {
+        q: 'How do doctors diagnose the cause of my rash?',
+        a: 'Doctors usually start by asking questions about your symptoms and history; then they perform an examination of the affected area. In some cases, they may recommend tests to pinpoint the exact cause behind your persistent skin rash.',
+      },
+    ],
+    relatedServiceSlug: 'dermatology',
+    disclaimer:
+      'This article is for general education and isn’t a substitute for personalized medical advice. Talk with your provider about your specific situation.',
+  },
+  {
     slug: 'allergy-immunotherapy-how-it-works-and-who-may-benefit',
     title: 'Allergy Immunotherapy: How It Works And Who May Benefit',
     category: 'Allergy & Immunology',
